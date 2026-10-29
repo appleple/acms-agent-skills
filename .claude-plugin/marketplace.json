@@ -39,13 +39,15 @@
         "acms",
         "theme",
         "template",
-        "twig"
+        "twig",
+        "form"
       ],
       "skills": [
         "./skills/acms-theme-development",
         "./skills/acms-template-acms",
         "./skills/acms-template-twig",
-        "./skills/acms-module-reference"
+        "./skills/acms-module-reference",
+        "./skills/acms-form"
       ],
       "dependencies": [
         "acms-common"
