@@ -1,0 +1,49 @@
+[
+  {
+    "query": "a-blog cms のエントリー編集画面に「サブタイトル」とメイン画像の入力欄を足したい。Twig のテーマなので admin/entry/field.twig に書けばいい？",
+    "expected_behavior": [
+      "自分のテーマの admin/entry/field.html（ユニットの下なら field_foot.html）に書くよう案内する",
+      "field.html は system の標準テンプレートから @include で読まれるため、Twig ではなく標準テンプレートの記法で書くと説明する",
+      "admin/entry/edit.html を複製して書き足す方法は使わない",
+      "画像の入力はメディアを選び、入力欄はカスタムフィールドメーカーで生成するよう勧める"
+    ],
+    "source": "Twig のテーマなら管理画面も Twig で書けると思い込みやすく、edit.html を丸ごと複製する古い方法もネット上に残っている"
+  },
+  {
+    "query": "Twig で V2_Blog_Field のロゴ画像を出している。{% if blogField.fields.site_logo.value %} で判定しているのに、メディア管理でロゴを消したら <img src=\"\"> が出るようになった",
+    "expected_behavior": [
+      "メディアのフィールドには ID だけが保存され、メディアを削除すると path などが空になる一方で value は空でない配列のまま残ると説明する",
+      "判定を fields.site_logo.value.path に変える",
+      "標準テンプレートなら {site_logo@path} で判定することにも触れる"
+    ],
+    "source": "value の有無で判定するのが自然に見えるため、参照先のメディアが消えたときの挙動を知らないと原因が分からない"
+  },
+  {
+    "query": "Twig でエントリーのフィールドグループ group_staff（staff_name と メディアの staff_photo）をループして出したい",
+    "expected_behavior": [
+      "fields.group_staff を行の配列として for で回す",
+      "テキストは row.staff_name.value、メディアは row.staff_photo.path のように、グループ内の画像・メディアには value が付かないことを示す",
+      "画像の有無を path で判定し、resizeImg と getHeightFromRatio で width / height を付ける"
+    ],
+    "source": "グループの外では fields.name.value.path なのに、グループの中では row.name.path になる形の違いで何も出なくなる"
+  },
+  {
+    "query": "商品紹介用のカスタムユニットを3種類作りたい。include/unit/custom.html に書けばいい？中で Entry_Summary も使いたい",
+    "expected_behavior": [
+      "custom.html は1種類しか作れないので include/unit/extend.html に unit#custom_名前 のブロックで作ると説明する",
+      "入力欄は admin/entry/unit/extend.html に custom_名前 のブロックで置き、カスタムフィールドメーカーのカスタムユニットで生成するよう勧める",
+      "編集設定のユニットメニューとユニット設定の両方に登録する手順を示す",
+      "モジュールを含むユニットは、使わないエントリーでも実行されるため、グローバル変数入りのインクルードのパスで読み込む場所を限るよう勧める"
+    ],
+    "source": "custom.html で作ると2種類目から作り直しになり、ユニット内に書いたモジュールが使っていないエントリーでも実行されて重くなる"
+  },
+  {
+    "query": "カテゴリーごとにエントリーの入力欄を変えたい。field.html に <!-- BEGIN_IF [%{CCD}/eq/news] --> で書き分けてもいい？",
+    "expected_behavior": [
+      "field.html から @include(\"/admin/entry/ccd/%{CCD}.html\") のようにグローバル変数入りのパスでインクルードする方法を示す",
+      "パスにはテンプレートキャッシュでも解決される %{BCD}・%{CCD}・%{RCCD} などを使う",
+      "入力欄が出ていない状態で保存すると、そのフィールドの値が消えることを伝え、必要なら updateField を案内する"
+    ],
+    "source": "出し分け自体はできても、保存時に全フィールドを入れ替える仕様を知らないと、カテゴリー変更時などに値が消える"
+  }
+]

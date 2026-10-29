@@ -29,7 +29,7 @@
     {
       "name": "acms-site-builder",
       "displayName": "a-blog cms サイト制作",
-      "description": "テーマ・標準テンプレート・Twig テンプレート・モジュールの選び方など、a-blog cms でサイトを制作するためのスキル",
+      "description": "テーマ・標準テンプレート・Twig テンプレート・モジュールの選び方・メールフォーム・カスタムフィールドなど、a-blog cms でサイトを制作するためのスキル",
       "version": "0.1.0",
       "source": "./",
       "strict": false,
@@ -40,14 +40,16 @@
         "theme",
         "template",
         "twig",
-        "form"
+        "form",
+        "custom field"
       ],
       "skills": [
         "./skills/acms-theme-development",
         "./skills/acms-template-acms",
         "./skills/acms-template-twig",
         "./skills/acms-module-reference",
-        "./skills/acms-form"
+        "./skills/acms-form",
+        "./skills/acms-custom-field"
       ],
       "dependencies": [
         "acms-common"

@@ -1,7 +1,5 @@
 # acms-agent-skills
 
-> **開発中です。** v0.1.0 のリリースまでは、スキルの名前や内容が予告なく変わります。
-
 [a-blog cms](https://www.a-blogcms.jp) でサイト制作やプラグイン（拡張アプリ）開発を行う AI エージェント（Claude Code、GitHub Copilot、Codex、Cursor など）向けのスキル集です。[Agent Skills](https://agentskills.io/specification) の形式で書いているので、この形式に対応したエージェントならどれでも使えます。
 
 ## 対象
@@ -22,6 +20,8 @@ a-blog cms 本体の開発用ではありません。
 | [acms-template-acms](skills/acms-template-acms/SKILL.md) | 標準テンプレート（BEGIN_MODULE、ブロック、変数、校正オプション、@include） |
 | [acms-template-twig](skills/acms-template-twig/SKILL.md) | Twig テンプレート（module()、touch()、フィルター、include / extends） |
 | [acms-module-reference](skills/acms-module-reference/SKILL.md) | 目的に合うモジュールの選び方、モジュール ID、変数表の引き方 |
+| [acms-form](skills/acms-form/SKILL.md) | メールフォーム（フォーム ID、バリデーター、コンバーター、確認画面、メールテンプレート） |
+| [acms-custom-field](skills/acms-custom-field/SKILL.md) | カスタムフィールド・画像やメディアの入力欄・フィールドグループ・カスタムユニット |
 | [acms-plugin-development](skills/acms-plugin-development/SKILL.md) | プラグイン（拡張アプリ）の PHP 実装（ServiceProvider、Hook、独自モジュール） |
 | [acms-admin-frontend-plugin](skills/acms-admin-frontend-plugin/SKILL.md) | 管理画面 JavaScript プラグイン（ACMS.plugins、ACMS.events、Slot） |
 
@@ -56,7 +56,7 @@ claude plugin install acms-plugin-developer@acms-agent-skills
 | プラグイン | 含まれるスキル |
 |---|---|
 | `acms-common` | acms-router、acms-project-triage（下の2つを入れると依存関係として自動で入ります） |
-| `acms-site-builder` | acms-theme-development、acms-template-acms、acms-template-twig、acms-module-reference |
+| `acms-site-builder` | acms-theme-development、acms-template-acms、acms-template-twig、acms-module-reference、acms-form、acms-custom-field |
 | `acms-plugin-developer` | acms-plugin-development、acms-admin-frontend-plugin |
 
 ### 手動
