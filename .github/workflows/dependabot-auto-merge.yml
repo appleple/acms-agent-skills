@@ -1,0 +1,25 @@
+name: dependabot-auto-merge
+
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 更新内容の取得
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # アクションの更新だけを対象にする。マージは必須チェック（validate）の通過を待って行われる
+      - name: 自動マージを有効にする
+        if: steps.metadata.outputs.package-ecosystem == 'github_actions'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
