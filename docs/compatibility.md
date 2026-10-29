@@ -13,6 +13,13 @@
 - スキルの削除・改名はメジャー、スキルの追加はマイナー、内容の修正はパッチとする。
 - `.claude-plugin/marketplace.json` の各プラグインの `version` もリリースのたびに揃えて上げる（Claude Code は version が変わったときに更新を配る）。
 
+### リリースの手順
+
+1. `CHANGELOG.md` の `## [Unreleased]` を `## [X.Y.Z] - YYYY-MM-DD` に改め、新しい `## [Unreleased]` を上に足す。
+2. `.claude-plugin/marketplace.json` の `metadata.version` と各プラグインの `version` を `X.Y.Z` に揃える。
+3. main にコミットして push し、`git tag vX.Y.Z && git push origin vX.Y.Z` でタグを push する。
+4. `.github/workflows/release.yml` が、検証・タグと marketplace.json の版の一致・CHANGELOG の節の有無を確かめてから、CHANGELOG の節をリリースノートにした GitHub Release を作る。どれかが合わなければ Release は作られないので、直してタグを打ち直す（`git tag -d vX.Y.Z && git push origin :refs/tags/vX.Y.Z`）。
+
 ## a-blog cms 本体との連動
 
 本体の公開 API（テンプレート構文、Twig の関数・フィルター、Hook、管理画面の JavaScript の拡張ポイント）が変わったときは、本体のリリース作業の中でこのリポジトリの該当スキルも更新する。

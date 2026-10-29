@@ -1,0 +1,48 @@
+name: release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: スキルと marketplace.json の検証
+        run: node scripts/validate-skills.mjs
+      - name: シェルスクリプトの構文チェック
+        run: |
+          find skills -name '*.sh' -print0 | xargs -0 -r -n1 sh -n
+      # marketplace.json の version が古いままだと Claude Code が更新を配らないため、タグと揃っていなければ止める
+      - name: タグと marketplace.json のバージョンの一致を確かめる
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          listed=$(node -p "require('./.claude-plugin/marketplace.json').metadata.version")
+          if [ "$version" != "$listed" ]; then
+            echo "::error::タグ ${GITHUB_REF_NAME} と marketplace.json の metadata.version（${listed}）が一致しない"
+            exit 1
+          fi
+      # GitHub の自動生成ではなく CHANGELOG の節を使う。利用者向けの変更点は CHANGELOG にだけ書いているため
+      - name: CHANGELOG からリリースノートを取り出す
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          if [ ! -s release-notes.md ]; then
+            echo "::error::CHANGELOG.md に「## [${version}]」の節がない"
+            exit 1
+          fi
+      - name: GitHub Release を作る
+        run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes-file release-notes.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
