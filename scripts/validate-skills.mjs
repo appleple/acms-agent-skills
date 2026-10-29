@@ -17,7 +17,10 @@ const MAX_SKILL_LINES = 500;
 // 公開リポジトリに載せてはいけない社内情報の代表的なパターン
 const FORBIDDEN_PATTERNS = [
   [/bitbucket\.org\/appleple/i, '社内リポジトリの URL'],
+  [/bitbucket\.org:appleple/i, '社内リポジトリの URL'],
+  [/appleple-theme/i, '社内テーマの名前'],
   [/\.esa\.io/i, '社内 Wiki の URL'],
+  [/\besa\b/i, '社内 Wiki の名前'],
   [/\bCMS-\d{3,}\b/, 'Jira のチケット番号'],
   [/localhost:\d{4}/, 'ローカル環境の URL'],
   [/\/Users\/[^/\s]+\//, 'ローカルのホームディレクトリのパス'],
