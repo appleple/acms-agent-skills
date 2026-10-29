@@ -150,7 +150,7 @@ private function exec(string $query): void
 - どれも既定では `BID`（URL のブログ）について判定する。別のブログの行を扱うなら、そのブログ ID を渡して確かめる。
 - 入力は `$this->Post->setMethod('キー', '検証の名前', 条件)` で検証を宣言し、`$this->Post->validate(new \ACMS_Validator())` のあと `$this->Post->isValidAll()` が偽なら処理せずに `$this->Post` を返す。本体の POST モジュール（`php/ACMS/POST/Tag/Update.php` など）と同じ形にすると、テンプレートの `validator#...` のブロックでエラーを出せる。権限も `operable` のような検証として宣言できる。
 - CSRF は本体が `post()` の前に確かめる。外さない（references/modules.md）。
-- POST モジュールが終わると、本体は設定（「POST 時にキャッシュをクリア」）に従ってページキャッシュを消す（`$isCacheDelete`、既定 `true`）。Hook・cron・外部からの通知など、POST モジュールの外でデータを変えたときは `\ACMS_POST_Cache::clearPageCache(BID)` を呼ぶ。
+- POST モジュールが終わると、本体は設定（「POST時のキャッシュクリア」）に従ってページキャッシュを消す（`$isCacheDelete`、既定 `true`）。Hook・cron・外部からの通知など、POST モジュールの外でデータを変えたときは `\ACMS_POST_Cache::clearPageCache(BID)` を呼ぶ。
 - プラグイン（拡張アプリ）の PHP ファイルを直接 URL で呼ぶ作りにしない。本体同梱の `.htaccess` は `index.php` 以外の `.php` へのアクセスを拒否する。外部からの通知（Webhook）も POST モジュールで受ける。
 
 ## ログと例外
