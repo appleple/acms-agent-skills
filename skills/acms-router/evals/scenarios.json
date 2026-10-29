@@ -15,5 +15,23 @@
       "acms-plugin-development を使う"
     ],
     "source": "本体ファイルを直接書き換える提案はバージョンアップで消える"
+  },
+  {
+    "query": "資料請求フォームを作って。会社名と電話番号は必須で、確認画面も付けたい",
+    "expected_behavior": [
+      "acms-form を使う",
+      "テンプレートの種類を acms-project-triage で確かめ、記法は acms-template-acms か acms-template-twig のどちらか一方に従う",
+      "フォーム ID は管理画面で作る必要があると伝える"
+    ],
+    "source": "フォームは一般的な HTML フォームとして書かれやすく、a-blog cms のフォーム ID・検証の仕組みを使わない実装になりがち"
+  },
+  {
+    "query": "お知らせのエントリーに PDF を添付できる欄と、一覧用のサムネイル画像の欄を足したい",
+    "expected_behavior": [
+      "acms-custom-field を使う",
+      "管理画面の入力欄の定義とテンプレートでの出力の両方が必要だと示す",
+      "本体の管理画面テンプレート（themes/system）を直接書き換えない"
+    ],
+    "source": "入力欄を足すために system テーマの管理画面テンプレートを直接編集しやすい"
   }
 ]

@@ -2,14 +2,14 @@
 name: acms-router
 description: >-
   a-blog cms（acms）に関する依頼を分類し、どのスキルとどの公式ドキュメントを使うかを決める入口。
-  a-blog cms のサイト制作・テーマ・テンプレート（標準テンプレート / Twig）・モジュール・カスタムフィールド・
-  プラグイン（拡張アプリ）・管理画面の JavaScript について依頼されたとき、どこから手を付けるか迷うとき、
-  リポジトリが a-blog cms かどうか分からないときに最初に使う。a-blog cms, acms, ablogcms, theme, template, Twig, plugin.
+  a-blog cms のサイト制作・テーマ・テンプレート（標準テンプレート / Twig）・モジュール・フォーム・カスタムフィールド・
+  カスタムユニット・プラグイン（拡張アプリ）・管理画面の JavaScript について依頼されたとき、どこから手を付けるか迷うとき、
+  リポジトリが a-blog cms かどうか分からないときに最初に使う。a-blog cms, acms, ablogcms, theme, template, Twig, form, custom field, plugin.
 license: MIT
 compatibility: a-blog cms Ver. 3.2 以上
 metadata:
   acms-min-version: "3.2"
-  status: draft
+  status: stable
 ---
 
 # a-blog cms の依頼の振り分け
@@ -24,21 +24,23 @@ metadata:
 
 | 依頼の内容 | 使うスキル |
 |---|---|
-| テーマを作る・複製する・継承する、template.yaml、どのテンプレートが表示に使われるか | `acms-theme-development` |
-| `.html` のテンプレートに `<!-- BEGIN_MODULE ... -->`、`{var}`、`%{GLOBAL}`、`@include` を書く・直す | `acms-template-acms` |
+| テーマを作る・継承する、template.yaml、どのテンプレートが表示に使われるか、acms.js や管理用 CSS の読み込み | `acms-theme-development` |
+| `.html` のテンプレートに `<!-- BEGIN_MODULE ... -->`、`{var}`、`%{GLOBAL}`、`BEGIN_IF`、`@include` を書く・直す | `acms-template-acms` |
 | `.twig` のテンプレート、`module('V2_...')`、`touch()`、`{% extends %}` を書く・直す | `acms-template-twig` |
-| 「新着一覧を出したい」のように、何を表示したいかは決まっているがモジュールが分からない | `acms-module-reference` |
-| プラグイン（拡張アプリ）の PHP、Hook、独自モジュール、校正オプションの追加 | `acms-plugin-development` |
+| 「新着一覧を出したい」のように、何を表示したいかは決まっているがモジュールが分からない。モジュール ID の設定が効かない | `acms-module-reference` |
+| お問い合わせなどのメールフォーム、バリデーター（`:v#`）、コンバーター（`:c`）、確認画面、メールテンプレート | `acms-form` |
+| ブログ・カテゴリー・エントリーなどのカスタムフィールド、画像・メディアの入力欄、フィールドグループ、カスタムユニット | `acms-custom-field` |
+| プラグイン（拡張アプリ）の PHP、Hook、独自モジュール、校正オプション・検証オプションの追加、グローバル変数の追加 | `acms-plugin-development` |
 | 管理画面の JavaScript プラグイン、`ACMS.plugins`、`ACMS.events`、Slot | `acms-admin-frontend-plugin` |
 
-どれにも当たらない場合（カスタムフィールド、ユニット、ルール、フォーム、キャッシュなど）は、公式ドキュメントの目次 <https://developer.a-blogcms.jp/document/> から該当ページを探して読む。推測で書かない。主な入口は次のとおり。
+記法を書くスキル（`acms-template-acms` / `acms-template-twig`）は、テンプレートの種類に合わせてどちらか一方だけを使う。フォームやカスタムフィールドの依頼でも、テンプレートの記法はこの2つのどちらかに従う。
+
+どれにも当たらない場合（ルール、キャッシュ、セキュリティ設定など）は、公式ドキュメントの目次 <https://developer.a-blogcms.jp/document/> から該当ページを探して読む。推測で書かない。主な入口は次のとおり。
 
 | 分野 | ページ |
 |---|---|
-| カスタムフィールド | <https://developer.a-blogcms.jp/document/customfield/> |
 | ユニット | <https://developer.a-blogcms.jp/document/units/> |
 | ルール | <https://developer.a-blogcms.jp/document/rule/> |
-| フォーム | <https://developer.a-blogcms.jp/document/form/> |
 | URL コンテキスト | <https://developer.a-blogcms.jp/document/urlcontext/> |
 | キャッシュ | <https://developer.a-blogcms.jp/document/cache/> |
 | セキュリティ | <https://developer.a-blogcms.jp/document/security/> |
@@ -46,7 +48,8 @@ metadata:
 
 ## 守ること
 
-- 公式ドキュメント（developer.a-blogcms.jp）を正とする。記憶にある記法と食い違ったらドキュメントに従う。
-- 対象は Ver. 3.2 以上。3.2 より前のサイトなら、そのことを利用者に伝え、スキルの内容をそのまま当てはめない。
-- `config.server.php` には DB の接続情報があるため、読み込まない・出力しない。
-- a-blog cms 本体のファイル（`php/` 配下など）は書き換えない。挙動を変えたいときは、テーマ・プラグイン（拡張アプリ）・設定で実現する。本体を書き換えるとバージョンアップで消えるため。
+- 仕様の正は公式ドキュメント（developer.a-blogcms.jp）と、作業対象のサイトで実際に動く挙動。記憶にある記法と食い違ったらドキュメントに従い、ドキュメントと挙動が違えば挙動を優先して利用者に伝える。
+- 対象は Ver. 3.2 以上。3.2 より前のサイトなら、そのことを利用者に伝え、スキルの内容をそのまま当てはめない。3.2.x の途中で入った機能（各スキルに「Ver. 3.2.NN 以降」と注記がある）は、判定したバージョンと照らしてから使う。
+- `config.server.php` と `private/` 配下には DB の接続情報や秘密鍵があるため、読み込まない・出力しない。
+- a-blog cms 本体のファイル（`php/`、`js/`、`themes/system/` など）は書き換えない。挙動を変えたいときは、テーマ・プラグイン（拡張アプリ）・設定で実現する。本体を書き換えるとバージョンアップで消えるため。
+- モジュール ID・フォーム ID・テーマの割り当てなど、管理画面で作る設定は DB に保存され、ファイルを置くだけでは作られない。必要な管理画面の操作を利用者に伝える。
