@@ -3,17 +3,36 @@
     "query": "このリポジトリの a-blog cms のバージョンを教えて",
     "expected_behavior": [
       "scripts/detect.sh を実行し、themes/system/css/acms.css の先頭コメントからバージョンを読む",
-      "config.server.php を開かない"
+      "config.server.php と private/ 配下を開かない",
+      "判定できなければ不明と伝え、管理画面での確認を頼む"
     ],
-    "source": "バージョンを調べようとして DB 接続情報を含む config.server.php を読んでしまう"
+    "source": "バージョンを調べようとして DB 接続情報を含む config.server.php を読んだり、難読化された PHP からバージョンを探そうとしたりする"
   },
   {
     "query": "site@blog テーマのテンプレートを直したい。まず構成を調べて",
     "expected_behavior": [
-      "site@blog が blog テーマを親とする子テーマだと説明する",
-      "template.yaml の tpl_twig から Twig か標準テンプレートかを判定する",
-      "実際にどのブログがどのテーマを使っているかはファイルからは分からないと伝える"
+      "site@blog が blog テーマを親とする子テーマで、テンプレートは site@blog > blog > system の順に探されると説明する",
+      "template.yaml の tpl_twig を継承の順にたどって Twig か標準テンプレートかを判定する",
+      "実際にどのブログがどのテーマを使っているか（テーマセット）はファイルからは分からないと伝え、利用者に確認する"
     ],
-    "source": "テーマの継承とテンプレートの種類は、書き始める前に確かめないと記法を取り違える"
+    "source": "テーマの継承とテンプレートの種類は、書き始める前に確かめないと記法や直すファイルを取り違える"
+  },
+  {
+    "query": "news@base テーマには template.yaml がない。これは標準テンプレートのテーマだよね？",
+    "expected_behavior": [
+      "子テーマに template.yaml が無くても、親テーマ base の template.yaml の tpl_twig が使われると説明する",
+      "detect.sh の template 欄（どの template.yaml から判定したか）を根拠に答える",
+      "template.yaml に無くても管理画面のテーマ設定で Twig を有効にしている場合があることに触れる"
+    ],
+    "source": "子テーマの template.yaml だけを見て標準テンプレートと決めつけ、Twig のテーマに標準テンプレートの記法で書いてしまう"
+  },
+  {
+    "query": "extension/plugins に置いたプラグインが管理画面に出てこない。導入されているか調べて",
+    "expected_behavior": [
+      "detect.sh で extension/plugins/ 配下を確かめる",
+      "ServiceProvider.php が無いディレクトリは本体がプラグインとして扱わないことを伝える",
+      "有効かどうかは DB にあるためファイルからは分からないと伝える"
+    ],
+    "source": "ディレクトリがあるだけで導入済みと判断し、ServiceProvider.php の有無や有効化の状態を確かめない"
   }
 ]

@@ -1,47 +1,61 @@
 ---
 name: acms-project-triage
 description: >-
-  作業対象の a-blog cms（acms）について、バージョン、テーマの一覧と継承関係、各テーマが標準テンプレートか
-  Twig テンプレートか、導入済みのプラグイン（拡張アプリ）を scripts/detect.sh で判定する。
+  作業対象の a-blog cms（acms）について、バージョン、テーマの一覧と継承の順、各テーマが標準テンプレートか
+  Twig テンプレートか、配置済みのプラグイン（拡張アプリ）を scripts/detect.sh で判定する。
   a-blog cms のテーマ・テンプレート・プラグイン（拡張アプリ）を書き始める前、バージョンやテンプレートの種類が分からないとき、
-  「このサイトの構成を調べて」と頼まれたときに使う。version detection, theme, Twig or standard template.
+  「このサイトの構成を調べて」「a-blog cms のバージョンは？」と頼まれたときに使う。
+  a-blog cms version detection, theme inheritance, Twig or standard template, plugins.
+  テーマの作り方・継承の使い方は acms-theme-development が担う。
 license: MIT
-compatibility: a-blog cms Ver. 3.2 以上。POSIX シェル（sh / bash）で動く。外部通信はしない。
+compatibility: a-blog cms Ver. 3.2 以上（Ver. 3.2 未満も判定はでき、対象外と伝える）。POSIX シェル（sh）で動き、Node.js や PHP の CLI は不要。外部通信はしない。
 metadata:
   acms-min-version: "3.2"
-  status: draft
+  status: stable
 ---
 
 # a-blog cms の構成の判定
 
 ## 手順
 
-1. a-blog cms の設置ディレクトリ（`index.php`・`themes/`・`extension/` があるディレクトリ）を探す。リポジトリ直下とは限らない（`public/`・`htdocs/`・`ablogcms/` など）。
-2. 判定スクリプトを実行する。
+1. a-blog cms の設置ディレクトリ（`index.php`・`themes/`・`extension/` が並ぶディレクトリ）を探す。リポジトリ直下とは限らない（`public/`・`htdocs/`・`ablogcms/` など）。
+2. 判定スクリプトを実行する。スクリプトのパスは、このスキルのディレクトリからの相対パス。
 
-   ```bash
+   ```sh
    sh scripts/detect.sh <設置ディレクトリ>
    ```
 
-   スクリプトのパスは、このスキルのディレクトリからの相対パス。
-
 3. 出力を読み、次を利用者に短く報告してから作業に入る。
-   - バージョン（判定できなければ「不明」と書き、管理画面のフッターなどで確認してもらう）
-   - 作業するテーマ名と、その親テーマ
-   - そのテーマが Twig（`tpl_twig: enabled`）か標準テンプレートか
-   - 導入済みのプラグイン（拡張アプリ）
+   - バージョン（「不明」なら、管理画面で確認してもらう）
+   - 作業するテーマと、その継承の順（`chain`）
+   - そのテーマが Twig か標準テンプレートか（`template`）
+   - 配置されているプラグイン（拡張アプリ）
 
-## 判定の根拠
+## 出力の読み方
 
-| 項目 | 見るもの |
-|---|---|
-| バージョン | `themes/system/css/acms.css` の先頭コメント（`@ablogcms/acms.css Ver. x.y.z`）。PHP のソースは配布版では難読化されているため使わない |
-| テーマの継承 | ディレクトリ名 `子テーマ@親テーマ`。テンプレートは子 → 親の順に探される |
-| Twig か標準か | テーマ直下の `template.yaml` の `tpl_twig: enabled`。テーマ単位の設定で、管理画面のテーマ設定でも切り替えられるため、`template.yaml` に無くても Twig の場合がある。`.twig` ファイルの有無も合わせて見る |
-| プラグイン（拡張アプリ） | `extension/plugins/` 配下のディレクトリ |
+```text
+## a-blog cms
+version: 3.2.38 (themes/system/css/acms.css の先頭コメント)
+
+## themes
+- blog@site
+  chain: blog@site > site > system
+  template: standard (template.yaml に tpl_twig なし)
+
+## plugins
+- SamplePlugin
+```
+
+| 項目 | 判定の根拠 | 判定できないこと |
+|---|---|---|
+| `version` | `themes/system/css/acms.css`（無ければ `acms.min.css`）の先頭コメント `@ablogcms/acms.css Ver. x.y.z`。ビルド時に本体のバージョンが入る（Ver. 3.0.10 以降） | それより古い版は「不明」になる。配布版の PHP は一部が難読化されているため、PHP からは読まない |
+| `chain` | ディレクトリ名の `@` の右側を親として、本体と同じ規則で並べたもの。テンプレートはこの順に探され、最後に `system` が使われる | 親のディレクトリが無ければ `warning` を出す |
+| `template` | 継承の順に `template.yaml` の `tpl_twig` を見て、最初に値があったもの（本体も template.yaml をキーごとに子 → 親の順で読む）。`enabled` なら Twig | template.yaml に無くても、管理画面のテーマ設定で Twig を有効にしている場合がある。`.twig` ファイルがあれば `standard?` と出すので、利用者に確認する。テーマ設定で template.yaml を優先しない設定にしていると、template.yaml の値は使われない |
+| `plugins` | `extension/plugins/` 配下のディレクトリ。`ServiceProvider.php` が無いものは本体がプラグインとして扱わない | 有効にしているかどうかは DB にあるため分からない |
 
 ## 守ること
 
 - `config.server.php`・`private/` 配下は読まない。DB の接続情報や秘密鍵があるため。スクリプトもこれらを読まない。
-- どのテーマが実際に使われているか（ブログごとのテーマ設定）は DB に保存されており、ファイルだけでは分からない。利用者に確認する。
-- バージョンが 3.2 未満なら、スキルの内容をそのまま当てはめず、そのことを伝える。
+- どのブログ・カテゴリーにどのテーマが割り当てられているか（テーマセット）は DB に保存されており、ファイルからは分からない。利用者に確認する。テーマが複数あるときは、作業するテーマを推測で決めない。
+- バージョンが 3.2 未満なら、acms-agent-skills の内容をそのまま当てはめず、そのことを伝える（Twig テンプレートは Ver. 3.2 から）。
+- スクリプトが失敗したり出力が想定と違ったりしたら、推測で補わず、どの項目が判定できなかったかを利用者に伝える。
