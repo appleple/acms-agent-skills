@@ -6,7 +6,7 @@ URL からどのテンプレートファイルが選ばれるかの要点。カ�
 
 - 割り当てられたテーマ → 親テーマ → … → `system` の順に、同じ相対パスのファイルを探す。
 - Twig が有効なテーマでは、`foo.html` を探すときに同じテーマの中で `foo.twig` → `foo.html.twig` → `foo.html` の順に見てから親テーマへ進む（Ver. 3.2.18 以降）。そのため、子テーマの `foo.html` は親テーマの `foo.twig` より優先される。
-- テンプレートとして読まれる拡張子は `html`・`htm`・`twig`・`csv`・`xml`・`json` と、設定 `allow_template_extension` に書いたものに限られる（Ver. 3.2.22 以降）。`config.system.default.yaml` の既定値には `css`・`yaml`・`txt`・`js` も入っている。
+- テンプレートとして読まれる拡張子は `html`・`htm`・`twig`・`csv`・`xml`・`json` と、設定 `allow_template_extension` に書いたものに限られる。URL で直接指定したテンプレートへの制限は Ver. 3.2.0 からあり、テーマ内の候補を探すとき（継承・`@include` など）にも同じ制限がかかるのは Ver. 3.2.22 以降。`config.system.default.yaml` の既定値には `css`・`yaml`・`txt`・`js` も入っている。
 
 ## ページの種類ごとの基本テンプレート
 
