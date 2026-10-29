@@ -1,34 +1,56 @@
 [
   {
-    "query": "Twig のテーマで、エントリー一覧の日付を「2026年10月29日」の形で出したい",
+    "query": "Twig テンプレートで Entry_Summary を使って新着を5件出して",
     "expected_behavior": [
-      "V2_Entry_Summary を module() で呼んで items をループする",
-      "日付は acms_date を使うか、Twig の date を使うなら書式の違いを説明する"
+      "Twig の module() で呼べるのは V2_ で始まるモジュールだけだと説明する",
+      "module('V2_Entry_Summary', …) に置き換え、戻り値の items を {% for %} でループする",
+      "件数は第3引数の limit かモジュール ID の設定で指定する"
     ],
-    "source": "Twig 標準の date と a-blog cms の date は名前が重なり、acms_ を付けないと期待と違う書式になる"
+    "source": "従来のモジュール名をそのまま module() に渡しがち。名前が見つからないと空の配列が返るだけでエラーにならないため、原因に気付きにくい"
   },
   {
-    "query": "Twig テンプレートで Entry_Summary を使って新着を出して",
+    "query": "Twig テーマで、エントリーの本文 {{ entry.body }} とリッチエディタのカスタムフィールドの HTML がタグごと文字で表示される。直して",
     "expected_behavior": [
-      "Twig では V2_ で始まるモジュールしか呼べないと説明する",
-      "V2_Entry_Summary に置き換える"
+      "{{ }} は自動で HTML エスケープされるのが原因だと説明する",
+      "編集者が入力したフィールドの HTML には |safe_html を使う",
+      "V2_Entry_Body の entry.body のように a-blog cms が組み立てた HTML は |raw で出すと説明する",
+      "フォームの入力値など不特定の人が入力した値には |raw を付けない"
     ],
-    "source": "従来のモジュール名をそのまま module() に渡して動かない"
+    "source": "表示を直すためにすべてに |raw を付け、危険な HTML をそのまま出してしまう。逆にすべてを safe_html にするとユニットの HTML が削られることがある"
   },
   {
-    "query": "本文の HTML がエスケープされて表示される。{{ entry.body }} を直して",
+    "query": "標準テンプレートの @include で読み込んでいる include/header.html の中に {% if touch('Touch_Login') %} と書いたのに、そのまま文字で出てしまう",
     "expected_behavior": [
-      "まず |safe_html を使う",
-      "|raw は script も通すため、管理者が入力した値で明示的に必要なときだけと説明する"
-    ],
-    "source": "表示を直すために |raw を付け、危険な HTML をそのまま出してしまう"
-  },
-  {
-    "query": "標準テンプレートの include/header.html の中に Twig を書いたのに動かない",
-    "expected_behavior": [
-      "@include で読み込んだ先の Twig は処理されないと説明する",
-      "Twig の include で読み込むか、ルートから Twig に移す方法を示す"
+      "Twig が先に処理され、その後で @include が展開されるため、@include で読み込んだ先の Twig は処理されないと説明する",
+      "呼び出し側を {{ include('/include/header.html') }} のように Twig の include にするか、ルートから Twig に移す方法を示す"
     ],
     "source": "Twig と標準テンプレートの処理順を知らないと原因が分からない"
+  },
+  {
+    "query": "標準テンプレートの <p>{summary}[trim(120, '…')]</p> と <time>{udate}[date('Y.m.d')]</time> を Twig に書き換えて。更新日は空のこともある",
+    "expected_behavior": [
+      "|trim は Twig 標準のフィルターになりエラーになるため、|acms_trim(120, '…')（文字数で切るなら |mb_trim）を使う",
+      "Twig 標準と名前が重なる校正オプションは acms_ を付けて呼ぶと説明する",
+      "日付は Twig の |date でも書式は同じだが、空の値だと現在日時が出るため、|acms_date を使うか {% if %} で囲む"
+    ],
+    "source": "校正オプションと同じ名前の Twig 標準フィルター（trim、date など）が優先されることを知らず、そのまま移してエラーや誤った日付を出す"
+  },
+  {
+    "query": "Twig で、カテゴリーごとにあるかもしれない部品 /include/category/{カテゴリーのコード}.twig を読み込みたい。無いときは何も出さないで",
+    "expected_behavior": [
+      "パスを ~ で組み立てて include に渡す（Twig の include のパスには変数を使える）",
+      "ignore_missing = true を名前付きで渡すか、{% include … ignore missing %} と書く",
+      "include の第3引数に true を並べるだけでは ignore_missing にならない（第3引数は with_context）と説明する"
+    ],
+    "source": "Twig の include はファイルが無いとエラーになる。第3引数に true を渡す書き方は with_context の指定になり、エラーを防げない"
+  },
+  {
+    "query": "本番サイトで .twig ファイルを修正してアップロードしたのに、表示が変わらない",
+    "expected_behavior": [
+      "デバッグモードでないときは Twig のコンパイル済みキャッシュが使われ続けると説明する",
+      "管理画面のダッシュボードのキャッシュクリアで「テンプレート キャッシュ」をクリアするよう案内する",
+      "ページキャッシュを使っている場合はページキャッシュもクリアするよう案内する"
+    ],
+    "source": "デバッグモードのある開発環境では即時に反映されるため、本番だけ反映されない原因が分からない"
   }
 ]
