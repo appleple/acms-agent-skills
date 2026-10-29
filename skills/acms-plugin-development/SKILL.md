@@ -5,10 +5,10 @@ description: >-
   プラグイン（拡張アプリ）のディレクトリ構成と ServiceProvider（install / uninstall / activate / init の役割、名前空間）、
   Hook の選び方と登録（HOOK_ENABLE、例外を外へ投げない理由）、独自の GET / V2 GET / POST モジュール（CSRF の扱い）、
   校正オプション（Corrector）・検証オプション（Validator）・グローバル変数の追加、管理画面の設定ページ（Twig 管理画面は Ver. 3.2.24 以降）、
-  管理画面への JavaScript の読み込み、動かないときのデバッグを扱う。
+  管理画面への JavaScript の読み込み、動かないときのデバッグ、配布・本番運用するプラグインの設計（独自テーブルの作成とマイグレーション、設定値と API キーの置き場所、権限の確認、ログ、テスト、composer の依存、配布の zip と対応バージョン）を扱う。
   「エントリー保存時に処理を足したい」「独自モジュールを作りたい」「プラグインを作って」「Hook.php に書いたのに動かない」と頼まれたとき、
   ServiceProvider.php・Hook.php・Corrector.php・Validator.php・extension/plugins/ を触るときに使う。
-  a-blog cms plugin, Hook, ServiceProvider, custom module, corrector, validator.
+  a-blog cms plugin, Hook, ServiceProvider, custom module, corrector, validator, DB table, migration, testing, distribution.
   管理画面の JavaScript プラグインの中身（ACMS.plugins、ACMS.events）は acms-admin-frontend-plugin、テンプレートの記法は acms-template-acms / acms-template-twig が担う。
 license: MIT
 compatibility: a-blog cms Ver. 3.2 以上。Twig の管理画面と Twig の Filter 登録は Ver. 3.2.24 以降、Asset API は Ver. 3.2.29 以降。
@@ -46,6 +46,7 @@ metadata:
    - Hook を選ぶとき、Hook が動かないときは references/hooks.md を読む。
    - 独自の GET / V2 GET / POST モジュールを作るときは references/modules.md を読む。
    - 校正オプション・検証オプション・グローバル変数を足すときは references/corrector-validator-global-variables.md を読む。
+   - 独自テーブル・設定画面・テスト・配布を伴うプラグイン（拡張アプリ）を作るときは references/production-plugin.md を読む（install / update / uninstall の本体の動き、DB_PREFIX とマイグレーション、API キーの置き場所、POST の権限、composer の依存、対応バージョンの宣言）。
 3. 書いたら「確認とデバッグ」の順で動作を確かめる。
 
 ## 守ること
@@ -70,4 +71,4 @@ metadata:
 6. 本番だけで起きる: デバッグモードではテンプレートキャッシュが無効になる。インクルードのパスに足したグローバル変数の問題（references/corrector-validator-global-variables.md）は、デバッグモードでは再現しない。ページキャッシュが返るときは `afterBuild` などは呼ばれない（references/hooks.md）。
 7. プラグイン（拡張アプリ）の `$version` を上げたのに反映されない: 管理画面でアップデートを実行すると `update()` が呼ばれる。テーブルの変更はここに書く。
 
-テストと静的解析は <https://developer.a-blogcms.jp/document/develop_apps/plugin-testing.html> を読む。
+テストと静的解析は <https://developer.a-blogcms.jp/document/develop_apps/plugin-testing.html> と references/production-plugin.md の「テスト」を読む。
