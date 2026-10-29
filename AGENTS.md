@@ -14,6 +14,7 @@
 - 正は developer.a-blogcms.jp。変数表・スニペット・ドキュメントの文章を写さず、リンクと「どれを選ぶか」の判断表に留める。
 - 社内情報（社内のリポジトリ・チケット番号・社内 Wiki・ローカル環境のパスや URL・顧客名）を書かない。`scripts/validate-skills.mjs` が代表的なパターンを検出する。
 - 名前は略さない（`dev`・`js` ではなく `development`・`javascript`）。
+- 「拡張アプリ」は「プラグイン（拡張アプリ）」と書く。英語では plugin に統一し、extension は使わない（`extension/plugins/` などの実在するパスは除く）。
 - 対象は a-blog cms Ver. 3.2 以上。それより新しいバージョンで入った機能には本文で「Ver. 3.2.24 以降」のように注記する（docs/compatibility.md）。
 - 新しいスキルには評価シナリオを最低1件置く。
 

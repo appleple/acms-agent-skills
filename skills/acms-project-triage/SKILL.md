@@ -2,8 +2,8 @@
 name: acms-project-triage
 description: >-
   作業対象の a-blog cms（acms）について、バージョン、テーマの一覧と継承関係、各テーマが標準テンプレートか
-  Twig テンプレートか、導入済みの拡張アプリ（プラグイン）を scripts/detect.sh で判定する。
-  a-blog cms のテーマ・テンプレート・拡張アプリを書き始める前、バージョンやテンプレートの種類が分からないとき、
+  Twig テンプレートか、導入済みのプラグイン（拡張アプリ）を scripts/detect.sh で判定する。
+  a-blog cms のテーマ・テンプレート・プラグイン（拡張アプリ）を書き始める前、バージョンやテンプレートの種類が分からないとき、
   「このサイトの構成を調べて」と頼まれたときに使う。version detection, theme, Twig or standard template.
 license: MIT
 compatibility: a-blog cms Ver. 3.2 以上。POSIX シェル（sh / bash）で動く。外部通信はしない。
@@ -29,7 +29,7 @@ metadata:
    - バージョン（判定できなければ「不明」と書き、管理画面のフッターなどで確認してもらう）
    - 作業するテーマ名と、その親テーマ
    - そのテーマが Twig（`tpl_twig: enabled`）か標準テンプレートか
-   - 導入済みの拡張アプリ
+   - 導入済みのプラグイン（拡張アプリ）
 
 ## 判定の根拠
 
@@ -38,7 +38,7 @@ metadata:
 | バージョン | `themes/system/css/acms.css` の先頭コメント（`@ablogcms/acms.css Ver. x.y.z`）。PHP のソースは配布版では難読化されているため使わない |
 | テーマの継承 | ディレクトリ名 `子テーマ@親テーマ`。テンプレートは子 → 親の順に探される |
 | Twig か標準か | テーマ直下の `template.yaml` の `tpl_twig: enabled`。テーマ単位の設定で、管理画面のテーマ設定でも切り替えられるため、`template.yaml` に無くても Twig の場合がある。`.twig` ファイルの有無も合わせて見る |
-| 拡張アプリ | `extension/plugins/` 配下のディレクトリ |
+| プラグイン（拡張アプリ） | `extension/plugins/` 配下のディレクトリ |
 
 ## 守ること
 

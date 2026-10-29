@@ -3,7 +3,7 @@ name: acms-router
 description: >-
   a-blog cms（acms）に関する依頼を分類し、どのスキルとどの公式ドキュメントを使うかを決める入口。
   a-blog cms のサイト制作・テーマ・テンプレート（標準テンプレート / Twig）・モジュール・カスタムフィールド・
-  拡張アプリ（プラグイン）・管理画面の JavaScript について依頼されたとき、どこから手を付けるか迷うとき、
+  プラグイン（拡張アプリ）・管理画面の JavaScript について依頼されたとき、どこから手を付けるか迷うとき、
   リポジトリが a-blog cms かどうか分からないときに最初に使う。a-blog cms, acms, ablogcms, theme, template, Twig, plugin.
 license: MIT
 compatibility: a-blog cms Ver. 3.2 以上
@@ -28,7 +28,7 @@ metadata:
 | `.html` のテンプレートに `<!-- BEGIN_MODULE ... -->`、`{var}`、`%{GLOBAL}`、`@include` を書く・直す | `acms-template-acms` |
 | `.twig` のテンプレート、`module('V2_...')`、`touch()`、`{% extends %}` を書く・直す | `acms-template-twig` |
 | 「新着一覧を出したい」のように、何を表示したいかは決まっているがモジュールが分からない | `acms-module-reference` |
-| 拡張アプリ（プラグイン）の PHP、Hook、独自モジュール、校正オプションの追加 | `acms-extension-development` |
+| プラグイン（拡張アプリ）の PHP、Hook、独自モジュール、校正オプションの追加 | `acms-plugin-development` |
 | 管理画面の JavaScript プラグイン、`ACMS.plugins`、`ACMS.events`、Slot | `acms-admin-frontend-plugin` |
 
 どれにも当たらない場合（カスタムフィールド、ユニット、ルール、フォーム、キャッシュなど）は、公式ドキュメントの目次 <https://developer.a-blogcms.jp/document/> から該当ページを探して読む。推測で書かない。主な入口は次のとおり。
@@ -49,4 +49,4 @@ metadata:
 - 公式ドキュメント（developer.a-blogcms.jp）を正とする。記憶にある記法と食い違ったらドキュメントに従う。
 - 対象は Ver. 3.2 以上。3.2 より前のサイトなら、そのことを利用者に伝え、スキルの内容をそのまま当てはめない。
 - `config.server.php` には DB の接続情報があるため、読み込まない・出力しない。
-- a-blog cms 本体のファイル（`php/` 配下など）は書き換えない。挙動を変えたいときは、テーマ・拡張アプリ・設定で実現する。本体を書き換えるとバージョンアップで消えるため。
+- a-blog cms 本体のファイル（`php/` 配下など）は書き換えない。挙動を変えたいときは、テーマ・プラグイン（拡張アプリ）・設定で実現する。本体を書き換えるとバージョンアップで消えるため。

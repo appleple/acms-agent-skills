@@ -2,13 +2,13 @@
 
 > **開発中です。** v0.1.0 のリリースまでは、スキルの名前や内容が予告なく変わります。
 
-[a-blog cms](https://www.a-blogcms.jp) でサイト制作や拡張アプリ開発を行う AI エージェント（Claude Code、GitHub Copilot、Codex、Cursor など）向けのスキル集です。[Agent Skills](https://agentskills.io/specification) の形式で書いているので、この形式に対応したエージェントならどれでも使えます。
+[a-blog cms](https://www.a-blogcms.jp) でサイト制作やプラグイン（拡張アプリ）開発を行う AI エージェント（Claude Code、GitHub Copilot、Codex、Cursor など）向けのスキル集です。[Agent Skills](https://agentskills.io/specification) の形式で書いているので、この形式に対応したエージェントならどれでも使えます。
 
 ## 対象
 
 - a-blog cms **Ver. 3.2 以上**
 - テーマ・テンプレートを制作する方（標準テンプレートと Twig テンプレートの両方）
-- 拡張アプリ（プラグイン）を開発する方
+- プラグイン（拡張アプリ）を開発する方
 
 a-blog cms 本体の開発用ではありません。
 
@@ -17,12 +17,12 @@ a-blog cms 本体の開発用ではありません。
 | スキル | 内容 |
 |---|---|
 | [acms-router](skills/acms-router/SKILL.md) | a-blog cms に関する依頼を分類し、適切なスキルへ振り分ける |
-| [acms-project-triage](skills/acms-project-triage/SKILL.md) | 作業対象のバージョン・テーマ・テンプレートの種類・拡張アプリを判定する |
+| [acms-project-triage](skills/acms-project-triage/SKILL.md) | 作業対象のバージョン・テーマ・テンプレートの種類・プラグイン（拡張アプリ）を判定する |
 | [acms-theme-development](skills/acms-theme-development/SKILL.md) | テーマの構成・継承・template.yaml・テンプレートの探索 |
 | [acms-template-acms](skills/acms-template-acms/SKILL.md) | 標準テンプレート（BEGIN_MODULE、ブロック、変数、校正オプション、@include） |
 | [acms-template-twig](skills/acms-template-twig/SKILL.md) | Twig テンプレート（module()、touch()、フィルター、include / extends） |
 | [acms-module-reference](skills/acms-module-reference/SKILL.md) | 目的に合うモジュールの選び方、モジュール ID、変数表の引き方 |
-| [acms-extension-development](skills/acms-extension-development/SKILL.md) | 拡張アプリの PHP 実装（ServiceProvider、Hook、独自モジュール） |
+| [acms-plugin-development](skills/acms-plugin-development/SKILL.md) | プラグイン（拡張アプリ）の PHP 実装（ServiceProvider、Hook、独自モジュール） |
 | [acms-admin-frontend-plugin](skills/acms-admin-frontend-plugin/SKILL.md) | 管理画面 JavaScript プラグイン（ACMS.plugins、ACMS.events、Slot） |
 
 スキルの詳しい内容は、公式ドキュメント [developer.a-blogcms.jp](https://developer.a-blogcms.jp/) を正としています。スキル自体は判断の手順とドキュメントへの案内に絞っています。
@@ -50,14 +50,14 @@ gh skill install appleple/acms-agent-skills acms-template-twig --agent claude-co
 ```bash
 claude plugin marketplace add appleple/acms-agent-skills
 claude plugin install acms-site-builder@acms-agent-skills
-claude plugin install acms-extension-developer@acms-agent-skills
+claude plugin install acms-plugin-developer@acms-agent-skills
 ```
 
 | プラグイン | 含まれるスキル |
 |---|---|
 | `acms-common` | acms-router、acms-project-triage（下の2つを入れると依存関係として自動で入ります） |
 | `acms-site-builder` | acms-theme-development、acms-template-acms、acms-template-twig、acms-module-reference |
-| `acms-extension-developer` | acms-extension-development、acms-admin-frontend-plugin |
+| `acms-plugin-developer` | acms-plugin-development、acms-admin-frontend-plugin |
 
 ### 手動
 
@@ -65,7 +65,7 @@ claude plugin install acms-extension-developer@acms-agent-skills
 
 ## スクリプトの実行と外部通信
 
-- `acms-project-triage` は、作業対象のファイルを読むシェルスクリプト（`scripts/detect.sh`）を含みます。読むのはテーマ・CSS・拡張アプリのディレクトリだけで、DB 接続情報を含む `config.server.php` は読みません。外部への通信もしません。
+- `acms-project-triage` は、作業対象のファイルを読むシェルスクリプト（`scripts/detect.sh`）を含みます。読むのはテーマ・CSS・プラグイン（拡張アプリ）のディレクトリだけで、DB 接続情報を含む `config.server.php` は読みません。外部への通信もしません。
 - その他のスキルはスクリプトを含みません。エージェントが公式ドキュメント（developer.a-blogcms.jp）を Web から読むことがあります。
 
 ## フィードバック

@@ -5,7 +5,7 @@ description: >-
   ACMS.plugins.register によるプラグイン登録、ACMS.events のイベント購読（処理前の確認・処理後の通知）、
   Slot / Fill による UI の差し込み、ユニットやデータビューへの機能登録、npm パッケージ @ablogcms/plugins・@ablogcms/events を扱う。
   「管理画面にボタンを足したい」「メディアのアップロード前に確認を出したい」「独自のユニットを作りたい」と頼まれたときに使う。
-  a-blog cms admin plugin, ACMS.plugins, ACMS.events, Slot. PHP 側の拡張は acms-extension-development が担う。
+  a-blog cms admin plugin, ACMS.plugins, ACMS.events, Slot. PHP 側の拡張は acms-plugin-development が担う。
 license: MIT
 compatibility: a-blog cms Ver. 3.2.29 以上
 metadata:
@@ -40,7 +40,7 @@ register('my-plugin', {
 ```
 
 - イベント購読・機能登録・UI の差し込みは、すべて `setup(ctx)` の中で `ctx` から行う。プラグインを外したときにまとめて解除されるため。
-- 読み込みは、PHP 側（拡張アプリ）から `<script type="module">` を管理画面に差し込んで行う（acms-extension-development）。
+- 読み込みは、PHP のプラグイン（拡張アプリ）から `<script type="module">` を管理画面に差し込んで行う（acms-plugin-development）。
 
 ## 守ること
 

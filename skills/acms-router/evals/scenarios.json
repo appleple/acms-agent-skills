@@ -11,8 +11,8 @@
   {
     "query": "エントリーの保存時に外部 API へ通知したい。どこを直せばいい？",
     "expected_behavior": [
-      "本体の PHP を書き換えず、拡張アプリ（Hook）で実現する方針を示す",
-      "acms-extension-development を使う"
+      "本体の PHP を書き換えず、プラグイン（拡張アプリ）の Hook で実現する方針を示す",
+      "acms-plugin-development を使う"
     ],
     "source": "本体ファイルを直接書き換える提案はバージョンアップで消える"
   }

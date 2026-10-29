@@ -1,5 +1,5 @@
 #!/bin/sh
-# a-blog cms の設置ディレクトリを受け取り、バージョン・テーマ・テンプレートの種類・拡張アプリを出力する。
+# a-blog cms の設置ディレクトリを受け取り、バージョン・テーマ・テンプレートの種類・プラグイン（拡張アプリ）を出力する。
 # config.server.php と private/ は DB の接続情報などを含むため読まない。
 set -eu
 
@@ -47,7 +47,7 @@ for dir in "$root"/themes/*/; do
 done
 
 echo
-echo "## extension plugins"
+echo "## plugins"
 found=0
 if [ -d "$root/extension/plugins" ]; then
   for dir in "$root"/extension/plugins/*/; do

@@ -7,4 +7,4 @@
 ### Added
 
 - リポジトリの雛形（marketplace.json、検証スクリプト、CI）
-- スキルの下書き: acms-router、acms-project-triage、acms-theme-development、acms-template-acms、acms-template-twig、acms-module-reference、acms-extension-development、acms-admin-frontend-plugin
+- スキルの下書き: acms-router、acms-project-triage、acms-theme-development、acms-template-acms、acms-template-twig、acms-module-reference、acms-plugin-development、acms-admin-frontend-plugin
