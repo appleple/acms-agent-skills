@@ -1,11 +1,41 @@
 [
   {
-    "query": "メディアをアップロードする前に、ファイル名に日本語が含まれていたら確認ダイアログを出したい",
+    "query": "a-blog cms の管理画面で、メディアをアップロードする前にファイル名に全角文字が含まれていたら確認ダイアログを出して、キャンセルされたらアップロードを止めたい",
     "expected_behavior": [
-      "ACMS.plugins.register の setup(ctx) の中で ctx.events.on を使う",
-      "アップロード前のイベントで false を返して止める形にする",
-      "管理画面の DOM を直接書き換えない"
+      "media.upload.before ゲートを購読する",
+      "止めるときはハンドラの第 2 引数の cancel() を呼び、return false では止まらないと説明する",
+      "Ver. 3.2.38 時点では ctx.events.on がゲートの第 2 引数を渡さないため、ACMS.events.on で購読し戻り値の解除関数を保持する",
+      "管理画面の DOM やアップロードボタンのクリックイベントを直接書き換えない"
     ],
-    "source": "管理画面の DOM やクラス名に直接依存すると、バージョンアップで壊れる"
+    "source": "古いイベント API（ACMS.addListener）や jQuery の慣習から `return false` で止められると思い込みやすい。また ctx.events.on でゲートの cancel を呼ぶと例外になり、理由も表示されない"
+  },
+  {
+    "query": "React と TypeScript で a-blog cms の管理画面プラグインを作りたい。webpack の設定を書いて",
+    "expected_behavior": [
+      "react と react/jsx-runtime を externals にして ACMS.Library.React / ACMS.Library.ReactJsxRuntime を宛先にする",
+      "出力形式を IIFE にし、ESM 出力にしない",
+      "production ビルドにする",
+      "ACMS.Library.ReactJsxRuntime は Ver. 3.2.36 以降であることを注記する"
+    ],
+    "source": "React を同梱すると本体とインスタンスが二重になり Invalid hook call で壊れる。ESM 出力では bare import が残りブラウザで解決できない"
+  },
+  {
+    "query": "自作のプラグイン（拡張アプリ）の管理画面用 JS を読み込ませたい。PHP 側で何をすればいい？ JS からは ACMS.plugins.register を呼ぶ予定",
+    "expected_behavior": [
+      "Ver. 3.2.29 以降のアセット API（Asset::script）で attrs に type=module を付けて出力する、または InjectTemplate で script を差し込む",
+      "admin.js が async のため ACMS.plugins がまだ無いことがあり、その場合は ACMS.adminReady で待つ形にする",
+      "登録は読み込み時に同期的に行い、fetch の後などで登録しない",
+      "ServiceProvider や Hook の書き方は acms-plugin-development に任せる"
+    ],
+    "source": "テーマの head に script を足す従来の方法や DOMContentLoaded 待ちで書きがちで、ACMS.plugins が未定義のエラーや登録の取りこぼしが起きる"
+  },
+  {
+    "query": "PHP 側の設定画面で入力した API キーをプラグインの JS に渡して、メディアの代替テキストを外部 API で生成するボタンをメディア編集モーダルに付けたい",
+    "expected_behavior": [
+      "ボタンは Slot media.edit-modal.field.alt に ctx.ui.fill で差し込み、withFillProps で setAlt などを受け取る",
+      "API キーを ctx.config（jsModule）で JS に渡さず、外部 API の呼び出しは PHP 側で行うよう提案する",
+      "ctx.config のキーはプラグイン名をキャメルケースにしたものになることを説明する"
+    ],
+    "source": "ctx.config は acms.js の URL のクエリとして渡るため秘密情報が漏れる。props を受け取るコンポーネントを withFillProps なしで渡すと DOM コールバックとして扱われる"
   }
 ]
