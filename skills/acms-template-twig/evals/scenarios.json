@@ -1,0 +1,34 @@
+[
+  {
+    "query": "Twig のテーマで、エントリー一覧の日付を「2026年10月29日」の形で出したい",
+    "expected_behavior": [
+      "V2_Entry_Summary を module() で呼んで items をループする",
+      "日付は acms_date を使うか、Twig の date を使うなら書式の違いを説明する"
+    ],
+    "source": "Twig 標準の date と a-blog cms の date は名前が重なり、acms_ を付けないと期待と違う書式になる"
+  },
+  {
+    "query": "Twig テンプレートで Entry_Summary を使って新着を出して",
+    "expected_behavior": [
+      "Twig では V2_ で始まるモジュールしか呼べないと説明する",
+      "V2_Entry_Summary に置き換える"
+    ],
+    "source": "従来のモジュール名をそのまま module() に渡して動かない"
+  },
+  {
+    "query": "本文の HTML がエスケープされて表示される。{{ entry.body }} を直して",
+    "expected_behavior": [
+      "まず |safe_html を使う",
+      "|raw は script も通すため、管理者が入力した値で明示的に必要なときだけと説明する"
+    ],
+    "source": "表示を直すために |raw を付け、危険な HTML をそのまま出してしまう"
+  },
+  {
+    "query": "標準テンプレートの include/header.html の中に Twig を書いたのに動かない",
+    "expected_behavior": [
+      "@include で読み込んだ先の Twig は処理されないと説明する",
+      "Twig の include で読み込むか、ルートから Twig に移す方法を示す"
+    ],
+    "source": "Twig と標準テンプレートの処理順を知らないと原因が分からない"
+  }
+]

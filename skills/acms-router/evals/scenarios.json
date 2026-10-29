@@ -1,0 +1,19 @@
+[
+  {
+    "query": "このサイトのトップページにお知らせの一覧を追加して",
+    "expected_behavior": [
+      "書き始める前に acms-project-triage でテンプレートが標準か Twig かを判定する",
+      "Twig なら acms-template-twig、標準なら acms-template-acms の記法で書く",
+      "表示するモジュールは acms-module-reference で選ぶ"
+    ],
+    "source": "テンプレートの種類を確かめずに書くと、Twig テーマに BEGIN_MODULE を書くなど記法を取り違えやすい"
+  },
+  {
+    "query": "エントリーの保存時に外部 API へ通知したい。どこを直せばいい？",
+    "expected_behavior": [
+      "本体の PHP を書き換えず、拡張アプリ（Hook）で実現する方針を示す",
+      "acms-extension-development を使う"
+    ],
+    "source": "本体ファイルを直接書き換える提案はバージョンアップで消える"
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "query": "このリポジトリの a-blog cms のバージョンを教えて",
+    "expected_behavior": [
+      "scripts/detect.sh を実行し、themes/system/css/acms.css の先頭コメントからバージョンを読む",
+      "config.server.php を開かない"
+    ],
+    "source": "バージョンを調べようとして DB 接続情報を含む config.server.php を読んでしまう"
+  },
+  {
+    "query": "site@blog テーマのテンプレートを直したい。まず構成を調べて",
+    "expected_behavior": [
+      "site@blog が blog テーマを親とする子テーマだと説明する",
+      "template.yaml の tpl_twig から Twig か標準テンプレートかを判定する",
+      "実際にどのブログがどのテーマを使っているかはファイルからは分からないと伝える"
+    ],
+    "source": "テーマの継承とテンプレートの種類は、書き始める前に確かめないと記法を取り違える"
+  }
+]
