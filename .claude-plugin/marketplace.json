@@ -12,18 +12,20 @@
     {
       "name": "acms-common",
       "displayName": "a-blog cms 共通",
-      "description": "依頼の振り分けと、作業対象の a-blog cms のバージョン・テーマ・プラグイン（拡張アプリ）の判定",
+      "description": "依頼の振り分け、作業対象の a-blog cms のバージョン・テーマ・プラグイン（拡張アプリ）の判定、バージョンアップ",
       "version": "0.1.0",
       "source": "./",
       "strict": false,
       "license": "MIT",
       "keywords": [
         "a-blog cms",
-        "acms"
+        "acms",
+        "upgrade"
       ],
       "skills": [
         "./skills/acms-router",
-        "./skills/acms-project-triage"
+        "./skills/acms-project-triage",
+        "./skills/acms-upgrade"
       ]
     },
     {

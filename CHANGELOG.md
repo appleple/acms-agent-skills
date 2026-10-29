@@ -7,6 +7,6 @@
 ### Added
 
 - リポジトリの雛形（marketplace.json、検証スクリプト、CI）
-- スキル（いずれも stable）: acms-router、acms-project-triage、acms-theme-development、acms-template-acms、acms-template-twig、acms-module-reference、acms-form、acms-custom-field、acms-plugin-development、acms-admin-frontend-plugin
+- スキル（いずれも stable）: acms-router、acms-project-triage、acms-theme-development、acms-template-acms、acms-template-twig、acms-module-reference、acms-form、acms-custom-field、acms-plugin-development、acms-admin-frontend-plugin、acms-upgrade
 - 各スキルの評価シナリオ（evals/scenarios.json。各3件以上）
 - 検証スクリプトに社内情報の混入を検出するパターンを追加
