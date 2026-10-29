@@ -29,7 +29,7 @@ React はフックが動かず（Invalid hook call）、Tiptap は選択範囲�
 
 | 依存 | externals の宛先 | 使える版 |
 |---|---|---|
-| `react` | `ACMS.Library.React` | Ver. 3.2.29 以降 |
+| `react` | `ACMS.Library.React` | Ver. 3.2.11 以降（`ACMS.plugins` 自体が Ver. 3.2.29 以降なので、プラグインでは 3.2.29 以降として扱えばよい） |
 | `react/jsx-runtime` | `ACMS.Library.ReactJsxRuntime` | Ver. 3.2.36 以降 |
 | `@tiptap/core` / `@tiptap/react` / `@tiptap/suggestion` / `@tiptap/pm/*` | `ACMS.Library.tiptap.core` / `.react` / `.suggestion` / `.pm.state` など | Ver. 3.2.36 以降。中身が入るのはブロックエディターの読み込み後なので、`registerBlockDefinition` / `registerExtension` に渡す関数の中でだけ使う |
 | `react-dom` / `react-dom/client` | `ACMS.Library.ReactDom` / `ACMS.Library.ReactDomClient` | Ver. 3.2.38 以降 |

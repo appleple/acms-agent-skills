@@ -66,7 +66,7 @@ props を受け取る関数コンポーネントをそのまま渡さない。�
 | ユニットの共通ツールバーにボタンを足す | `unit-editor.unit-toolbar` | `editor` / `unit` |
 | ユニットエディターの上・下に UI を置く | `unit-editor.top` / `unit-editor.bottom` | `editor` |
 | ブロックエディターにメニューを足す | `block-editor.menus` | `editor` / `appendTo` |
-| ブロックツールバーに UI だけを足す | `block-editor.block-menu`（全ブロック共通）、`block-editor.block-menu.text` / `.image` / `.file` / `.linkButton` / `.table`（その種類のブロックを選んでいるときだけ） | `editor` / `variant`（Ver. 3.2.36 以降） |
+| ブロックツールバーに UI だけを足す | `block-editor.block-menu`（全ブロック共通）、`block-editor.block-menu.text` / `.image` / `.file` / `.linkButton` / `.table`（その種類のブロックを選んでいるときだけ）。**これらの Slot は Ver. 3.2.36 以降** | `editor` / `variant` |
 
 メディア編集モーダルはメディア管理だけでなく、カスタムフィールド・ブロックエディター・ユニットなどから開く画面にも共通で使われる。
 
