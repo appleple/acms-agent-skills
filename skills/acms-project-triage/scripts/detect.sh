@@ -43,12 +43,32 @@ for css in "$root/themes/system/css/acms.css" "$root/themes/system/css/acms.min.
   fi
 done
 if [ -z "$version" ]; then
-  echo "version: 不明（themes/system/css/acms.css の先頭コメントに版の表記がない。管理画面で確認する）"
+  # Ver. 3.2.28 以前の acms.css には本体の版が入らないため、配布物にあるファイルで系列だけを判定する。
+  # 難読化されるのは Application.php など一部だけで、ファイルの有無は配布版でも確かめられる。
+  if [ -f "$root/php/Services/Template/Twig.php" ]; then
+    series="3.2"; range="3.2.0〜3.2.28"; marker="php/Services/Template/Twig.php"
+  elif [ -f "$root/php/ACMS/GET/Admin/Config/Set/Theme.php" ]; then
+    series="3.1"; range="3.1.x"; marker="php/ACMS/GET/Admin/Config/Set/Theme.php"
+  elif [ -f "$root/php/ACMS/GET/Admin/Webhook/Index.php" ]; then
+    series="3.0"; range="3.0.x"; marker="php/ACMS/GET/Admin/Webhook/Index.php"
+  elif [ -d "$root/php" ]; then
+    series="2"; range="2.x 以前"; marker="Ver. 3.0 以降のファイルがない"
+  else
+    series=""; range=""; marker=""
+  fi
+  if [ -n "$series" ]; then
+    echo "version: ${range}（推定。根拠: ${marker}。正確な版は管理画面で確認する）"
+  else
+    echo "version: 不明（acms.css に版の表記がなく、php/ も見つからない。管理画面で確認する）"
+  fi
+  case "$series" in
+    3.1|3.0|2) echo "warning: Ver. 3.2 未満のため acms-agent-skills の対象外（バージョンを上げるなら acms-upgrade）" ;;
+  esac
 else
   major=$(echo "$version" | cut -d. -f1)
   minor=$(echo "$version" | cut -d. -f2)
   if [ "$major" -lt 3 ] || { [ "$major" -eq 3 ] && [ "$minor" -lt 2 ]; }; then
-    echo "warning: Ver. 3.2 未満のため acms-agent-skills の対象外"
+    echo "warning: Ver. 3.2 未満のため acms-agent-skills の対象外（バージョンを上げるなら acms-upgrade）"
   fi
 fi
 
