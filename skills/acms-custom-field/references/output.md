@@ -44,7 +44,7 @@
 | メディア（画像） | `%{MEDIA_ARCHIVES_DIR}` | `@path`・`@alt`・`@caption`・`@link`・`@text`・`@ratio`・`@width`・`@height`・`@focalX`・`@focalY`・`@thumbnail`・`@type`（`image` / `svg` / `file`） |
 | メディア（ファイル） | 付けない（`@path` がダウンロード用のリンクになっている） | `@path`・`@name`・`@extension`・`@fileSize`・`@thumbnail` |
 | 画像（archives） | `%{ARCHIVES_DIR}` | `@path`・`@x`・`@y`・`@alt`、サイズ違いは `@largePath`・`@tinyPath`・`@squarePath` |
-| ファイル（archives） | `%{ARCHIVES_DIR}` | `@path` ほか（メーカーの出力用ソースで確かめる） |
+| ファイル（archives） | `%{ARCHIVES_DIR}` | `@path` ほか（メーカーの「出力用コード」で確かめる） |
 
 - 複数の値（チェックボックスなど）は `<!-- BEGIN name:loop -->{name}<!-- END name:loop -->` で回す。
 - グループは `<!-- BEGIN グループ名:loop -->` で回す。入力チェックの無いグループでは、すべての項目が空の行は出力されない。
