@@ -1,11 +1,51 @@
 [
   {
-    "query": "エントリーを公開したら Slack に通知したい",
+    "query": "エントリーを公開したら Slack に通知するプラグインを作って",
     "expected_behavior": [
-      "本体の PHP を書き換えず、Hook で実現する",
-      "Webhook の URL をコードに直書きせず設定から読む",
-      "通知に失敗しても公開処理を止めない"
+      "本体の PHP を書き換えず、プラグイン（拡張アプリ）の Hook の saveEntry で実現し、ServiceProvider::init() で HookFactory に attach する",
+      "saveEntry は保存・非公開・削除などでも呼ばれるので、エントリーのステータスを見て公開のときだけ通知する",
+      "通知の処理を try / catch (\\Throwable) で囲み、失敗は AcmsLogger で記録して保存処理を止めない",
+      "Webhook の URL をコードに直書きせず、プラグイン（拡張アプリ）の設定ページ（コンフィグ）から読む",
+      "Hook を動かすには config.server.php の HOOK_ENABLE が 1 である必要があることを伝え、変更は利用者に依頼する"
     ],
-    "source": "本体の保存処理を直接書き換える、または通知の失敗で保存まで失敗させる"
+    "source": "スキルなしでは本体の保存処理を直接書き換える、通知の失敗で例外を投げて保存後にエラー画面にする、saveEntry が公開以外でも呼ばれることを考えずに通知を重複させる、HOOK_ENABLE に触れない、といった誤りが起きやすい"
+  },
+  {
+    "query": "プラグインの Hook.php に afterAuthenticate を書いたのに呼ばれない。init も呼ばれていないみたい",
+    "expected_behavior": [
+      "init・beforeAuthenticate・afterAuthenticate・restrictionAuthority・customRuleValue は、本体がプラグイン（拡張アプリ）を読み込む前に呼ぶため、プラグイン（拡張アプリ）の Hook では受け取れないと説明する",
+      "ユーザー拡張の extension/acms/Hook.php に書くか、プラグイン（拡張アプリ）の初期処理は ServiceProvider::init() に書くよう案内する",
+      "ほかの Hook も動かない場合に備えて、HOOK_ENABLE と、作業中のブログでプラグイン（拡張アプリ）が有効かを確かめるよう案内する"
+    ],
+    "source": "公式ドキュメントにはプラグイン（拡張アプリ）から受け取れない Hook の記載がなく、スキルなしでは attach の書き方や名前空間を疑って時間を使いやすい"
+  },
+  {
+    "query": "公開側のページに置いたフォームから、自作の POST モジュール（ACMS_POST_Contact_Save）に送信すると、ログインしていないときだけ毎回トークン切れのエラーになる",
+    "expected_behavior": [
+      "ログインしていない利用者のページでは、テンプレートに本体のフォームのモジュール名か check-csrf-token という文字列がないとセッションに CSRF トークンが保存されないと説明する",
+      "フォームの class などに check-csrf-token を入れるよう案内する",
+      "$isCSRF = false にして CSRF の検証を外す方法を提案しない",
+      "formToken をテンプレートに手で書かない（本体が </form> の前に自動で入れる）と説明する"
+    ],
+    "source": "スキルなしでは CSRF の検証を外す、formToken を手書きするといった危険な、または効かない対処を提案しやすい。原因は本体の CsrfTokenManager の挙動で、ドキュメントからは分からない"
+  },
+  {
+    "query": "Twig のテーマで使える独自モジュールをプラグイン（拡張アプリ）として作りたい。名前は Entry_Summary の改良版なので同じ名前にしたい",
+    "expected_behavior": [
+      "Twig の module() で呼べるのは V2 GET モジュール（Acms\\Modules\\Get\\V2\\Base を継承し get() で配列を返す）だと説明し、ACMS_GET の GET モジュールを作らない",
+      "extension/plugins/<名前>/Modules/Get/V2/ に置き、プラグイン（拡張アプリ）から解決できるのは Ver. 3.2.27 以降だと伝える",
+      "本体と同じ名前にすると本体のモジュールが先に見つかって自作のものは使われないので、別の名前にするよう案内する",
+      "プラグイン（拡張アプリ）のディレクトリ名に _ を使わない"
+    ],
+    "source": "スキルなしでは標準テンプレート用の GET モジュールを作って Twig から呼ぼうとする、同じ名前で上書きできると考える（公式ドキュメントにも上書きできるという記述がある）といった誤りが起きやすい"
+  },
+  {
+    "query": "エントリーごとにインクルードするファイルを変えたいので、extendsGlobalVars で MY_ENTRY_TYPE を足して @include(\"/include/%{MY_ENTRY_TYPE}.html\") と書いた。本番だけ効かない",
+    "expected_behavior": [
+      "テンプレートキャッシュが有効なときは、インクルードのパスで解決されるグローバル変数が決まった一覧に限られ、デバッグモードではテンプレートキャッシュが無効になるので本番だけ起きると説明する",
+      "addGlobalVarsInIncludePath で $globalVarNames[] = 'MY_ENTRY_TYPE' のように追記する（代入で上書きしない）",
+      "足した変数の値ごとに別のテンプレートキャッシュができるので、値の種類が少ない変数に限るよう注意し、エントリー ID のようなページごとに変わる値を入れない"
+    ],
+    "source": "スキルなしではデバッグモードで再現しないため原因が分かりにくく、分かっても値の種類が多い変数を足してテンプレートキャッシュを無効同然にしやすい"
   }
 ]
