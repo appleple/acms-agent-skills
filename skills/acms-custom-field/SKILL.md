@@ -67,7 +67,7 @@ metadata:
 必ず守ること:
 
 - Twig で `fields.name` をそのまま比較・出力しない。`{value, array}` の形の配列なので、`.value` を付け忘れると比較が常に偽になる。
-- **画像・メディアの有無は `path` で判定する**（標準は `<!-- BEGIN_IF [{name@path}/nem] -->`、Twig は `{% if fields.name.value.path %}`）。参照先のメディアが削除されると、フィールドにメディアの ID だけが残り、`path` などは空になる。`{% if fields.name.value %}` は真のままなので `<img src="">` が出る。
+- **画像・メディアの有無は `path` で判定する**（標準は `<!-- BEGIN_IF [{name@path}/nem] -->`、Twig は `{% if fields.name.value.path %}`）。参照先のメディアが削除されると、フィールドにメディアの ID だけが残り、`path` などは空になる。`{% if fields.name.value %}` は真のままなので `<img src="">` が出る。判定を直すときは、同じフィールドを出している箇所をテーマ全体で探し、標準テンプレートの部品（`{name@path}`）と Twig（`.value.path`）の両方を揃える。Twig のテーマでも `@include` で読む標準テンプレートの部品が混ざっていることがあるため。
 - エントリーの一覧系モジュール（`Entry_Summary` など）でエントリーのカスタムフィールドを出すには、モジュール ID の設定でエントリーフィールドの出力を有効にする。モジュールのカスタムフィールドは、モジュール ID の「カスタムフィールド」を有効にしたときだけ出る。
 - 画像は `resizeImg(幅)` で縮小して出す。`height` は、メディアなら `{name@ratio}[getHeightFromRatio(幅)]`、画像（archives）なら `{name@path}[imageRatioSizeH(幅)]` で求める。
 
