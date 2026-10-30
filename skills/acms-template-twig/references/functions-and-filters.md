@@ -44,9 +44,58 @@ V2 モジュールが返すフィールドは、1 項目ごとに `{ value: 最�
 |---|---|
 | `include(パス, 変数, with_context, ignore_missing)` | Twig 標準の `include` を a-blog cms が置き換えたもの。引数は同じ。デバッグモードでは前後にパスの HTML コメントを出す（Ver. 3.2.15 以降）。ignore_missing は名前付きで渡す（`ignore_missing = true`）か、タグで `{% include '/x.twig' ignore missing %}` と書く |
 | `vite(エントリー, オプション)` / `viteReactRefresh()` | Vite でビルドしたアセットの読み込みタグを出す。標準テンプレートの `@vite()` にあたる。<https://developer.a-blogcms.jp/document/vite.html> |
-| `acms_config(スコープ)` | コンフィグの値を読むオブジェクトを返す（Ver. 3.2.24 以降）。<https://developer.a-blogcms.jp/document/twig/acms-config.html> |
+| `acms_link(クエリ, オプション)` / `acms_path(クエリ, オプション)` | URL・パスを組み立てる（Ver. 3.2.39 以降）。下の「acms_link() と acms_path()」 |
+| `acms_config(スコープ)` | コンフィグの値を読むオブジェクトを返す（Ver. 3.2.24 以降）。下の「acms_config()」 |
 | `{% markdown %}…{% endmarkdown %}` | 囲んだ Markdown を HTML にして出す |
 | `dump()` | 変数の中身を出す。デバッグモードのときだけ出力される |
+
+## acms_link() と acms_path()
+
+Ver. 3.2.39 以降。PHP の `acmsLink()` / `acmsPath()` を Twig から呼ぶ関数。
+
+```twig
+<a href="{{ acms_link({ bid: BID, cid: 3 }, { inherit: false }) }}">お知らせ</a>
+<a href="{{ acms_link({ page: 2 }) }}">次へ</a>
+<a href="{{ acms_link({ bid: BID, cid: cid, admin: 'category_edit' }, { inherit: false }) }}">編集する</a>
+```
+
+まず、URL が既にあるならそれを使う。V2 モジュールの戻り値の `url`（`entry.url` など）や `BLOG_URL` などのグローバル変数で足りるなら、関数で組み立て直さない。使うのは、戻り値に URL が無いとき、ID からカテゴリー・エントリーへのリンクを作るとき、今のページを基にページ番号やタグだけ変えるとき、管理画面へのリンク（編集ボタンなど）を作るとき。`/bid/1/admin/…` のように URL を文字列で直書きすると、セグメント名（`bid` `admin` など）やブログのコード・ドメインを変えたサイトで壊れるので、この関数で組み立てる。
+
+| | `acms_link(クエリ, オプション)` | `acms_path(クエリ, オプション)` |
+|---|---|---|
+| 戻り値 | プロトコル・ドメインを含む URL（文字列）。必要に応じて末尾の `/`、`?…`、`#…` も付く | ドメインもサブディレクトリも含まないパス（先頭と末尾の `/` なし、例 `news/2026`）。`query` と `fragment` は付かない |
+| 今のページの URL の引き継ぎ | 既定であり（`inherit: true`） | なし（渡したものだけ） |
+| オプション（すべて `true` / `false`） | `inherit`（既定 `true`）、`explicitTpl`、`ignoreTplIfAjax`（既定 `true`） | `admin`、`baseId`（どちらも ID 形式のパス `bid/1/cid/3` にする）、`explicitTpl` |
+| 使う場面 | `href` など、リンクに出す URL はこちら | ドメイン抜きのパスが要るとき（他の値と比べる・連結するなど）。サブディレクトリに置いたサイトでは `/` を付けても正しいリンクにならないので、リンクには `acms_link` を使う |
+
+- クエリはハッシュで渡す。主なキーは `bid` `cid` `eid` `uid` `tag` `keyword` `page` `order` `limit` `tpl` `admin`（管理画面のページ名）、`acms_link` だけで効くものに `query`（`{ query: { a: 'b' } }` が `?a=b` になる）と `fragment`。
+- `inherit: true`（既定）の挙動: `bid` も `cid` も `eid` も渡さないと、今のページのブログ・カテゴリー・エントリー・テンプレートに加えて、タグ・キーワード・並び順・フィールド検索・クエリ文字列まで引き継ぐ。`eid` だけを渡すと、ブログとカテゴリーはそのエントリーから決まり、タグ・キーワード・クエリ文字列などは今のページから引き継ぐ。`cid` だけを渡すと、ブログはそのカテゴリーから決まり、検索条件は引き継がない。ページ送りや絞り込みのリンク（`{ page: 2 }`）には便利だが、決まった場所への固定リンクに検索条件が混ざる。固定リンクは `{ inherit: false }` にして `bid` を必ず渡す（`inherit: false` で `bid` が無いと空文字が返る）。
+- 第2引数は必ずハッシュ。PHP の `acmsLink($query, false)` のような真偽値・位置引数の旧形式、未対応のオプション名、`true` / `false` 以外の値（`'false'` や `1`）を渡すと、空になるのではなくエラーでページが表示されなくなる。第1引数も配列以外（文字列・`null`）はエラー。
+- `admin` を渡すと管理画面の URL になる。ログインしている投稿者以上のときはパスが ID 形式（`bid/1/cid/3/admin/…`）になる。`admin: 'entry-edit'` / `'entry_editor'` は、エントリー編集画面の設定（管理画面で編集するか、ページ上で編集するか）に合わせて読み替えられる。URL を作るだけで権限は確かめないので、管理画面へのリンクは `touch('Touch_SessionWithContribution')` などで囲み、ログインしていない人に出さない（開けるかどうかはリンク先で判定される）。
+- 戻り値は「安全」扱いではないので `{{ }}` で自動エスケープされる（`&` が `&amp;` になる）。属性値としてはそれで正しいので `|raw` は付けない。
+- 同じサイトからの Ajax リクエストで読み込んだ部品の中では、既定（`ignoreTplIfAjax: true`）で `tpl` は URL に付かない。
+
+## acms_config()
+
+Ver. 3.2.24 以降。コンフィグ（ブログやコンフィグセットの設定値）を読むオブジェクトを返す。公開側のテーマでもプラグイン（拡張アプリ）の管理画面でも使える。
+
+```twig
+{% set config = acms_config() %}
+{% if config.boolean('my_flag') %}…{% endif %}
+<p>{{ config.persisted.get('site_title', '') }}</p>
+```
+
+| 引数 | 参照するコンフィグ |
+|---|---|
+| なし | 今のページに効いている値（ブログ・ルール・コンフィグセットなどを重ねた結果）。Ver. 3.2.24 では今のブログの保存済みの値だけで、ルールなどは重ならない |
+| `{ blogId: 2 }`（Ver. 3.2.25 以降） | 指定したブログの保存済みの値（システムの既定値に重ねたもの）。ルールやモジュール ID の上書きは今のブログを基準に解決されるので、別のブログのルールの値は取れない |
+| `{ configSetId: …}` / `{ ruleId: … }` / `{ moduleId: … }` | そのコンフィグセット・ルール・モジュール ID の値。`moduleId` を渡すと `configSetId` は無視される |
+
+- 値の取り出し: `get(キー, 既定値)`、型をそろえるなら `string` `integer` `float` `boolean`（Ver. 3.2.25 以降。`boolean` は `on` / `off` などを真偽値にする）、複数値は `array(キー)`、`{ value, array }` の形で欲しいときは `field(キー)`、グループは `group(名前)`。どれも第1引数はコンフィグのキー名。
+- 既定では、フォームから `config[]` の値が送信されたリクエストで、送信された値が保存済みの値より優先される（設定画面の再表示のため）。公開側で表示に使うだけなら `config.persisted.get(…)` にすると、送信された値が混ざらない。
+- 権限を確かめずに値を返す。コンフィグには外部サービスの認証キーやシークレット、Basic 認証のパスワードなどの秘密の値も入るので、テンプレートでは必要なキーだけを出す。`all()` や `dump(config.all)` の結果をページに出さない。
+- 戻り値を `{{ }}` で出すと自動エスケープされる。`selected()` / `checked()` は属性をそのまま出す（設定画面のフォーム用。プラグイン（拡張アプリ）の設定画面の作り方は acms-plugin-development）。
+- 公式: <https://developer.a-blogcms.jp/document/twig/acms-config.html>
 
 ## フィルター（校正オプション）
 

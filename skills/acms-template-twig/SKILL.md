@@ -2,7 +2,7 @@
 name: acms-template-twig
 description: >-
   a-blog cms（acms）の Twig テンプレートを書く・直す・標準テンプレートから移すときの記法と判断基準（Ver. 3.2 以降）。
-  Twig の有効化（template.yaml の tpl_twig）、.twig / .html の探索順、module('V2_...') と touch() の引数と戻り値、
+  Twig の有効化（template.yaml の tpl_twig）、.twig / .html の探索順、module('V2_...') と touch() の引数と戻り値、URL を組み立てる acms_link / acms_path とコンフィグを読む acms_config、
   グローバル変数、校正オプションのフィルターと acms_ 接頭辞、自動エスケープと safe_html / raw、include / extends、
   標準テンプレートとの併用順序、管理画面テンプレートとの関係、Twig のキャッシュを扱う。
   template.yaml に tpl_twig: enabled があるテーマ、.twig ファイル、{% %} や {{ }} を含むテンプレートを編集するとき、
@@ -59,9 +59,12 @@ metadata:
 | 部品を読み込む | `{{ include('/path.twig', { 変数 }) }}`。パスは常にテーマのルートから探す（今のファイルからの相対ではない）。パスに変数を使える |
 | 無いかもしれない部品 | `include('/path.twig', {}, ignore_missing = true)`。第3引数に `true` を並べるだけでは効かない（第3引数は `with_context`） |
 | レイアウトを継承する | `{% extends %}` をテンプレートの最初のタグにし、`{% block %}` を上書きする。親の中身は `{{ parent() }}` |
+| リンクの URL を組み立てる | `acms_link({ bid: BID, cid: 3 }, { inherit: false })`（Ver. 3.2.39 以降）。プロトコル・ドメイン込みの URL を返す。既定（`inherit: true`）は今のページの URL を引き継ぐので、固定リンクは `{ inherit: false }` と `bid` を渡す。第2引数に真偽値を渡すとエラー。モジュールの戻り値の `url` で足りるならそちらを使う |
+| ドメイン抜きのパスを得る | `acms_path({ bid: BID, eid: eid })`（Ver. 3.2.39 以降）。先頭の `/` もサブディレクトリも付かないので、リンクには `acms_link` を使う |
+| コンフィグの値を読む | `{% set config = acms_config() %}` → `config.get('キー')`（Ver. 3.2.24 以降）。権限を確かめずに返すので、秘密の値（認証キーなど）を出さない |
 | 管理者向けの編集ボタン | `{{ include('/admin/module/setting.twig', { moduleInfo: 戻り値.moduleInfo }) }}`（`moduleInfo` は管理者のときだけ入る） |
 
-- `module()` の引数・戻り値・キャッシュの細かい挙動、`touch()`・`vite()`・`acms_config()` などの関数、グローバル変数、Twig 一般の誤りは references/functions-and-filters.md を読む。
+- `module()` の引数・戻り値・キャッシュの細かい挙動、`acms_link()` / `acms_path()` の引き継ぎとオプション、`acms_config()` の引数とメソッド、`touch()`・`vite()` などの関数、グローバル変数、Twig 一般の誤りは references/functions-and-filters.md を読む。
 - 標準テンプレートからの書き換えは references/from-standard-template.md を読む。
 
 ## エスケープ（必ず守る）
