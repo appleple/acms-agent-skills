@@ -44,7 +44,8 @@
         "twig",
         "form",
         "custom field",
-        "upgrade"
+        "upgrade",
+        "member"
       ],
       "skills": [
         "./skills/acms-theme-development",
@@ -53,7 +54,8 @@
         "./skills/acms-module-reference",
         "./skills/acms-form",
         "./skills/acms-custom-field",
-        "./skills/acms-upgrade-theme"
+        "./skills/acms-upgrade-theme",
+        "./skills/acms-member-site"
       ],
       "dependencies": [
         "acms-common"

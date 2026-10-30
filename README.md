@@ -38,6 +38,7 @@ a-blog cms 本体の開発用ではありません。
 | [acms-module-reference](skills/acms-module-reference/SKILL.md) | 目的に合うモジュールの選び方、モジュール ID、変数表の引き方 |
 | [acms-form](skills/acms-form/SKILL.md) | メールフォーム（フォーム ID、バリデーター、コンバーター、確認画面、メールテンプレート） |
 | [acms-custom-field](skills/acms-custom-field/SKILL.md) | カスタムフィールド・画像やメディアの入力欄・フィールドグループ・カスタムユニット |
+| [acms-member-site](skills/acms-member-site/SKILL.md) | 会員制サイト（会員登録・ログイン・マイページ・会員限定のカテゴリーと記事・会員情報の項目・退会）と、会員限定の内容が漏れる経路 |
 | [acms-upgrade-theme](skills/acms-upgrade-theme/SKILL.md) | バージョンアップでのテーマの修正（非推奨・削除されたモジュール、組み込み JS、ユニットの HTML と acms.css、表示崩れ） |
 
 ### acms-plugin-developer（プラグイン（拡張アプリ）開発）
@@ -54,6 +55,7 @@ a-blog cms 本体の開発用ではありません。
 - 「お問い合わせフォームを作って。電話番号は全角でも受け付けたい」
 - 「エントリーにメイン画像の入力欄を足して」
 - 「このテーマを Twig に移したい」
+- 「会員だけが見られるお知らせのカテゴリーを作って」
 - 「エントリーを公開したら Slack に通知するプラグインを作って」
 - 「このサイトを 3.1 から 3.2 に上げたい」
 
