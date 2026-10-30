@@ -1,6 +1,6 @@
 # acms-agent-skills
 
-[a-blog cms](https://www.a-blogcms.jp) でサイト制作やプラグイン（拡張アプリ）開発を行う AI エージェント向けのスキル集です。Claude Code・Codex・GitHub Copilot・Cursor・Gemini CLI など、[Agent Skills](https://agentskills.io/specification) の形式に対応したエージェントで使えます。
+[a-blog cms](https://www.a-blogcms.jp) でサイト制作やプラグイン（拡張アプリ）開発を行う AI エージェント向けのスキル集です。Claude Code・Codex・GitHub Copilot・Cursor・Antigravity など、[Agent Skills](https://agentskills.io/specification) の形式に対応したエージェントで使えます。
 
 ## スキルとは
 
@@ -71,7 +71,7 @@ a-blog cms 本体の開発用ではありません。
 | Codex | [npx skills](#npx-skills) | [gh skill](#github-cligh-skill)・[手動](#手動) |
 | GitHub Copilot | [gh skill](#github-cligh-skill) | [npx skills](#npx-skills)・[手動](#手動) |
 | Cursor | [npx skills](#npx-skills) | [gh skill](#github-cligh-skill)・[手動](#手動) |
-| Gemini CLI | [npx skills](#npx-skills) | [gh skill](#github-cligh-skill)・[手動](#手動) |
+| Antigravity | [npx skills](#npx-skills) | [gh skill](#github-cligh-skill)・[手動](#手動) |
 | そのほかの Agent Skills 対応エージェント | [npx skills](#npx-skills) | [手動](#手動) |
 
 どの方法でも中身は同じ `skills/` です。インストールや更新のあとは、新しいセッションを始めると読み込まれます。
@@ -96,7 +96,7 @@ claude plugin install acms-plugin-developer@acms-agent-skills
 
 ### npx skills
 
-[Skills CLI](https://github.com/vercel-labs/skills) は、Claude Code・Codex・Cursor・GitHub Copilot・Gemini CLI など多くのエージェントのスキル置き場に入れられます。
+[Skills CLI](https://github.com/vercel-labs/skills) は、Claude Code・Codex・Cursor・GitHub Copilot・Antigravity など多くのエージェントのスキル置き場に入れられます。
 
 ```bash
 # 入れられるスキルの一覧を見る（インストールはしない）
@@ -116,7 +116,7 @@ npx skills add appleple/acms-agent-skills --skill acms-router --skill acms-proje
 npx skills add appleple/acms-agent-skills -g -a codex
 ```
 
-エージェント名は `claude-code`・`codex`・`cursor`・`github-copilot`・`gemini-cli` などです（[一覧](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)）。一部だけ入れるときも、振り分けと構成の判定を担う `acms-router` と `acms-project-triage` は一緒に入れてください。ほかのスキルがこの2つを前提にしているためです。
+エージェント名は `claude-code`・`codex`・`cursor`・`github-copilot`・`antigravity`・`antigravity-cli` などです（[一覧](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)）。一部だけ入れるときも、振り分けと構成の判定を担う `acms-router` と `acms-project-triage` は一緒に入れてください。ほかのスキルがこの2つを前提にしているためです。
 
 ### GitHub CLI（gh skill）
 
@@ -139,7 +139,7 @@ gh skill install appleple/acms-agent-skills acms-form --agent claude-code --pin 
 gh skill install appleple/acms-agent-skills --all --agent cursor
 ```
 
-`--agent` には `claude-code`・`codex`・`github-copilot`・`cursor`・`gemini-cli` などを指定できます（`gh skill install --help` で一覧が出ます）。
+`--agent` には `claude-code`・`codex`・`github-copilot`・`cursor`・`antigravity`・`antigravity-cli` などを指定できます（`gh skill install --help` で一覧が出ます）。
 
 ### Codex
 
@@ -161,15 +161,17 @@ Cursor は `.cursor/skills/`・`.agents/skills/`（プロジェクト）と `~/.
 npx skills add appleple/acms-agent-skills -a cursor
 ```
 
-### Gemini CLI
+### Antigravity
 
-Gemini CLI は `~/.gemini/skills/`・`~/.agents/skills/`（ユーザー）と `.gemini/skills/`・`.agents/skills/`（ワークスペース）を読み込みます（[Gemini CLI のドキュメント](https://geminicli.com/docs/cli/skills/)）。
+Antigravity（App・IDE・CLI）は、ワークスペースの `.agents/skills/` を読み込みます。ユーザー単位（すべてのワークスペース）の置き場所は製品ごとに違い、App と IDE は `~/.gemini/config/skills/`、CLI は `~/.gemini/antigravity-cli/skills/` です（[Antigravity のドキュメント](https://antigravity.google/docs/skills)）。どの製品でも読まれる、ワークスペースに入れる方法が確実です。
 
 ```bash
-npx skills add appleple/acms-agent-skills -a gemini-cli
-```
+# ワークスペース（プロジェクト）に入れる
+npx skills add appleple/acms-agent-skills -a antigravity
 
-Gemini CLI は Antigravity CLI への移行が案内されています。Antigravity でのスキルの置き場所は、Antigravity の公式ドキュメントで確かめてください。
+# Antigravity CLI のユーザー単位に入れる
+npx skills add appleple/acms-agent-skills -g -a antigravity-cli
+```
 
 ### 手動
 
@@ -183,8 +185,11 @@ cd acms-agent-skills
 mkdir -p /path/to/project/.claude/skills && cp -r skills/* /path/to/project/.claude/skills/
 mkdir -p ~/.claude/skills && cp -r skills/* ~/.claude/skills/
 
-# Codex・Cursor・GitHub Copilot・Gemini CLI で共通に読まれる置き場所（ユーザー単位）
+# Codex・Cursor・GitHub Copilot で共通に読まれる置き場所（ユーザー単位）
 mkdir -p ~/.agents/skills && cp -r skills/* ~/.agents/skills/
+
+# Antigravity の App・IDE（ユーザー単位）
+mkdir -p ~/.gemini/config/skills && cp -r skills/* ~/.gemini/config/skills/
 
 # GitHub Copilot（リポジトリ単位）
 mkdir -p /path/to/project/.github/skills && cp -r skills/* /path/to/project/.github/skills/
