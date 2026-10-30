@@ -24,6 +24,7 @@ metadata:
 
 | 依頼の内容 | 使うスキル |
 |---|---|
+| 静的な HTML サイトを a-blog cms のテーマにする（CMS 化する）、既存の HTML をテンプレートに移す | `acms-static-to-theme` |
 | テーマを作る・継承する、template.yaml、どのテンプレートが表示に使われるか、acms.js や管理用 CSS の読み込み | `acms-theme-development` |
 | `.html` のテンプレートに `<!-- BEGIN_MODULE ... -->`、`{var}`、`%{GLOBAL}`、`BEGIN_IF`、`@include` を書く・直す | `acms-template-acms` |
 | `.twig` のテンプレート、`module('V2_...')`、`touch()`、`{% extends %}` を書く・直す | `acms-template-twig` |

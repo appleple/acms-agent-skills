@@ -32,6 +32,7 @@ a-blog cms 本体の開発用ではありません。
 
 | スキル | 内容 |
 |---|---|
+| [acms-static-to-theme](skills/acms-static-to-theme/SKILL.md) | 静的な HTML サイトを a-blog cms のテーマにする（CMS 化する）作業を最初から最後まで導く。静的サイトの調査スクリプト付き |
 | [acms-theme-development](skills/acms-theme-development/SKILL.md) | テーマの構成・継承・template.yaml・テンプレートの探索、大規模サイトの設計と運用（子ブログ、環境間の移行、キャッシュ） |
 | [acms-template-acms](skills/acms-template-acms/SKILL.md) | 標準テンプレート（BEGIN_MODULE、ブロック、変数、校正オプション、BEGIN_IF、@include） |
 | [acms-template-twig](skills/acms-template-twig/SKILL.md) | Twig テンプレート（module()、touch()、フィルター、エスケープ、include / extends） |
@@ -51,6 +52,7 @@ a-blog cms 本体の開発用ではありません。
 
 ### 依頼の例
 
+- 「この静的サイトを a-blog cms のテーマにして」（[公式チュートリアル](https://developer.a-blogcms.jp/document/tutorial/)の題材でも試せます）
 - 「トップページにお知らせの新着を5件出して」
 - 「お問い合わせフォームを作って。電話番号は全角でも受け付けたい」
 - 「エントリーにメイン画像の入力欄を足して」
@@ -255,6 +257,7 @@ gh skill list
 
 - `acms-project-triage` は、作業対象のファイルを読むシェルスクリプト（`scripts/detect.sh`）を含みます。読むのはテーマ・CSS・プラグイン（拡張アプリ）のディレクトリと、版を推定するための本体のファイルの有無だけで、DB 接続情報を含む `config.server.php` と `private/` は読みません。外部への通信もしません。
 - `acms-upgrade` は、バージョンアップで直す箇所を洗い出すシェルスクリプト（`scripts/scan.sh`）を含みます。テーマ（`T-` で始まるチェック）とプラグイン（拡張アプリ）（`P-` で始まるチェック）の両方を調べ、それぞれの直し方は `acms-upgrade-theme`・`acms-upgrade-plugin` にあります。読むのは `themes/`（`system` を除く）と `extension/` だけで、`config.server.php`・`.env`・`private/` は読みません。外部への通信もしません。`acms-upgrade-theme`・`acms-upgrade-plugin` はスクリプトを含まず、`acms-upgrade` が入っていない環境では grep で探す文字列を案内します。
+- `acms-static-to-theme` は、静的サイトの構成を調べるシェルスクリプト（`scripts/inventory.sh`）を含みます。読むのは指定した静的サイトのディレクトリだけで、外部への通信もしません。
 - その他のスキルはスクリプトを含みません。エージェントが公式ドキュメント（developer.a-blogcms.jp）を Web から読むことがあります。
 
 ## フィードバック

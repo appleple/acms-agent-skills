@@ -31,7 +31,7 @@
     {
       "name": "acms-site-builder",
       "displayName": "a-blog cms サイト制作",
-      "description": "テーマ・標準テンプレート・Twig テンプレート・モジュールの選び方・メールフォーム・カスタムフィールド・バージョンアップでのテーマの修正など、a-blog cms でサイトを制作するためのスキル",
+      "description": "静的サイトのテーマ化・テーマ・標準テンプレート・Twig テンプレート・モジュールの選び方・メールフォーム・カスタムフィールド・会員制サイトなど、a-blog cms でサイトを制作するためのスキル",
       "version": "0.1.0",
       "source": "./",
       "strict": false,
@@ -45,9 +45,11 @@
         "form",
         "custom field",
         "upgrade",
-        "member"
+        "member",
+        "static site"
       ],
       "skills": [
+        "./skills/acms-static-to-theme",
         "./skills/acms-theme-development",
         "./skills/acms-template-acms",
         "./skills/acms-template-twig",
