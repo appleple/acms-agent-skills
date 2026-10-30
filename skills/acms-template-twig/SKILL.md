@@ -24,7 +24,7 @@ metadata:
 
 - テーマで Twig が有効か確かめる。管理画面のテーマ設定の「Twigテンプレート」、またはテーマの `template.yaml` の `tpl_twig: enabled`。`template.yaml` の値が効くのは、テーマ設定の「テンプレート選択ファイル（template.yaml）の値を優先する」にチェックがあるとき（既定はオン）。子テーマ（`blog@site`）では子 → 親の順に `template.yaml` を見る。
 - Twig が有効なテーマでは、ルートのテンプレートと Twig の `include` / `extends` で読む先は、拡張子が `.html` でも Twig として処理される。`{{` `{%` `{#` をそのまま出したい箇所（JavaScript のテンプレートなど）は `{% verbatim %}` で囲む。
-- 何を表示するか決まっていなければ acms-module-reference でモジュールを選ぶ。`module()` で呼べるのは名前が `V2_` で始まるモジュールだけ。
+- 何を表示するか決まっていなければ acms-module-reference でモジュールを選ぶ。`module()` で呼べるのは名前が `V2_` で始まるモジュールだけ。従来のモジュール名を渡された相談では、個別の置き換えだけでなく、この規則そのものを利用者に説明する（ほかのモジュールでも同じ誤りを避けられるため）。
 - 変数名は推測しない。管理者でログインし、デバッグモードのページで `Ctrl + K`（Mac は `⌘ + K`）を押し `#` を入力すると、そのページで呼んだ V2 モジュールの実際の値が見える。
 
 ## 記法の要点
@@ -61,10 +61,10 @@ metadata:
 | レイアウトを継承する | `{% extends %}` をテンプレートの最初のタグにし、`{% block %}` を上書きする。親の中身は `{{ parent() }}` |
 | リンクの URL を組み立てる | `acms_link({ bid: BID, cid: 3 }, { inherit: false })`（Ver. 3.2.39 以降）。プロトコル・ドメイン込みの URL を返す。既定（`inherit: true`）は今のページの URL を引き継ぐので、固定リンクは `{ inherit: false }` と `bid` を渡す。第2引数に真偽値を渡すとエラー。モジュールの戻り値の `url` で足りるならそちらを使う |
 | ドメイン抜きのパスを得る | `acms_path({ bid: BID, eid: eid })`（Ver. 3.2.39 以降）。先頭の `/` もサブディレクトリも付かないので、リンクには `acms_link` を使う |
-| コンフィグの値を読む | `{% set config = acms_config() %}` → `config.get('キー')`（Ver. 3.2.24 以降）。権限を確かめずに返すので、秘密の値（認証キーなど）を出さない |
+| コンフィグの値を読む | `{% set config = acms_config() %}` → `config.get('キー')`（Ver. 3.2.24 以降）。別のブログの値を読む `acms_config({ blogId: … })`、型を変換して取り出す `string()` などは **Ver. 3.2.25 以降**。権限を確かめずに返すので、秘密の値（認証キーなど）を出さない |
 | 管理者向けの編集ボタン | `{{ include('/admin/module/setting.twig', { moduleInfo: 戻り値.moduleInfo }) }}`（`moduleInfo` は管理者のときだけ入る） |
 
-- `module()` の引数・戻り値・キャッシュの細かい挙動、`acms_link()` / `acms_path()` の引き継ぎとオプション、`acms_config()` の引数とメソッド、`touch()`・`vite()` などの関数、グローバル変数、Twig 一般の誤りは references/functions-and-filters.md を読む。
+- `module()` の引数・戻り値・キャッシュの細かい挙動、`acms_link()` / `acms_path()` の引き継ぎとオプション、`acms_config()` の引数とメソッド（オプションやメソッドを示すときは、それぞれの導入バージョンも添える）、`touch()`・`vite()` などの関数、グローバル変数、Twig 一般の誤りは references/functions-and-filters.md を読む。
 - 標準テンプレートからの書き換えは references/from-standard-template.md を読む。
 
 ## エスケープ（必ず守る）
