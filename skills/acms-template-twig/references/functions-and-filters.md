@@ -100,7 +100,7 @@ Ver. 3.2.24 以降。コンフィグ（ブログやコンフィグセットの�
 ## フィルター（校正オプション）
 
 - 校正オプションは、システムのもの・`extension/acms/Corrector.php` で足したもののどちらも、同じ名前のフィルターとして使える。校正オプションの引数はフィルターの引数として並べる（`|resizeImg(640)`、`|mb_trim(20, '…')`）。
-- Twig 標準のフィルターと名前が重なるもの（Ver. 3.2.38 時点で `date` `escape` `nl2br` `number_format` `split` `striptags` `trim`）は Twig 側になる。a-blog cms 版は `acms_` を付けて呼ぶ。`acms_` 付きの名前は、重ならない校正オプションにも用意されている（`safe_html` を除く）。
+- Twig 標準のフィルターと名前が重なるもの（Ver. 3.2.38 時点で `date` `escape` `nl2br` `number_format` `split` `striptags` `trim`）は Twig 側になる。a-blog cms バージョンは `acms_` を付けて呼ぶ。`acms_` 付きの名前は、重ならない校正オプションにも用意されている（`safe_html` を除く）。
 - 校正オプション由来のフィルターの出力は、`safe_html` を除いて自動エスケープの対象になる。HTML を返すものの後ろには `|safe_html` を付ける。
 - 校正オプションの一覧: <https://developer.a-blogcms.jp/document/reference/proofreading.html>、独自の校正オプション: <https://developer.a-blogcms.jp/document/user_corrector/>、Twig での使い方: <https://developer.a-blogcms.jp/document/twig/filter.html>
 

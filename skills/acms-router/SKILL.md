@@ -34,7 +34,7 @@ metadata:
 | 会員制サイト（会員登録・ログイン・マイページ・会員限定のコンテンツ・退会）、ログインの有無での出し分け | `acms-member-site` |
 | プラグイン（拡張アプリ）の PHP、Hook、独自モジュール、校正オプション・検証オプションの追加、グローバル変数の追加 | `acms-plugin-development` |
 | 管理画面の JavaScript プラグイン、`ACMS.plugins`、`ACMS.events`、Slot | `acms-admin-frontend-plugin` |
-| a-blog cms のバージョンアップ（3.1 から 3.2 など）の進め方。版の判定・移行先の決定・要件（PHP・MySQL）・バックアップ・検証環境・要修正箇所の洗い出し（scan.sh）・本体の更新・本番への反映 | `acms-upgrade` |
+| a-blog cms のバージョンアップ（3.1 から 3.2 など）の進め方。バージョンの判定・移行先の決定・要件（PHP・MySQL）・バックアップ・検証環境・要修正箇所の洗い出し（scan.sh）・本体の更新・本番への反映 | `acms-upgrade` |
 | バージョンアップに伴うテーマの修正。非推奨・削除されたモジュール、組み込み JS、ユニットの HTML と acms.css の変更、更新後の表示崩れ | `acms-upgrade-theme` |
 | バージョンアップに伴うプラグイン（拡張アプリ）・`extension/acms/` の修正。PHP の要件、SQL ヘルパー、削除された関数・クラス、Hook の変化 | `acms-upgrade-plugin` |
 

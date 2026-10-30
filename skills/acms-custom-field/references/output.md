@@ -4,7 +4,7 @@
 
 | 内容 | ページ |
 |---|---|
-| フィールドモジュール（標準テンプレートの Blog_Field / Category_Field / Entry_Field / User_Field / Module_Field。V2 版の変数は Twig の変数表で確かめる） | <https://developer.a-blogcms.jp/document/reference/field.html> |
+| フィールドモジュール（標準テンプレートの Blog_Field / Category_Field / Entry_Field / User_Field / Module_Field。V2 バージョンの変数は Twig の変数表で確かめる） | <https://developer.a-blogcms.jp/document/reference/field.html> |
 | 校正オプション（resizeImg・getHeightFromRatio・imageRatioSizeH など） | <https://developer.a-blogcms.jp/document/reference/proofreading.html> |
 | メディアのフィールド | <https://developer.a-blogcms.jp/document/customfield/media-field.html> |
 | 画像のフィールド | <https://developer.a-blogcms.jp/document/customfield/img-upload.html> |

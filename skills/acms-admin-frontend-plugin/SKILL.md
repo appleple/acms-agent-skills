@@ -93,7 +93,7 @@ const off = ACMS.events.on('media.upload.before', (payload, gate) => {
 });
 ```
 
-- `return false` では止まらない（Ver. 3.2.33 以降。戻り値は無視される）。Ver. 3.2.29〜3.2.32 は止め方が違うので、その版の型定義に従う。
+- `return false` では止まらない（Ver. 3.2.33 以降。戻り値は無視される）。Ver. 3.2.29〜3.2.32 は止め方が違うので、そのバージョンの型定義に従う。
 - ハンドラが例外を投げるとゲートは止まり、理由は表示されない。止めたいときは `cancel` を呼ぶ。
 - 通知イベント（`.success` / `.after` / `.change` など）は止められない。ゲートかどうかは名前でなく型定義で決まる
   （`unit-editor.command.before` は名前が `.before` でも通知）。

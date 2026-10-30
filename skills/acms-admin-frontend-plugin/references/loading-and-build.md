@@ -27,7 +27,7 @@ ServiceProvider・Hook の書き方は acms-plugin-development を読む。
 ビルドするときは、本体と同じインスタンスを共有しなければならないものを externals にする。同梱すると二重になり、
 React はフックが動かず（Invalid hook call）、Tiptap は選択範囲の判定などが壊れる。
 
-| 依存 | externals の宛先 | 使える版 |
+| 依存 | externals の宛先 | 使えるバージョン |
 |---|---|---|
 | `react` | `ACMS.Library.React` | Ver. 3.2.11 以降（`ACMS.plugins` 自体が Ver. 3.2.29 以降なので、プラグインでは 3.2.29 以降として扱えばよい） |
 | `react/jsx-runtime` | `ACMS.Library.ReactJsxRuntime` | Ver. 3.2.36 以降 |

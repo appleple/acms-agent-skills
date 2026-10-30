@@ -8,13 +8,13 @@
 
 | 項目 | 内容 | 根拠 |
 |---|---|---|
-| 移行元 | Ver. 3.1.x。3.0 以前からは、途中の版の移行ガイドも読む（SKILL.md の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
-| PHP | 3.2 は PHP 8.1 以上。上限はパッチ版で変わるので、動作条件のページで移行先の版の範囲を確かめる | [下位互換性のない変更点](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html)、[動作条件](https://developer.a-blogcms.jp/document/requirements.html) |
-| MySQL | MySQL 8.0 以上（MariaDB は動作条件のページの版） | 同上 |
-| オンラインアップデートと PHP | 更新の候補は、サーバーの PHP の版に合うパッケージから選ばれる。PHP 8.1 未満のままでは 3.2 が候補に出ないので、先に PHP を上げられるか（3.1 がその PHP で動くか）をサーバーの管理者と決める | `v3.1.79:ablogcms/php/ACMS/POST/Update/Exec.php:64-71`（`checkUseCache(phpversion(), $range)`）、`v3.1.79:ablogcms/php/Services/Update/System/CheckForUpdate.php:431-448` |
+| 移行元 | Ver. 3.1.x。3.0 以前からは、途中のバージョンの移行ガイドも読む（SKILL.md の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
+| PHP | 3.2 は PHP 8.1 以上。上限はパッチバージョンで変わるので、動作条件のページで移行先のバージョンの範囲を確かめる | [下位互換性のない変更点](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html)、[動作条件](https://developer.a-blogcms.jp/document/requirements.html) |
+| MySQL | MySQL 8.0 以上（MariaDB は動作条件のページのバージョン） | 同上 |
+| オンラインアップデートと PHP | 更新の候補は、サーバーの PHP のバージョンに合うパッケージから選ばれる。PHP 8.1 未満のままでは 3.2 が候補に出ないので、先に PHP を上げられるか（3.1 がその PHP で動くか）をサーバーの管理者と決める | `v3.1.79:ablogcms/php/ACMS/POST/Update/Exec.php:64-71`（`checkUseCache(phpversion(), $range)`）、`v3.1.79:ablogcms/php/Services/Update/System/CheckForUpdate.php:431-448` |
 | オンラインアップデートの範囲 | 3.1 → 3.2 はマイナーバージョンアップ。管理画面 > コンフィグ > 機能設定の「オンラインアップデート」を「マイナーバージョンも含める」にしないと候補に出ない | `v3.1.79:ablogcms/php/ACMS/POST/Update/Exec.php:64-67`（`system_update_range`）、[オンラインアップデート](https://developer.a-blogcms.jp/document/update/online-update.html) |
 | DB の更新とデータの変換 | 3.2.0 より前からの DB 更新で、カスタムユニットのデータの保存先の移動と、非表示にしたユニットの持ち方の変換が行われる。元に戻すには DB のバックアップから戻すしかない | `v3.2.38:ablogcms/php/Services/Update/Database/Rule.php:427-438`（`update320()`） |
-| 配布されているプラグイン（拡張アプリ） | 3.2 対応版が出ているかを先に確かめる（3.2.0 の時点では全部は対応していない）。確かめ方は acms-upgrade-plugin | [下位互換性のない変更点](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html) |
+| 配布されているプラグイン（拡張アプリ） | 3.2 対応バージョンが出ているかを先に確かめる（3.2.0 の時点では全部は対応していない）。確かめ方は acms-upgrade-plugin | [下位互換性のない変更点](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html) |
 
 ## 下位互換性のない変更
 
@@ -28,7 +28,7 @@
 
 ## 非推奨になった機能と代替
 
-非推奨の機能は 3.2 でも動く。デバッグモードのとき、PHP 側は監査ログ（notice）に、組み込み JS はブラウザーのコンソールに警告が出る（`Acms\Services\Logger\Deprecated::once`、`ACMS.Library.deprecated`）。急がないが、移行のついでに直すと次の版で困らない。
+非推奨の機能は 3.2 でも動く。デバッグモードのとき、PHP 側は監査ログ（notice）に、組み込み JS はブラウザーのコンソールに警告が出る（`Acms\Services\Logger\Deprecated::once`、`ACMS.Library.deprecated`）。急がないが、移行のついでに直すと次のバージョンで困らない。
 
 | 機能 | 代替 | 見つけ方 | 根拠 |
 |---|---|---|---|

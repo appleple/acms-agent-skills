@@ -2,9 +2,9 @@
 
 <!--
 新しい移行先を足すときの、acms-upgrade-plugin（プラグイン）の雛形。このファイルを to-X.Y.md としてコピーする。
-同じ版の acms-upgrade の references/to-X.Y.md と scripts/checks/to-X.Y.tsv、acms-upgrade-theme の references/to-X.Y.md も揃える
+同じバージョンの acms-upgrade の references/to-X.Y.md と scripts/checks/to-X.Y.tsv、acms-upgrade-theme の references/to-X.Y.md も揃える
 （手順は acms-upgrade の references/_template.md と docs/compatibility.md）。SKILL.md の「移行先ごとのファイル」の表に 1 行足し、
-evals/scenarios.json に、その版のプラグインの修正で失敗しやすい依頼を 1 件以上足す。
+evals/scenarios.json に、そのバージョンのプラグインの修正で失敗しやすい依頼を 1 件以上足す。
 
 このファイルに書くもの: プラグイン（拡張アプリ）と extension/acms のユーザー拡張（PHP・管理画面の JavaScript）だけに関わる変更と、
 テーマとプラグインの両方に関わる変更のうちプラグイン側の直し方。PHP の要件はプラグインのコードに関わる範囲で書き、
@@ -20,13 +20,13 @@ evals/scenarios.json に、その版のプラグインの修正で失敗しや�
 - 見出しは下の 6 つで固定する（3 スキルの to-X.Y.md で同じ見出しを使い、tsv の section 列と SKILL.md がこの名前を使う）。
 -->
 
-公式の移行ガイドは <!-- 版ごとの移行ガイドの URL -->。
+公式の移行ガイドは <!-- バージョンごとの移行ガイドの URL -->。
 
 見つけ方の `P-` で始まる ID は、acms-upgrade の `scripts/scan.sh` のチェック（定義は acms-upgrade の `scripts/checks/to-X.Y.tsv`）。acms-upgrade が入っていないときは、「grep:」に挙げた文字列で `extension/` を探す。`要確認` と付いたチェックは、直す箇所ではなく見比べる箇所を出す。
 
 ## 前提（移行元・PHP などの要件）
 
-<!-- 移行元の版、PHP の範囲とプラグインのコードへの影響、配布プラグインの対応状況、直す場所。表の列: 項目 | 内容 | 根拠 -->
+<!-- 移行元のバージョン、PHP の範囲とプラグインのコードへの影響、配布プラグインの対応状況、直す場所。表の列: 項目 | 内容 | 根拠 -->
 
 | 項目 | 内容 | 根拠 |
 |---|---|---|
@@ -47,7 +47,7 @@ evals/scenarios.json に、その版のプラグインの修正で失敗しや�
 
 ## 直す手順
 
-<!-- 作業の順番。配布プラグインの対応版の確認 → scan.sh（または grep）で P-* を直す → PHP の版の違いの確認 → scan.sh の再実行。実装の書き方は acms-plugin-development / acms-admin-frontend-plugin に任せる。 -->
+<!-- 作業の順番。配布プラグインの対応バージョンの確認 → scan.sh（または grep）で P-* を直す → PHP のバージョンの違いの確認 → scan.sh の再実行。実装の書き方は acms-plugin-development / acms-admin-frontend-plugin に任せる。 -->
 
 ## 移行後の確認
 

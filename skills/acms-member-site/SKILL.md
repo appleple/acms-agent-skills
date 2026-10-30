@@ -30,7 +30,7 @@ metadata:
 
 ## 書く前に
 
-- 版とテーマの種類（標準テンプレート / Twig）、テーマの継承を確かめる（acms-project-triage）。
+- バージョンとテーマの種類（標準テンプレート / Twig）、テーマの継承を確かめる（acms-project-triage）。
 - 会員の画面の URL（`signin`・`signup`・`mypage/update-profile` など）はサイトごとに変えられる。テンプレートには `%{SIGNIN_SEGMENT}` `%{SIGNUP_SEGMENT}` `%{RESET_PASSWORD_SEGMENT}` `%{PROFILE_UPDATE_SEGMENT}` `%{WITHDRAWAL_SEGMENT}` などのグローバル変数で書き、パスを直書きしない。設定ファイル（config.server.php）は読まない。
 - 管理画面の設定（会員登録の受け付け・登録時の権限・メールの送信元など）はエージェントが変えず、references/admin-settings.md の表を使って利用者に依頼する。
 
@@ -38,7 +38,7 @@ metadata:
 
 - 「会員」は既定では**読者**権限のユーザー。読者は一般サインイン画面（`/signin/`）からだけ、管理者・編集者・投稿者は管理ログイン画面（`/login/`）からだけログインできる。ログイン設定の「一般サインイン権限」を投稿者にすると、投稿者も一般サインイン側に移る。
 - 会員の画面は URL で決まる専用のページで、本体が template.yaml の `tpl_*` キー（既定は `_member/*.html`）のテンプレートを表示する。テーマに無ければ親テーマ → system テーマの同名ファイルが使われる。
-- 画面の中身は GET の `Member_*` モジュール（`Member_Signin`・`Member_Signup`・`Member_Update_Profile` など）と、送信先の POST モジュール（`ACMS_POST_Member_Signin` など）で作る。**`Member_*` には V2 版が無い**ので、Twig のテーマでも会員の画面は標準テンプレートの `BEGIN_MODULE` で書く（混在の注意は acms-template-twig）。
+- 画面の中身は GET の `Member_*` モジュール（`Member_Signin`・`Member_Signup`・`Member_Update_Profile` など）と、送信先の POST モジュール（`ACMS_POST_Member_Signin` など）で作る。**`Member_*` には V2 バージョンが無い**ので、Twig のテーマでも会員の画面は標準テンプレートの `BEGIN_MODULE` で書く（混在の注意は acms-template-twig）。
 - サインイン・会員登録・パスワード再設定の画面は、ログイン中に開くとブログのトップへ戻される。マイページ系（プロフィール・メールアドレス・パスワード・2段階認証の変更、退会）はログインしていないと 404 になり、会員の所属ブログでしか開けない。
 
 ## 構成の判断

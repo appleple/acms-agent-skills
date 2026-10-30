@@ -26,7 +26,7 @@ a-blog cms 本体の開発用ではありません。
 |---|---|
 | [acms-router](skills/acms-router/SKILL.md) | a-blog cms に関する依頼を分類し、適切なスキルへ振り分ける |
 | [acms-project-triage](skills/acms-project-triage/SKILL.md) | 作業対象のバージョン・テーマの継承・テンプレートの種類（標準 / Twig）・プラグイン（拡張アプリ）を判定する |
-| [acms-upgrade](skills/acms-upgrade/SKILL.md) | バージョンアップ（Ver. 3.1 から 3.2 など）の共通の手順（版の判定・バックアップ・検証環境・本体の更新・本番への反映）と、要修正箇所の洗い出し |
+| [acms-upgrade](skills/acms-upgrade/SKILL.md) | バージョンアップ（Ver. 3.1 から 3.2 など）の共通の手順（バージョンの判定・バックアップ・検証環境・本体の更新・本番への反映）と、要修正箇所の洗い出し |
 
 ### acms-site-builder（サイト制作）
 
@@ -199,7 +199,7 @@ mkdir -p /path/to/project/.github/skills && cp -r skills/* /path/to/project/.git
 
 ## 更新
 
-スキルは、入れた方法ごとに更新の手順が違います。新しい版が出たかは [Releases](https://github.com/appleple/acms-agent-skills/releases) と [CHANGELOG](CHANGELOG.md) で確かめられます。
+スキルは、入れた方法ごとに更新の手順が違います。新しいバージョンが出たかは [Releases](https://github.com/appleple/acms-agent-skills/releases) と [CHANGELOG](CHANGELOG.md) で確かめられます。
 
 ### Claude Code
 
@@ -217,7 +217,7 @@ claude plugin update acms-common@acms-agent-skills
 
 - セッションの中で `/plugin` を開き、**Marketplaces** タブで `acms-agent-skills` を選んで **Update marketplace** を選ぶと、一覧の更新と、入れているプラグインの更新がまとめて行われます。
 - 同じ画面の **Enable auto-update** を選ぶと、自動更新がオンになります。
-- 更新しても、開いているセッションは読み込み済みの版を使い続けます。`/reload-plugins` を実行するか、新しいセッションを始めてください。
+- 更新しても、開いているセッションは読み込み済みのバージョンを使い続けます。`/reload-plugins` を実行するか、新しいセッションを始めてください。
 - `claude plugin update` が最新だと答えるのに内容が古いときは、先にマーケットプレイスの一覧を更新してください（上の1つ目のコマンド）。
 
 ### npx skills
@@ -260,7 +260,7 @@ gh skill list
 
 ## スクリプトの実行と外部通信
 
-- `acms-project-triage` は、作業対象のファイルを読むシェルスクリプト（`scripts/detect.sh`）を含みます。読むのはテーマ・CSS・プラグイン（拡張アプリ）のディレクトリと、版を推定するための本体のファイルの有無だけで、DB 接続情報を含む `config.server.php` と `private/` は読みません。外部への通信もしません。
+- `acms-project-triage` は、作業対象のファイルを読むシェルスクリプト（`scripts/detect.sh`）を含みます。読むのはテーマ・CSS・プラグイン（拡張アプリ）のディレクトリと、バージョンを推定するための本体のファイルの有無だけで、DB 接続情報を含む `config.server.php` と `private/` は読みません。外部への通信もしません。
 - `acms-upgrade` は、バージョンアップで直す箇所を洗い出すシェルスクリプト（`scripts/scan.sh`）を含みます。テーマ（`T-` で始まるチェック）とプラグイン（拡張アプリ）（`P-` で始まるチェック）の両方を調べ、それぞれの直し方は `acms-upgrade-theme`・`acms-upgrade-plugin` にあります。読むのは `themes/`（`system` を除く）と `extension/` だけで、`config.server.php`・`.env`・`private/` は読みません。外部への通信もしません。`acms-upgrade-theme`・`acms-upgrade-plugin` はスクリプトを含まず、`acms-upgrade` が入っていない環境では grep で探す文字列を案内します。
 - `acms-static-to-theme` は、静的サイトの構成を調べるシェルスクリプト（`scripts/inventory.sh`）と、作ったテンプレートの BEGIN / END の対応を確かめるシェルスクリプト（`scripts/check-blocks.sh`）を含みます。どちらも読むのは指定したディレクトリだけで、ファイルを書き換えず、外部への通信もしません。
 - その他のスキルはスクリプトを含みません。エージェントが公式ドキュメント（developer.a-blogcms.jp）を Web から読むことがあります。

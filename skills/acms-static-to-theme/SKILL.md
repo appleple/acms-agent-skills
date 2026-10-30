@@ -11,7 +11,7 @@ description: >-
   a-blog cms static HTML to theme, static site, migrate HTML to CMS, theme from static site, CMS 化.
   このスキルは手順を導くだけで、テーマの構成・継承・パスの書き換えは acms-theme-development、記法は acms-template-acms / acms-template-twig、
   モジュール選びとモジュール ID は acms-module-reference、フォームは acms-form、入力欄は acms-custom-field、
-  環境と版の判定は acms-project-triage が担う。既にあるテーマの修正だけなら acms-theme-development を使う。
+  環境とバージョンの判定は acms-project-triage が担う。既にあるテーマの修正だけなら acms-theme-development を使う。
 license: MIT
 compatibility: a-blog cms Ver. 3.2 以上。scripts/inventory.sh と scripts/check-blocks.sh は POSIX シェル（sh）と awk・sed・grep・find で動き、Node.js や PHP の CLI は不要。外部通信はせず、対象のファイルを書き換えない。
 metadata:
@@ -34,7 +34,7 @@ metadata:
 
 | 作業 | スキル |
 |---|---|
-| 版・既存テーマ・標準か Twig かの判定 | acms-project-triage |
+| バージョン・既存テーマ・標準か Twig かの判定 | acms-project-triage |
 | テーマの置き場所・継承・テーマセット・パスの書き換え・デバッグモード | acms-theme-development |
 | 標準テンプレートの記法（BEGIN_MODULE、@include、校正オプション） | acms-template-acms |
 | Twig の記法（module()、include、エスケープ） | acms-template-twig |
@@ -44,9 +44,9 @@ metadata:
 
 ## 手順
 
-### 1. 設置環境と版を確かめる
+### 1. 設置環境とバージョンを確かめる
 
-acms-project-triage の `scripts/detect.sh` で、版・既存のテーマ・プラグイン（拡張アプリ）を確かめて利用者に伝える。版は `php/Application.php`・`license.php` などの PHP ファイルから読まない（配布版では難読化されていて読めず、読めるのは開発用のソースだけのため）。detect.sh で分からなければ、管理画面で確かめてもらう。a-blog cms がまだ無いなら、インストールを利用者に頼む（チュートリアルの「動作環境を用意します」）。どのブログにテーマを割り当てるか（ルートブログか子ブログか）も利用者に確かめる。
+acms-project-triage の `scripts/detect.sh` で、バージョン・既存のテーマ・プラグイン（拡張アプリ）を確かめて利用者に伝える。バージョンは `php/Application.php`・`license.php` などの PHP ファイルから読まない（配布版では難読化されていて読めず、読めるのは開発用のソースだけのため）。detect.sh で分からなければ、管理画面で確かめてもらう。a-blog cms がまだ無いなら、インストールを利用者に頼む（チュートリアルの「動作環境を用意します」）。どのブログにテーマを割り当てるか（ルートブログか子ブログか）も利用者に確かめる。
 
 ### 2. 標準テンプレートか Twig かを決める
 

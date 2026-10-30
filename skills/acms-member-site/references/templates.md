@@ -84,5 +84,5 @@
 
 ## Twig のテーマ
 
-- `Member_*` に V2 版は無い。Twig が有効なテーマでも、会員の画面は標準テンプレートの `<!-- BEGIN_MODULE Member_Signin -->` などで書く。Twig の中に書いた `BEGIN_MODULE` は、Twig の処理の後に標準テンプレートとして処理される（acms-template-twig）。
+- `Member_*` に V2 バージョンは無い。Twig が有効なテーマでも、会員の画面は標準テンプレートの `<!-- BEGIN_MODULE Member_Signin -->` などで書く。Twig の中に書いた `BEGIN_MODULE` は、Twig の処理の後に標準テンプレートとして処理される（acms-template-twig）。
 - 会員限定記事の印と続きの有無は、V2 のエントリーのデータ（`isMembersOnly`、`V2_Entry_Body` の `hasSecretUnits`）で分岐できる。続きを差し込む要素の作り方は references/members-only.md。

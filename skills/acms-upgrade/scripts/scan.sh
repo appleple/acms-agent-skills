@@ -1,9 +1,9 @@
 #!/bin/sh
-# a-blog cms の移行先の版に合わせて、テーマとプラグイン（拡張アプリ）の要修正箇所を洗い出す。
-# checks/to-<版>.tsv のチェック定義を読み、themes/（system を除く）と extension/ を grep する。
+# a-blog cms の移行先のバージョンに合わせて、テーマとプラグイン（拡張アプリ）の要修正箇所を洗い出す。
+# checks/to-<バージョン>.tsv のチェック定義を読み、themes/（system を除く）と extension/ を grep する。
 # config.server.php と private/ は DB の接続情報などを含むため読まない（探索の対象に入れていない）。
-# 使い方: sh scan.sh <a-blog cms の設置ディレクトリ> <移行先の版（例 3.2）>
-# 終了コード: 0 = 実行できた（検出の有無は問わない）、1 = 引数や設置ディレクトリの誤り、2 = 移行先の版のチェック定義がない
+# 使い方: sh scan.sh <a-blog cms の設置ディレクトリ> <移行先のバージョン（例 3.2）>
+# 終了コード: 0 = 実行できた（検出の有無は問わない）、1 = 引数や設置ディレクトリの誤り、2 = 移行先のバージョンのチェック定義がない
 set -eu
 
 script_dir=$(cd "$(dirname "$0")" && pwd)
@@ -21,7 +21,7 @@ list_versions() {
 }
 
 if [ "$#" -ne 2 ]; then
-  echo "使い方: sh scan.sh <a-blog cms の設置ディレクトリ> <移行先の版（例 3.2）>" >&2
+  echo "使い方: sh scan.sh <a-blog cms の設置ディレクトリ> <移行先のバージョン（例 3.2）>" >&2
   exit 1
 fi
 
@@ -113,7 +113,7 @@ done < "$checks"
 
 echo
 echo "## system テーマと同じパスに置いたファイル（上書き）"
-echo "# 移行先の版の themes/system の同じファイルと見比べる。本体側の変更が取り込まれていない可能性がある"
+echo "# 移行先のバージョンの themes/system の同じファイルと見比べる。本体側の変更が取り込まれていない可能性がある"
 override_list=$(
   for dir in $theme_dirs; do
     find "$dir" \( -name node_modules -o -name vendor -o -name .git \) -prune -o -type f \( -name '*.html' -o -name '*.twig' \) -print |

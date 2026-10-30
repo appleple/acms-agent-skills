@@ -26,7 +26,7 @@ metadata:
    ```
 
 3. 出力を読み、次を利用者に短く報告してから作業に入る。
-   - バージョン（「推定」や「不明」なら、管理画面で正確な版を確認してもらう。3.2.x の途中で入った機能を使うかどうかは正確な版で決まるため）
+   - バージョン（「推定」や「不明」なら、管理画面で正確なバージョンを確認してもらう。3.2.x の途中で入った機能を使うかどうかは正確なバージョンで決まるため）
    - 作業するテーマと、その継承の順（`chain`）
    - そのテーマが Twig か標準テンプレートか（`template`）。Twig かどうかを答えるときは、template.yaml の判定に加えて「template.yaml に無くても管理画面のテーマ設定で Twig を有効にしている場合がある」ことも必ず添え、管理画面での確認を頼む（template.yaml だけでは決まらないため）
    - 配置されているプラグイン（拡張アプリ）
@@ -48,7 +48,7 @@ version: 3.2.38 (themes/system/css/acms.css の先頭コメント)
 
 | 項目 | 判定の根拠 | 判定できないこと |
 |---|---|---|
-| `version` | `themes/system/css/acms.css`（無ければ `acms.min.css`）の先頭コメント `@ablogcms/acms.css Ver. x.y.z`。ビルド時に本体の版が入るのは Ver. 3.2.29 以降 | 3.2.28 以前は先頭コメントが CSS 自体の版（`acms.css Ver. 2.1.x`）で、本体の版ではない。その場合は配布物にあるファイルの有無で系列だけを推定する（`php/Services/Template/Twig.php` があれば 3.2.0〜3.2.28、`php/ACMS/GET/Admin/Config/Set/Theme.php` があれば 3.1 系、`php/ACMS/GET/Admin/Webhook/Index.php` があれば 3.0 系、どれも無ければ 2.x 以前）。推定のときは正確な版を管理画面で確かめてもらう。配布版の PHP は一部が難読化されているため、PHP の中身からは読まない |
+| `version` | `themes/system/css/acms.css`（無ければ `acms.min.css`）の先頭コメント `@ablogcms/acms.css Ver. x.y.z`。ビルド時に本体のバージョンが入るのは Ver. 3.2.29 以降 | 3.2.28 以前は先頭コメントが CSS 自体のバージョン（`acms.css Ver. 2.1.x`）で、本体のバージョンではない。その場合は配布物にあるファイルの有無で系列だけを推定する（`php/Services/Template/Twig.php` があれば 3.2.0〜3.2.28、`php/ACMS/GET/Admin/Config/Set/Theme.php` があれば 3.1 系、`php/ACMS/GET/Admin/Webhook/Index.php` があれば 3.0 系、どれも無ければ 2.x 以前）。推定のときは正確なバージョンを管理画面で確かめてもらう。配布版の PHP は一部が難読化されているため、PHP の中身からは読まない |
 | `chain` | ディレクトリ名の `@` の右側を親として、本体と同じ規則で並べたもの。テンプレートはこの順に探され、最後に `system` が使われる | 親のディレクトリが無ければ `warning` を出す |
 | `template` | 継承の順に `template.yaml` の `tpl_twig` を見て、最初に値があったもの（本体も template.yaml をキーごとに子 → 親の順で読む）。`enabled` なら Twig | template.yaml に無くても、管理画面のテーマ設定で Twig を有効にしている場合がある。`.twig` ファイルがあれば `standard?` と出すので、利用者に確認する。テーマ設定で template.yaml を優先しない設定にしていると、template.yaml の値は使われない |
 | `plugins` | `extension/plugins/` 配下のディレクトリ。`ServiceProvider.php` が無いものは本体がプラグインとして扱わない | 有効にしているかどうかは DB にあるため分からない |

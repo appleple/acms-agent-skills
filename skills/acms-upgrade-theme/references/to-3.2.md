@@ -10,8 +10,8 @@ PHP・MySQL の要件、オンラインアップデート、DB の更新など�
 
 | 項目 | 内容 | 根拠 |
 |---|---|---|
-| 移行元 | Ver. 3.1.x。3.0 以前からは、途中の版の移行ガイドも読む（acms-upgrade の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
-| 更新前にしか取れないもの | 本体を更新すると `themes/system` の中身が 3.2 に置き換わり、旧版の `acms.css`・`acms.min.css` やユニットのテンプレートを取れなくなる。`T-ACMS-CSS` が出たテーマは、更新前にテーマの `css/` へコピーしておく | [incompatible.html](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html) |
+| 移行元 | Ver. 3.1.x。3.0 以前からは、途中のバージョンの移行ガイドも読む（acms-upgrade の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
+| 更新前にしか取れないもの | 本体を更新すると `themes/system` の中身が 3.2 に置き換わり、旧バージョンの `acms.css`・`acms.min.css` やユニットのテンプレートを取れなくなる。`T-ACMS-CSS` が出たテーマは、更新前にテーマの `css/` へコピーしておく | [incompatible.html](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html) |
 | 直す場所 | テーマ（`themes/<テーマ>/`）だけを直す。`themes/system/` は本体の更新で上書きされるので直さない | [オンラインアップデート](https://developer.a-blogcms.jp/document/update/online-update.html)の「更新されるファイル」（`themes/system`・`php`・`js` などが置き換わる） |
 
 ## 下位互換性のない変更
@@ -35,7 +35,7 @@ PHP・MySQL の要件、オンラインアップデート、DB の更新など�
 
 ## 非推奨になった機能と代替
 
-非推奨の機能は 3.2 でも動く。デバッグモードのとき、モジュールは監査ログ（notice）に、組み込み JS はブラウザーのコンソールに警告が出る（`Acms\Services\Logger\Deprecated::once`、`ACMS.Library.deprecated`）。急がないが、移行のついでに直すと次の版で困らない。代替のモジュール（`Entry_Summary` など）は 3.1 にもあるので、本体を更新する前に置き換えてよい。
+非推奨の機能は 3.2 でも動く。デバッグモードのとき、モジュールは監査ログ（notice）に、組み込み JS はブラウザーのコンソールに警告が出る（`Acms\Services\Logger\Deprecated::once`、`ACMS.Library.deprecated`）。急がないが、移行のついでに直すと次のバージョンで困らない。代替のモジュール（`Entry_Summary` など）は 3.1 にもあるので、本体を更新する前に置き換えてよい。
 
 | 機能 | 代替 | 見つけ方 | 根拠 |
 |---|---|---|---|
@@ -55,7 +55,7 @@ PHP・MySQL の要件、オンラインアップデート、DB の更新など�
 
 1. 更新前のサイト（3.1）で acms-upgrade の `sh scripts/scan.sh <設置ディレクトリ> 3.2` を実行し、結果を保存する（acms-upgrade がなければ、上の表の「grep:」の文字列で `themes/` を探す）。
 2. 本体を更新する前にできること（3.1 のままでよいもの）を先に直す。
-   - `T-ACMS-CSS` が出たテーマは、更新前の `themes/system/css/acms.css`・`acms.min.css` をテーマの `css/` にコピーする（更新後は system の中身が 3.2 に置き換わり、旧版を取れなくなる）。
+   - `T-ACMS-CSS` が出たテーマは、更新前の `themes/system/css/acms.css`・`acms.min.css` をテーマの `css/` にコピーする（更新後は system の中身が 3.2 に置き換わり、旧バージョンを取れなくなる）。
    - `T-DEPRECATED-MODULE`: 代替モジュールへ置き換える。モジュール ID の設定（表示件数・並び順など）は代替モジュール側で作り直す必要があるので、利用者に管理画面での作業を頼む。変数名は代替モジュールの変数表で確かめる（acms-module-reference）。
    - `T-REMOVED-MODULE`・`T-REMOVED-POST`・`T-META-VARS`・`T-REMOVED-BUILTIN-JS`・`T-LITEEDITOR-FEATURE`・`T-FRONT-EDIT`・`T-UNIT-TEMPLATE-REMOVED`: 3.1 でも外してよい記述なので、先に外す。
 3. 本体を更新した後に、3.2 の HTML と見比べて直すもの。

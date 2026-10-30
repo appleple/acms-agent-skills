@@ -15,7 +15,7 @@
     "expected_behavior": [
       "createImages などのグローバル関数は Ver. 3.2.0 で削除されたと説明する",
       "ファサードのメソッド（createImages → Image::createImages、uniqueFilePath → Storage::uniqueFilePath、loadFulltext → Common::loadEntryFulltext、Ver. 3.2.29 以降は Fulltext::loadEntryFulltext）へ置き換える",
-      "引数はパッチ版の間でも変わることがあるので、移行先の版の php/Services/Facades/ の注釈で確かめるよう案内する",
+      "引数はパッチバージョンの間でも変わることがあるので、移行先のバージョンの php/Services/Facades/ の注釈で確かめるよう案内する",
       "acms-upgrade の scan.sh の P-REMOVED-FUNCTION（なければ grep）で、ほかの削除された関数の呼び出しもまとめて洗い出す",
       "本体の php/ に関数を書き足して直さない"
     ],
@@ -24,11 +24,11 @@
   {
     "query": "サーバーは PHP 7.4 で a-blog cms 3.1 と自作プラグインが動いている。3.2 にするとき、プラグイン側で気をつけることは？",
     "expected_behavior": [
-      "回答の最初に acms-project-triage（detect.sh）で版を判定するよう案内し、PHP のファイルから版を読まない",
+      "回答の最初に acms-project-triage（detect.sh）でバージョンを判定するよう案内し、PHP のファイルからバージョンを読まない",
       "3.2 は PHP 8.1 以上が必要で、PHP 8.1 未満ではオンラインアップデートの候補に 3.2 が出ないと説明する",
       "PHP を先に上げるなら、3.1 の本体とプラグインがその PHP で動くかも確かめるよう案内する",
-      "scan.sh は PHP の版の違いを調べないので、検証環境で PHP 8.1 以上・デバッグモードにしてエラーと警告を見ると説明する",
-      "配布されているプラグインは 3.2 対応版が出ているかを配布元で確かめる",
+      "scan.sh は PHP のバージョンの違いを調べないので、検証環境で PHP 8.1 以上・デバッグモードにしてエラーと警告を見ると説明する",
+      "配布されているプラグインは 3.2 対応バージョンが出ているかを配布元で確かめる",
       "acms-upgrade の scan.sh の P- のチェック（SQL ヘルパー・削除された関数など）でも洗い出す"
     ],
     "source": "本体の要件だけを見て、PHP 8 系で動かなくなるプラグインのコードや、PHP を上げる順番（3.1 のまま PHP を上げる期間）を見落としやすい"

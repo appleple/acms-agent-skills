@@ -39,8 +39,8 @@ my-plugin/                     … リポジトリ（開発用）
 |---|---|---|
 | インストール | ルートブログだけ。`checkRequirements()` が `false` なら「要件を満たしていません」とだけ出す。続けて `install()` → `activate()`、成功したら `app` テーブルに登録 | 満たしていない理由は `AcmsLogger::notice()` などで記録する。`install()` は2回流しても壊れないようにする（`activate()` の失敗でも未インストールに戻り、やり直されるため） |
 | 例外 | 各メソッドの例外は `catch (Exception)` で受けて「失敗しました」と表示する。`Error`（`TypeError` など）は受け止められず、画面がエラーになる | `install()` / `update()` / `uninstall()` の中は `catch (\Throwable)` で受けて `\RuntimeException` に包み直して投げる |
-| ファイルを差し替えた直後 | `$version` が `app` テーブルの版と違うと一覧が「要アップデート」になるが、有効なブログでは `init()` も Hook もそのまま動く | 新しいコードが古いテーブルで動く時間がある。`update()` を実行するまで、足した列やテーブルが無くても落ちないように書く |
-| アップデート | `update()` には前の版が渡されない。`update()` が成功したあとに `app` テーブルの版が書き換わる。`checkRequirements()` は呼ばれない | 前の版は `update()` の中で `app` テーブルから読む（下の例）。新しい版で本体の要件を上げたなら、`update()` でも確かめて足りなければ例外を投げる（版は書き換わらず「要アップデート」のまま残る） |
+| ファイルを差し替えた直後 | `$version` が `app` テーブルのバージョンと違うと一覧が「要アップデート」になるが、有効なブログでは `init()` も Hook もそのまま動く | 新しいコードが古いテーブルで動く時間がある。`update()` を実行するまで、足した列やテーブルが無くても落ちないように書く |
+| アップデート | `update()` には前のバージョンが渡されない。`update()` が成功したあとに `app` テーブルのバージョンが書き換わる。`checkRequirements()` は呼ばれない | 前のバージョンは `update()` の中で `app` テーブルから読む（下の例）。新しいバージョンで本体の要件を上げたなら、`update()` でも確かめて足りなければ例外を投げる（バージョンは書き換わらず「要アップデート」のまま残る） |
 | アンインストール | ルートブログだけ。`deactivate()` は呼ばれない。全ブログの有効化の記録が消える。確認ダイアログは「データも削除されます」と表示する | 表示どおり、独自テーブルと自分のコンフィグを `uninstall()` で消す。残す設計にするなら、利用者向けの説明に必ず書く |
 | ブログの削除 | 呼ばれる Hook は無い | 消えたブログの行が独自テーブルに残る前提で、読み出し側で `blog_id` を絞る |
 
@@ -74,7 +74,7 @@ public function update()
 
 private function installedVersion(): string
 {
-    // update() の実行中は、app テーブルにまだ前の版が入っている
+    // update() の実行中は、app テーブルにまだ前のバージョンが入っている
     $sql = \SQL::newSelect('app');
     $sql->addSelect('app_version');
     $sql->addWhereOpr('app_name', static::class);
@@ -131,7 +131,7 @@ private function exec(string $query): void
 
 - 秘密を扱う処理（外部 API の呼び出し）は PHP の側で行い、ブラウザに値を渡さない。管理画面の JavaScript に `ctx.config` で値を渡すと acms.js の URL のクエリとして見える（acms-admin-frontend-plugin の担当。そちらを読む）。
 - テンプレートに秘密の値を出さない。ブログのコンフィグは、テーマのテンプレートから `BlogConfig` モジュールや Twig の `acms_config()` で読める。
-- 秘密のキー名には `api_key`・`secret`・`token`・`pass` のどれかを含める（`myplugin_api_key` など）。監査ログは、キー名にこれらを含む POST の値（Ver. 3.2.2 以降。`notice` 以上のログに付く）とログのコンテキスト（Ver. 3.2.29 以降）を伏せ字にする（`php/Services/Logger/LoggerServiceProvider.php`、`php/Services/Logger/Filter.php`）。`ACMS_POST_Config` は保存したコンフィグの値をコンテキストに入れて記録するので、Ver. 3.2.28 以前ではキー名にかかわらず監査ログに平文で残る（スタンダードエディションでは info のログ自体が保存されない）。古い版も対象にするなら、利用者にそのことを伝え、`.env` に置く方法を案内する。
+- 秘密のキー名には `api_key`・`secret`・`token`・`pass` のどれかを含める（`myplugin_api_key` など）。監査ログは、キー名にこれらを含む POST の値（Ver. 3.2.2 以降。`notice` 以上のログに付く）とログのコンテキスト（Ver. 3.2.29 以降）を伏せ字にする（`php/Services/Logger/LoggerServiceProvider.php`、`php/Services/Logger/Filter.php`）。`ACMS_POST_Config` は保存したコンフィグの値をコンテキストに入れて記録するので、Ver. 3.2.28 以前ではキー名にかかわらず監査ログに平文で残る（スタンダードエディションでは info のログ自体が保存されない）。古いバージョンも対象にするなら、利用者にそのことを伝え、`.env` に置く方法を案内する。
 - ブログのエクスポートと DB バックアップには `config` テーブルが含まれる。設定ページに保存した秘密もファイルに入る。
 - 設定ページを差し込む `init()` では、`ADMIN === 'app_' . $this->menu` に加えて `sessionWithAdministration()` も条件にする。差し込まれたテンプレートを描く本体の `ACMS_GET_Admin_InjectTemplate` は権限を確かめないため。保存は `ACMS_POST_Config` がコンフィグの編集権限（管理者、ロールでは `config_edit`、またはその画面へのショートカットの権限）を確かめる。
 
@@ -175,7 +175,7 @@ private function exec(string $query): void
 - 本体は `php/vendor/` に composer の依存を持ち（Guzzle、Symfony のコンポーネント、Monolog、Twig、league/* など）、プラグイン（拡張アプリ）の `Acms\Plugins\` も本体のオートローダーで読み込まれる。実行時の依存を足さずに済むなら足さない。
 - 足すときは `src/vendor/` に同梱し、プラグイン（拡張アプリ）の中で `require_once __DIR__ . '/vendor/autoload.php'` する。本体はプラグイン（拡張アプリ）の `vendor/` を読み込まない。
   - `install()` / `update()` / `uninstall()` は、そのブログでプラグイン（拡張アプリ）がまだ有効でない（`init()` が呼ばれていない）リクエストで呼ばれる。これらの中で依存を使うなら、`init()` とは別にそこでも読み込む。
-- 本体の `php/vendor/` にあるライブラリを別の版で同梱しない。composer のオートローダーは後から読み込んだものが先に探される（`prepend`）ため、まだ読み込まれていないクラスはプラグイン（拡張アプリ）側の版になり、読み込み済みのクラスは本体の版のまま残る。版の混ざったクラスで本体まで壊れる。どうしても要るなら、名前空間を書き換えるツール（PHP-Scoper など）で別の名前空間にしてから同梱する。
+- 本体の `php/vendor/` にあるライブラリを別のバージョンで同梱しない。composer のオートローダーは後から読み込んだものが先に探される（`prepend`）ため、まだ読み込まれていないクラスはプラグイン（拡張アプリ）側のバージョンになり、読み込み済みのクラスは本体のバージョンのまま残る。バージョンの混ざったクラスで本体まで壊れる。どうしても要るなら、名前空間を書き換えるツール（PHP-Scoper など）で別の名前空間にしてから同梱する。
 - テストの側で同梱の依存を読み込む方法（`tests/bootstrap.php`、PHPStan の `excludePaths.analyse`）は、テスト基盤 `ablogcms/testing-framework` の README にある。
 
 ## テスト
@@ -191,7 +191,7 @@ developer サイトの「プラグイン（拡張アプリ）のテスト」の�
 - `ablogcms/testing-framework` は本体のマイナーに合わせて `3.2.*` と書く。`^3.2` は 3.3 系まで拾う。
 - `acms-create-database` が作るのは本体の定義にあるテーブルだけ（プラグイン（拡張アプリ）の `install()` は呼ばない）。独自テーブルを使う統合テストでは、`setUp` で自分の `migrate()` を呼んでテーブルを作る（上のマイグレーションを ServiceProvider の外のクラスに置くと、テストから呼びやすい）。
 - 単体テストを先に考え、DB が要るときだけ統合テストにする。GET / POST のクラスは直接テストせず、`Services/` をテストする。
-- イメージのタグはマイナー単位（`3.2`）なので、テストは 3.2 系の新しい本体で動く。対応範囲に入れた古いパッチ版（下の「対応バージョン」）での動作は、別に確かめる。
+- イメージのタグはマイナー単位（`3.2`）なので、テストは 3.2 系の新しい本体で動く。対応範囲に入れた古いパッチバージョン（下の「対応バージョン」）での動作は、別に確かめる。
 
 ## 対応バージョンと配布
 
@@ -199,7 +199,7 @@ developer サイトの「プラグイン（拡張アプリ）のテスト」の�
 - 最小の対応バージョンを3か所で守る。
   - `checkRequirements()`: `version_compare(VERSION, '3.2.29', '>=')` などで確かめ、足りなければ理由を記録して `false` を返す。
   - `update()`: `checkRequirements()` は呼ばれないので、ここでも確かめて足りなければ例外を投げる。
-  - `init()`: 本体を古い版に戻したサイトでも落ちないよう、足りなければ登録をせずに戻る。
+  - `init()`: 本体を古いバージョンに戻したサイトでも落ちないよう、足りなければ登録をせずに戻る。
 - 配布物は、展開すると `<名前>/ServiceProvider.php` になる zip にする（利用者は `<名前>/` を `extension/plugins/` に置く）。ディレクトリ名が名前空間とずれると管理画面の一覧に出ない。Git のホスティングが自動で作るアーカイブは展開先が `<リポジトリ名>-<タグ>` になるので、そのまま配布物にしない。
 - 配布物に `tests/`、`composer.json` / `composer.lock`（同梱する `vendor/` の読み込みには要らない）、開発用の設定、`.env` の写しを入れない。`extension/plugins/` は Web から見える場所にあり、本体同梱の `.htaccess` が拒否するのは `.php`・ドットファイル・一部の設定ファイル（`composer.json` など）だけで、Apache 以外のサーバーではそれも効かない。
 - 利用者向けの説明（README）に、対応する a-blog cms のバージョン、`HOOK_ENABLE` が要るか、アンインストールで消えるデータを書く。

@@ -53,11 +53,11 @@
     "expected_behavior": [
       "テーブル名を DB_PREFIX から始め、SQL クラスには接頭辞なしの論理名を渡し、文字列で書く CREATE TABLE にだけ DB_PREFIX を付ける",
       "DB::query は SQL の失敗で例外を投げず false を返すので、install() / update() で戻り値を確かめて例外を投げる",
-      "update() には前の版が渡されないので、update() の中で app テーブルの app_version を読み、version_compare で段階的にマイグレーションする",
+      "update() には前のバージョンが渡されないので、update() の中で app テーブルの app_version を読み、version_compare で段階的にマイグレーションする",
       "install() とマイグレーションを2回流しても壊れないように書き（CREATE TABLE IF NOT EXISTS など）、Error は catch (\\Throwable) で受けて例外に包み直す",
       "行に blog_id を持たせて BID で絞り、uninstall() で独自テーブルと自分の接頭辞のコンフィグを消す（本体の確認ダイアログがデータの削除を告げるため）"
     ],
-    "source": "スキルなしでは acms_ を直書きしたテーブル名や接頭辞なしの名前にしてバックアップから漏らす、DB::query の失敗を検知せず成功と表示させる、update() で前の版が分からないまま ALTER を流して2回目に壊れる、といった誤りが起きやすい"
+    "source": "スキルなしでは acms_ を直書きしたテーブル名や接頭辞なしの名前にしてバックアップから漏らす、DB::query の失敗を検知せず成功と表示させる、update() で前のバージョンが分からないまま ALTER を流して2回目に壊れる、といった誤りが起きやすい"
   },
   {
     "query": "外部の翻訳 API を呼ぶプラグインを作りたい。API キーはプラグインの設定画面で入れてもらい、Hook の中で config('mytranslate_apikey') で読む予定。管理画面の JS からも API を呼びたい",
@@ -70,13 +70,13 @@
     "source": "スキルなしでは config() で読んでコンフィグセットのあるブログで値が空になる、キーを JS に渡す、キー名が伏せ字の対象にならず監査ログに残る、といった誤りが起きやすい。いずれも本体のソースを読まないと分からない"
   },
   {
-    "query": "作ったプラグインを配布用に zip にしたい。Guzzle の新しい版を composer で入れて使っていて、Asset API も使っている。対応バージョンの書き方と zip の中身を教えて",
+    "query": "作ったプラグインを配布用に zip にしたい。Guzzle の新しいバージョンを composer で入れて使っていて、Asset API も使っている。対応バージョンの書き方と zip の中身を教えて",
     "expected_behavior": [
-      "本体の php/vendor にある Guzzle を別の版で同梱すると、オートローダーの順で版が混ざって壊れるため、本体の版を使うか名前空間を書き換えてから同梱するよう案内する",
+      "本体の php/vendor にある Guzzle を別のバージョンで同梱すると、オートローダーの順でバージョンが混ざって壊れるため、本体のバージョンを使うか名前空間を書き換えてから同梱するよう案内する",
       "同梱する依存は src/vendor に置いてプラグインの中で autoload.php を読み込み、install() / update() でも使うならそこでも読み込む（init() が呼ばれていないリクエストのため）",
       "Asset API が Ver. 3.2.29 以降なので、checkRequirements() で VERSION を version_compare で確かめ、update() と init() でも確かめる（update では checkRequirements が呼ばれないため）",
       "zip は展開すると <名前>/ServiceProvider.php になる形にし、ディレクトリ名を名前空間と同じにして、tests や開発用の設定を入れない"
     ],
-    "source": "スキルなしでは本体と同じライブラリを別の版で同梱して衝突させる、checkRequirements だけで対応バージョンを守れると考える、Git のホスティングの自動アーカイブをそのまま配って一覧に出ない、といった誤りが起きやすい"
+    "source": "スキルなしでは本体と同じライブラリを別のバージョンで同梱して衝突させる、checkRequirements だけで対応バージョンを守れると考える、Git のホスティングの自動アーカイブをそのまま配って一覧に出ない、といった誤りが起きやすい"
   }
 ]
