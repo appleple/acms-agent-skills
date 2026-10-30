@@ -257,7 +257,7 @@ gh skill list
 
 - `acms-project-triage` は、作業対象のファイルを読むシェルスクリプト（`scripts/detect.sh`）を含みます。読むのはテーマ・CSS・プラグイン（拡張アプリ）のディレクトリと、版を推定するための本体のファイルの有無だけで、DB 接続情報を含む `config.server.php` と `private/` は読みません。外部への通信もしません。
 - `acms-upgrade` は、バージョンアップで直す箇所を洗い出すシェルスクリプト（`scripts/scan.sh`）を含みます。テーマ（`T-` で始まるチェック）とプラグイン（拡張アプリ）（`P-` で始まるチェック）の両方を調べ、それぞれの直し方は `acms-upgrade-theme`・`acms-upgrade-plugin` にあります。読むのは `themes/`（`system` を除く）と `extension/` だけで、`config.server.php`・`.env`・`private/` は読みません。外部への通信もしません。`acms-upgrade-theme`・`acms-upgrade-plugin` はスクリプトを含まず、`acms-upgrade` が入っていない環境では grep で探す文字列を案内します。
-- `acms-static-to-theme` は、静的サイトの構成を調べるシェルスクリプト（`scripts/inventory.sh`）を含みます。読むのは指定した静的サイトのディレクトリだけで、外部への通信もしません。
+- `acms-static-to-theme` は、静的サイトの構成を調べるシェルスクリプト（`scripts/inventory.sh`）と、作ったテンプレートの BEGIN / END の対応を確かめるシェルスクリプト（`scripts/check-blocks.sh`）を含みます。どちらも読むのは指定したディレクトリだけで、ファイルを書き換えず、外部への通信もしません。
 - その他のスキルはスクリプトを含みません。エージェントが公式ドキュメント（developer.a-blogcms.jp）を Web から読むことがあります。
 
 ## フィードバック

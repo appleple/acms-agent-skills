@@ -5,7 +5,7 @@ description: >-
   a-blog cms（acms）のテーマにする「CMS 化」の作業を、環境の確認 → 標準テンプレートか Twig かの決定 → scripts/inventory.sh による棚卸し →
   ページと要素の機能への割り当て → テーマの作成 → 動的な部分の置き換え → 管理画面での作業の一覧 → 確認、の固定の順序で導く。
   共通部分の切り出し、アセットのパス（相対・ルート相対・CSS の中の url()・ハッシュ付きのファイル名）、残った静的ファイルの扱い、
-  静的 HTML に含まれる波括弧や BEGIN コメントと a-blog cms の記法との衝突も扱う。
+  静的 HTML に含まれる波括弧や BEGIN コメントと a-blog cms の記法との衝突、利用者に渡すモジュール ID の設定手順書、置き換えた後の確認（scripts/check-blocks.sh）も扱う。
   「この静的サイトを a-blog cms のテーマにして」「HTML を CMS 化して」「コーディング済みの HTML を a-blog cms に組み込みたい」
   「お知らせだけ更新できるようにしたい」と頼まれたとき、HTML 一式や静的サイトのディレクトリを渡されたときに使う。
   a-blog cms static HTML to theme, static site, migrate HTML to CMS, theme from static site, CMS 化.
@@ -13,7 +13,7 @@ description: >-
   モジュール選びとモジュール ID は acms-module-reference、フォームは acms-form、入力欄は acms-custom-field、
   環境と版の判定は acms-project-triage が担う。既にあるテーマの修正だけなら acms-theme-development を使う。
 license: MIT
-compatibility: a-blog cms Ver. 3.2 以上。scripts/inventory.sh は POSIX シェル（sh）と awk・sed・grep・find で動き、Node.js や PHP の CLI は不要。外部通信はしない。
+compatibility: a-blog cms Ver. 3.2 以上。scripts/inventory.sh と scripts/check-blocks.sh は POSIX シェル（sh）と awk・sed・grep・find で動き、Node.js や PHP の CLI は不要。外部通信はせず、対象のファイルを書き換えない。
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -74,13 +74,15 @@ references/mapping.md の対応表で、ページ（トップ・一覧・詳細�
 ### 5. テーマを作る
 
 1. 静的サイト一式を `themes/<テーマ名>/` にコピーし、トップの `index.html` を `tpl_top` の名前（既定は `_top.html`）に変える。Twig にするならテーマの `template.yaml` に `tpl_twig: enabled` を書く（ファイル名と探索順は acms-template-twig）。この時点で、見た目が静的サイトと同じに出ることを確かめる（ページのソースの `</head>` の直前に a-blog cms の `meta name="generator"` が入っていれば、a-blog cms を通っている）。
-2. 管理ボックス（`/admin/action.html` のインクルード）と、管理用の CSS・Js モジュールを `<head>` に入れる（チュートリアルの「管理用ボックスの設置」、読み込み方は acms-theme-development）。テーマを切り替えると管理画面への入口が消えるため、最初に入れる。
+2. 管理ボックス（`@include("/admin/action.html")`。Twig のテーマでも同じ書き方）と、管理用の CSS・Js モジュールを `<head>` に入れる（チュートリアルの「管理用ボックスの設置」、読み込み方は acms-theme-development）。テーマを切り替えると管理画面への入口が消えるため、最初に入れる。管理ボックス・エントリーの編集ボタン・本文（ユニット）の表示の部品は references/theme-parts.md を読む。
 3. アセットのパスを整える。手順 3 の出力で次を直す（詳細は references/site-types.md の「アセット」）。
    - CSS ファイルの中の `/` から始まる url()（a-blog cms は CSS ファイルの中を書き換えない）。
    - 部品に切り出す予定の HTML の相対パス（標準テンプレートでは、そのパスを書いたファイルの場所が基準になる）。`/` から始まるテーマ直下からのパスにそろえる。
    - ハッシュ付きのファイル名・ビルドの成果物の置き場所。
 4. 全ページに共通するブロックを、レイアウト（標準は `@extends`、Twig は `extends`）かインクルードに分ける。ページごとに違う部分（title、現在地の印、トップだけの見出し）は、グローバル変数かタッチモジュール（`Touch_Top` など）で出し分ける。
+   - **一部だけを CMS 化し、残りのページを a-blog cms を通さない場所（ドキュメントルートなど）に置くなら、共通部分を分けない。** CMS 化したページだけが部品を読み、残したページは元の HTML のままになって、同じマークアップの出所が 2 つになるため。残すページもテーマに置く（a-blog cms に表示させる）なら分けてよい。判断表は references/theme-parts.md。
 5. ページの種類ごとのテンプレートを置く。一覧はカテゴリーのディレクトリの `tpl_index`（既定 `index.html`）、詳細は `tpl_detail`（既定 `_entry.html`）。静的な詳細ページ 1 枚をひな形にして `_entry.html` を作る。置き方は acms-theme-development の references/template-resolution.md。
+   - カテゴリー別に置いても、カテゴリーを含まない URL（タグ・日付・検索の一覧、カテゴリーの無いエントリー）ではテーマ直下の `index.html`・`_entry.html` が使われ、無ければ 404 になる。トップを `_top.html` に変えた後、テーマ直下に一覧用のファイルが要るかを利用者と決める（references/theme-parts.md）。
 
 ### 6. 動的な部分を 1 か所ずつ置き換える
 
@@ -96,16 +98,28 @@ references/mapping.md の対応表で、ページ（トップ・一覧・詳細�
 
 モジュールを置くたびに、モジュール ID を付けるか決め、付けたら管理画面で作る必要があることを利用者に伝える（acms-module-reference）。置き換えが済んだ静的な詳細ページ・2 ページ目以降のファイルはテーマから消す（下の「落とし穴」）。
 
+置き換えでよく外すこと:
+- **ページャーを「次へ」「もっと見る」だけにしない。** 静的サイトにボタンが 1 つしか無くても、前のページへのリンク（標準は `backLink`、Twig は `pagination.prevPage`）も出す。2 ページ目に来た人が戻れなくなるため。
+- **パンくずを静的なまま残さない。** 詳細ページでは記事名とカテゴリーの階層が変わるので、静的なままだと全記事で同じ表示になる。一覧と詳細で同じ部品にして Topicpath（Twig は `V2_Topicpath`）にし、モジュール ID を付けるなら条件設定を references/admin-checklist.md の「パンくず」のとおりにしてもらう。
+- 記法の誤り（`@include` の引数を受ける側は `{{name}}`、条件分岐の続きは `ELSE_IF`）は acms-template-acms の references/syntax.md で確かめる。変数名・ブロック名・設定キーの確かめ方は references/lookup.md。
+
 ### 7. 管理画面で利用者がする作業の一覧を渡す
 
 テンプレートに書いただけでは、ブログ・カテゴリー・モジュール ID・フォーム ID・テーマセットの割り当て・エントリーは作られない（DB の設定）。手順 6 の各回と最後に、references/admin-checklist.md の形で、作るもの・値・確かめ方の一覧を利用者に渡す。エージェントは管理画面を操作しない。
 
+モジュール ID は、モジュールごとの設定手順書にして渡す（references/admin-checklist.md の「モジュール ID の設定手順書」）。項目名は管理画面の表記（「サマリー ( Entry_Summary )」「CIDのURLコンテキストを優先する」など）を設置ディレクトリのファイルから写し、一覧と詳細で絞り込みの指定が違うこと、テンプレートで使う変数に要る表示設定（Entry_Summary と Entry_Body でキーの名前が揃っていない）を書く。
+
 ### 8. 確認する
 
+順番と見方は references/verification.md を読む。要点:
+
+- 標準テンプレートは `sh scripts/check-blocks.sh themes/<テーマ名>` で、開始と終了のコメントの対応を確かめる（ファイルは書き換えない）。
+- 主要な URL（トップ・一覧・詳細・一覧の 2 ページ目・静的なまま残したページ）のステータスと、出力に展開されない `{…}`・`%{…}` が残っていないかを見る。静的なまま残したページは元のファイルと差分を取り、本体が入れる generator の meta などの正常な差分と分ける。
+- 表示が変わらないときは、キャッシュのクリアを管理画面の操作として利用者に頼む。キャッシュのファイルや DB を直接消さない。
 - デバッグモードのユーザーでログインし、各ページで使われているテンプレートとインクルードを確かめる（acms-theme-development の「使われているテンプレートを調べる」）。
 - ログアウトした状態でも見る（ログイン中は管理用の JavaScript が入り、直接表示の制限も一部外れるため）。
 - 手順 3 のページ一覧を全部開き、静的サイトと見比べる。リンク・画像・フォームの送信（入力 → 確認 → 完了 → メール）を確かめる。
-- 本番に置いたら、テンプレートキャッシュとページキャッシュを消してから確かめる（acms-theme-development）。
+- 本番に置いたら、テンプレートキャッシュとページキャッシュを消してもらってから確かめる（acms-theme-development）。
 
 ## 落とし穴（a-blog cms に静的 HTML を持ち込むとき）
 
@@ -122,7 +136,8 @@ references/mapping.md の対応表で、ページ（トップ・一覧・詳細�
 ## 守ること
 
 - 手順 4 の割り当てを利用者と決める前に、テンプレートを書き換え始めない。
-- 記法・モジュール名・変数名を推測で書かない。担当のスキルとそこから辿る変数表で確かめる。
+- 記法・モジュール名・変数名・設定キーを推測で書かない。担当のスキルとそこから辿る変数表、設置ディレクトリの変数表・管理画面のテンプレート・公式テーマで確かめる（references/lookup.md）。
 - 管理画面の操作（モジュール ID・フォーム ID・カテゴリーの作成、テーマセットの割り当て、エントリーの投入）は利用者に頼む。インポート用のファイル（モジュール ID・コンフィグ・エントリーの YAML や CSV）を推測で作らない（本体が受け付ける形かを確かめる手段が無いため。references/admin-checklist.md）。
+- DB を SQL で読み書きしない（モジュール ID の棚卸しも、管理画面の一覧を利用者に見てもらう）。管理画面を通さない変更は、本体のキャッシュや関連する設定と食い違うため。
 - `config.server.php`・`.env`・`private/` は開かない。a-blog cms の設置ディレクトリを grep や find で調べるときも、これらを対象から外す（例: `grep -rn 'tpl_twig' themes/`。設置ディレクトリ全体に grep をかけない）。設定の値が知りたければ、管理画面で確かめてもらう。
 - 公式チュートリアルの題材を渡されたときの当てはめ方は references/tutorial-example.md を読む。
