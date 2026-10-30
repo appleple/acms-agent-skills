@@ -4,6 +4,7 @@
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skillsDir = join(root, 'skills');
@@ -179,8 +180,20 @@ for (const name of skillNames) {
   if (!listedSkills.has(`./skills/${name}`)) error(marketplaceFile, `skills/${name} がどのプラグインにも載っていない`);
 }
 
+// 公開されるのは git が追跡する（または追跡しうる）ファイルだけなので、.gitignore や
+// .git/info/exclude で除外したローカル専用のファイル（作業記録など）は調べない。
+// git が無い環境（配布物を展開しただけなど）では、すべてのファイルを調べる。
+function publishableFiles() {
+  try {
+    const listed = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' });
+    return listed.split('\n').filter((path) => /\.(md|json|sh|mjs)$/.test(path)).map((path) => join(root, path)).filter((path) => existsSync(path));
+  } catch {
+    return walkMarkdown(root);
+  }
+}
+
 // 社内情報の混入チェック（このスクリプト自身は検出パターンを含むので除く）
-for (const file of walkMarkdown(root)) {
+for (const file of publishableFiles()) {
   if (file === fileURLToPath(import.meta.url)) continue;
   const text = readFileSync(file, 'utf8');
   for (const [pattern, label] of FORBIDDEN_PATTERNS) {
