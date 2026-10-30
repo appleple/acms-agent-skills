@@ -1,0 +1,36 @@
+[
+  {
+    "query": "自作プラグインで SQL::newSelect() を使って一覧を出している。3.2 で動かなくなる箇所はある？",
+    "expected_behavior": [
+      "acms-upgrade の scan.sh の P-SQL-GET-STRING・P-SQL-SET・P-REMOVED-FUNCTION などで extension/ を洗い出す",
+      "SQL ヘルパーの get() が 3.2 から SQL 文字列ではなく sql と params の配列を返すので、文字列として連結している箇所は直す必要があると説明する",
+      "SQL ヘルパーで条件まで組み立てて get(dsn()) の結果をそのまま DB::query() に渡す直し方を示す",
+      "setInsert / setReplace は addInsert / addReplace に置き換えると伝える",
+      "検証環境で PHP 8.1 以上・デバッグモードで動作を確かめるよう案内する"
+    ],
+    "source": "SQL ヘルパーの仕様変更は公式の移行ガイドでは「挙動を確認してください」としか書かれておらず、get() の戻り値が配列になったことに気づかずに文字列連結のまま移行しやすい"
+  },
+  {
+    "query": "3.2 に上げたら、自作プラグインで Call to undefined function createImages() と出て画像のアップロード処理が止まった",
+    "expected_behavior": [
+      "createImages などのグローバル関数は Ver. 3.2.0 で削除されたと説明する",
+      "ファサードのメソッド（createImages → Image::createImages、uniqueFilePath → Storage::uniqueFilePath、loadFulltext → Common::loadEntryFulltext、Ver. 3.2.29 以降は Fulltext::loadEntryFulltext）へ置き換える",
+      "引数はパッチ版の間でも変わることがあるので、移行先の版の php/Services/Facades/ の注釈で確かめるよう案内する",
+      "acms-upgrade の scan.sh の P-REMOVED-FUNCTION（なければ grep）で、ほかの削除された関数の呼び出しもまとめて洗い出す",
+      "本体の php/ に関数を書き足して直さない"
+    ],
+    "source": "削除された関数を本体や共通ファイルに自前で定義し直して当座をしのいだり、1つ直しては次のエラーに当たる場当たり的な修正になりやすい"
+  },
+  {
+    "query": "サーバーは PHP 7.4 で a-blog cms 3.1 と自作プラグインが動いている。3.2 にするとき、プラグイン側で気をつけることは？",
+    "expected_behavior": [
+      "回答の最初に acms-project-triage（detect.sh）で版を判定するよう案内し、PHP のファイルから版を読まない",
+      "3.2 は PHP 8.1 以上が必要で、PHP 8.1 未満ではオンラインアップデートの候補に 3.2 が出ないと説明する",
+      "PHP を先に上げるなら、3.1 の本体とプラグインがその PHP で動くかも確かめるよう案内する",
+      "scan.sh は PHP の版の違いを調べないので、検証環境で PHP 8.1 以上・デバッグモードにしてエラーと警告を見ると説明する",
+      "配布されているプラグインは 3.2 対応版が出ているかを配布元で確かめる",
+      "acms-upgrade の scan.sh の P- のチェック（SQL ヘルパー・削除された関数など）でも洗い出す"
+    ],
+    "source": "本体の要件だけを見て、PHP 8 系で動かなくなるプラグインのコードや、PHP を上げる順番（3.1 のまま PHP を上げる期間）を見落としやすい"
+  }
+]

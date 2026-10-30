@@ -68,7 +68,7 @@ search() {
 
 echo "# a-blog cms Ver. $version への移行チェック"
 echo "# 対象: ${root}（themes/ の system 以外と extension/）"
-echo "# 検出は文字列の一致による候補。直す前に該当行を開き、references/to-$version.md の該当見出しで直し方を確かめる"
+echo "# 検出は文字列の一致による候補。直す前に該当行を開き、各チェックの → の先（T- は acms-upgrade-theme、P- は acms-upgrade-plugin の references）で直し方を確かめる"
 
 tab=$(printf '\t')
 summary=""
@@ -104,7 +104,10 @@ $id: $count"
   echo
   echo "## $id ($target) $count 件"
   echo "$message"
-  echo "→ references/to-$version.md「${section}」"
+  # section は「<スキル名>: <references のファイル>#<見出し>」の形
+  section_skill=${section%%: *}
+  section_path=${section#*: }
+  echo "→ ${section_skill} の references/${section_path%%#*}「${section_path#*#}」"
   printf '%s\n' "$hits" | sed 's/^/- /'
 done < "$checks"
 

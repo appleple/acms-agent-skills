@@ -1,0 +1,46 @@
+[
+  {
+    "query": "このテーマ、トップページで Entry_Headline を使っている。3.2 に上げても大丈夫？直すならどう直す？",
+    "expected_behavior": [
+      "Entry_Headline は 3.2 で非推奨だが今も動き、デバッグモードでは監査ログに警告が出ると説明する",
+      "代替は Entry_Summary で、Entry_Summary は 3.1 にもあるので本体の更新前に置き換えてよいと伝える",
+      "モジュール ID の設定は代替モジュール側で作り直す必要があるので、管理画面での作業を利用者に頼む",
+      "scan.sh の T-DEPRECATED-MODULE で他の非推奨モジュール（Entry_List・Entry_Photo・Banner など）も洗い出す",
+      "変数名の違いは代替モジュールの変数表（acms-module-reference）で確かめるよう案内する"
+    ],
+    "source": "非推奨を「今すぐ動かなくなる」と誤解して慌てて書き換えたり、逆に Entry_Headline の変数をそのまま Entry_Summary に流用してモジュール ID の作り直しを忘れたりしやすい"
+  },
+  {
+    "query": "3.2 にアップデートしたら、エントリー本文の画像の横並びがずれて、引用（埋め込み）のカードの見た目も崩れた",
+    "expected_behavior": [
+      "3.2 でユニットのレイアウトが float から Flexbox・CSS Grid に変わり acms.css のユニットのスタイルが変わったことを原因の候補に挙げる",
+      "引用ユニットが埋め込みユニットになり、HTML が blockquote から a 要素に変わったので、旧クラス向けの CSS を直す必要があると説明する",
+      "配置 v1 とユニットグループを使っているなら、横並びの上揃え（hr.clearHidden）とユニットグループ内の acms-col-* の左右余白を確かめるよう案内する",
+      "scan.sh を実行して T-ACMS-CSS・T-EMBED-UNIT・T-UNIT-SECTION と上書き一覧を見る",
+      "themes/system の CSS やテンプレートを直接書き換えず、テーマ側で直す"
+    ],
+    "source": "スキルなしだと、更新後の表示崩れを個別の CSS の調整で場当たり的に直そうとし、acms.css の変更・埋め込みユニットの HTML の変更・配置 v1 の確認事項という原因にたどり着かない"
+  },
+  {
+    "query": "3.2 に上げたら、エントリー詳細の OGP 画像（og:image）が出なくなった。エントリーのカスタムフィールド ogp_image で設定していた",
+    "expected_behavior": [
+      "3.2 で Ogp モジュールがエントリーから読む画像フィールドの既定が ogp_image から entry_main_image に変わったことを原因に挙げる",
+      "Ogp モジュールの設定を一度も保存していないなら、private/config.system.yaml に ogp_image_entry_field_name: ogp_image を足す行を示し、利用者に書いてもらう",
+      "エージェント自身は private/ や config.server.php を開かない",
+      "この変更は scan.sh では見つけられず、表示（meta property=\"og:image\"）で確かめると説明する",
+      "themes/system のテンプレートを直接書き換えない"
+    ],
+    "source": "OGP 画像が消えた原因をテンプレートの記述に求めて書き換えたり、private/config.system.yaml を自分で開いて編集しようとしたりしやすい"
+  },
+  {
+    "query": "テーマで js-autoheight と prettyprint のクラス、それに %{META_DESCRIPTION} を使っている。3.2 でも効く？",
+    "expected_behavior": [
+      "js-autoheight（高さ揃え）は 3.2 で廃止され、クラスを付けても何も起きないので、テーマの JavaScript・CSS で代わりを用意するか記述を消すと説明する（js-autoheight-r は非推奨で今は動く、と区別する）",
+      "シンタックスハイライトが Google Code Prettify から highlight.js に変わり、prettyprint クラスでは色が付かない（既定では pre 要素が対象）と説明する",
+      "%{META_DESCRIPTION} は廃止されて空になるので、カスタムフィールドなど別の値から出すと説明する",
+      "acms-upgrade の scan.sh の T-REMOVED-BUILTIN-JS・T-PRETTIFY・T-META-VARS などで、ほかの廃止・非推奨の記述もまとめて洗い出す（なければ grep で探す）",
+      "js-autoheight と %{META_DESCRIPTION} の記述は 3.1 のままでも外せるので、本体の更新前に直してよいと伝える"
+    ],
+    "source": "廃止と非推奨の違いを区別せず、効かなくなる組み込み JS やグローバル変数を残したまま更新して、表示や SEO の不具合に後から気づきやすい"
+  }
+]

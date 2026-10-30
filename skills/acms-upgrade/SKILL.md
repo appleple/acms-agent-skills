@@ -1,17 +1,18 @@
 ---
 name: acms-upgrade
 description: >-
-  a-blog cms（acms）のメジャー・マイナーのバージョンアップ（Ver. 3.1 から 3.2 など）を、版の判定、移行先の決定、
-  バックアップ、検証環境での試行、scripts/scan.sh による要修正箇所の洗い出し、テーマとプラグイン（拡張アプリ）の修正、
+  a-blog cms（acms）のメジャー・マイナーのバージョンアップ（Ver. 3.1 から 3.2 など）の、版に依存しない共通の手順。
+  版の判定、移行先の決定（版番号の共有、版の飛び越え）、バックアップ、検証環境での試行、scripts/scan.sh による要修正箇所の洗い出し、
   本体のアップデート（オンラインアップデート・手動アップデート・データベースの更新）、確認、本番への反映の順で進める。
-  非推奨のモジュール（Entry_List・Entry_Headline など）や下位互換性のない変更の直し方は、移行先ごとの references/to-<版>.md にある。
-  「3.1 のサイトを 3.2 にしたい」「バージョンアップで何を直せばいい？」「アップデートしたら表示が崩れた」「3.0 から最新にしたい」と頼まれたとき、
+  移行先ごとの要件（PHP・MySQL）と DB の更新の内容は references/to-<版>.md にある。
+  「3.1 のサイトを 3.2 にしたい」「バージョンアップは何から始めればいい？」「オンラインアップデートに 3.2 が出てこない」「3.0 から最新にしたい」と頼まれたとき、
   3.2 未満のサイトで作業する前に版を上げるかを決めるときに使う。
-  a-blog cms upgrade, migration, version up, update, 3.1 to 3.2, deprecated, breaking changes.
-  テンプレートの記法は acms-template-acms / acms-template-twig、プラグイン（拡張アプリ）の実装は acms-plugin-development、
-  代替モジュールの選び方は acms-module-reference が担う。パッチバージョンだけの更新（3.2.x 内）は対象外。
+  a-blog cms upgrade, migration, version up, update, 3.1 to 3.2, requirements, backup, online update.
+  テーマの修正（非推奨・削除されたモジュール、ユニットの HTML、acms.css、表示崩れ）は acms-upgrade-theme、
+  プラグイン（拡張アプリ）と extension/acms の修正は acms-upgrade-plugin、テンプレートの記法は acms-template-acms / acms-template-twig、
+  プラグインの実装は acms-plugin-development が担う。パッチバージョンだけの更新（3.2.x 内）は対象外。
 license: MIT
-compatibility: 移行先 Ver. 3.2。移行元 Ver. 3.1 以前のサイトも対象（このスキルだけは Ver. 3.2 未満のサイトを扱う）。scripts/scan.sh は POSIX シェル（sh）で動き、Node.js や PHP の CLI は不要。外部通信はしない。
+compatibility: 移行先 Ver. 3.2。移行元が Ver. 3.2 未満（3.1 以前）のサイトも扱う。scripts/scan.sh は POSIX シェル（sh）で動き、Node.js や PHP の CLI は不要。外部通信はしない。
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -21,11 +22,13 @@ metadata:
 
 ## 移行先ごとのファイル
 
-| 移行先 | 移行元 | 読むファイル | チェック定義 |
-|---|---|---|---|
-| Ver. 3.2 | Ver. 3.1.x | references/to-3.2.md | scripts/checks/to-3.2.tsv |
+バージョンアップは 3 つのスキルで分担する。版に依存しない手順（このファイル）と、移行先ごとの共通の要件はこのスキル、テーマの修正は acms-upgrade-theme、プラグイン（拡張アプリ）の修正は acms-upgrade-plugin。各スキルの `references/to-<版>.md` は同じ見出し（前提・下位互換性のない変更・非推奨になった機能と代替・直す手順・移行後の確認・参考）でそろえてある。
 
-移行先を足すときは references/_template.md を写して `to-<版>.md` と `scripts/checks/to-<版>.tsv` を作り、この表に 1 行足す。
+| 移行先 | 移行元 | 共通（このスキル） | テーマ（acms-upgrade-theme） | プラグイン（acms-upgrade-plugin） | チェック定義（このスキル） |
+|---|---|---|---|---|---|
+| Ver. 3.2 | Ver. 3.1.x | [references/to-3.2.md](references/to-3.2.md) | `references/to-3.2.md`（`T-` のチェック） | `references/to-3.2.md`（`P-` のチェック） | [scripts/checks/to-3.2.tsv](scripts/checks/to-3.2.tsv) |
+
+移行先を足すときは、3 スキルそれぞれの `references/_template.md` を写して `to-<版>.md` を作り、このスキルに `scripts/checks/to-<版>.tsv` を作って、この表に 1 行足す。
 
 ## 手順
 
@@ -37,7 +40,7 @@ metadata:
 
 - 移行先は、その系列の最新のパッチ版にする（3.2 なら 3.2.x の最新）。パッチ版でも本体の挙動が変わることがあるので、最新のパッチ版の番号を[リリースノート](https://developer.a-blogcms.jp/releasenote.html)で確かめ、「移行先は Ver. 3.2.NN」のように番号を回答に書いて利用者と共有する（作業時点で変わりうるので、確かめた日付も添える）。
 - 2 つ以上の版を飛び越えるとき（3.0 から 3.2 など）は、途中の版の移行内容もすべて読む。上の表にない版（3.0 → 3.1 など）は、公式の移行ガイド（[Ver. 3.0.x から 3.1.x](https://developer.a-blogcms.jp/document/migration/301x/)、[Ver. 2.11.x から 3.0.x](https://developer.a-blogcms.jp/document/migration/300x/)）を読み、scan.sh ではその版の変更を見つけられないと利用者に伝える。
-- 要件（PHP・MySQL）を `references/to-<版>.md` の「前提」で確かめる。サーバーの PHP を上げる必要があるなら、どの順で上げるかを利用者とサーバーの管理者に決めてもらう。
+- 要件（PHP・MySQL）とオンラインアップデートで行けるかを、このスキルの `references/to-<版>.md` の「前提」で確かめる。サーバーの PHP を上げる必要があるなら、どの順で上げるかを利用者とサーバーの管理者に決めてもらう。
 
 ### 3. バックアップを取る
 
@@ -58,17 +61,17 @@ sh scripts/scan.sh <設置ディレクトリ> <移行先の版（例 3.2）>
 ```
 
 - 版を飛び越えるときは、表にある途中の版ごとに実行する。チェック定義のない版を渡すと、ある版の一覧を出して終了コード 2 で終わる。
-- 出力はチェックごとに「ID・件数・何が問題か・references の見出し・該当ファイル:行」。検出は文字列の一致による候補なので、直す前に該当行を開いて確かめる。`要確認` で始まるものは見比べる箇所。
-- 非推奨・削除されたモジュールの相談では、尋ねられた1つだけで終えず、同じチェック（3.2 なら `T-DEPRECATED-MODULE`・`T-REMOVED-MODULE` など）の検出結果全体から、ほかのモジュール（`Entry_List`・`Entry_Photo`・`Banner` など）も洗い出して一覧で示す。一つずつ相談されて見落としが出やすいため。
+- 出力はチェックごとに「ID・件数・何が問題か・直し方を書いた場所（スキル名・references のファイル・見出し）・該当ファイル:行」。検出は文字列の一致による候補なので、直す前に該当行を開いて確かめる。`要確認` で始まるものは見比べる箇所。
+- 非推奨・削除されたモジュールの相談では、尋ねられた1つだけで終えず、同じチェック（3.2 なら `T-DEPRECATED-MODULE`・`T-REMOVED-MODULE` など）の検出結果全体から、ほかのモジュール（`Entry_List`・`Entry_Photo`・`Banner` など）も洗い出して一覧で示す（代替は acms-upgrade-theme・acms-upgrade-plugin の表）。一つずつ相談されて見落としが出やすいため。
 - 最後の節は、テーマで `themes/system` と同じパスに置いたファイル（上書き）の一覧。本体の更新後に、新しい system の同じファイルと見比べる。
-- **更新後に表示が崩れたと相談されたら**、scan.sh を流して、表示に関わるチェック（移行先の references の「テーマで直すこと」にある ID。3.2 なら `T-ACMS-CSS`・`T-EMBED-UNIT`・`T-UNIT-SECTION`）と上書きの一覧の両方を見るよう、ID を挙げて案内する。崩れの原因は、テーマに残った旧 CSS か、旧 system から写したまま古くなった上書きのどちらかであることが多いため。
+- **更新後に表示が崩れたと相談されたら**、scan.sh を流して、表示に関わるチェック（3.2 なら `T-ACMS-CSS`・`T-EMBED-UNIT`・`T-UNIT-SECTION`）と上書きの一覧の両方を見るよう、ID を挙げて案内する。崩れの原因は、テーマに残った旧 CSS か、旧 system から写したまま古くなった上書きのどちらかであることが多いため。直し方は acms-upgrade-theme にある。
 - scan.sh が読むのは `themes/`（system を除く）と `extension/` だけ。`config.server.php` と `private/` は読まない。
 
 ### 6. テーマとプラグイン（拡張アプリ）を直す
 
-`references/to-<版>.md` の「テーマで直すこと」「プラグイン（拡張アプリ）で直すこと」の順に直す。各チェック ID の直し方と根拠は同じファイルの「下位互換性のない変更」「非推奨になった機能と代替」の表にある。
+テーマは acms-upgrade-theme、プラグイン（拡張アプリ）と `extension/acms/` のユーザー拡張は acms-upgrade-plugin を使う。scan.sh の `T-` で始まるチェックはテーマ、`P-` で始まるチェックはプラグインの項目で、各チェックの「→」の先に直し方を書いた場所がある。
 
-- 移行元の版のままで直せるもの（代替のモジュールが移行元にもある、廃止された記述を外す）は、本体を更新する前に直す。旧版の `themes/system` から取っておくもの（旧 `acms.css` など）も更新前に取る。
+- 移行元の版のままで直せるもの（代替のモジュールが移行元にもある、廃止された記述を外す）は、本体を更新する前に直す。旧版の `themes/system` から取っておくもの（`T-ACMS-CSS` が出たテーマの旧 `acms.css`・`acms.min.css` をテーマの `css/` にコピーするなど）も、手順 7 の前に取る。更新すると system の中身が置き換わり、旧版を取れなくなるため。
 - `themes/system/`・`php/`・`js/` は直さない。本体の更新で上書きされるため。直すのはテーマ・`extension/`・設定。
 - 配布されているプラグインは、移行先の版に対応した版が出ているかを先に確かめる。
 
@@ -87,7 +90,7 @@ sh scripts/scan.sh <設置ディレクトリ> <移行先の版（例 3.2）>
 
 ### 8. 確認する
 
-- `references/to-<版>.md` の「移行後の確認」を順に見る。
+- このスキルの `references/to-<版>.md` の「移行後の確認」を順に見て、続けて acms-upgrade-theme・acms-upgrade-plugin の「移行後の確認」を見る。
 - 管理画面のユーザー設定でデバッグモードにすると、非推奨の機能を使った箇所が監査ログ（PHP 側）とブラウザーのコンソール（組み込み JS）に出る。
 - scan.sh をもう一度実行し、`要確認` 以外の検出が 0 件になったことを確かめる。
 

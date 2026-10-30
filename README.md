@@ -4,7 +4,7 @@
 
 ## 対象
 
-- a-blog cms **Ver. 3.2 以上**（`acms-upgrade` だけは、3.2 へ上げる前の 3.1 以前のサイトも扱います）
+- a-blog cms **Ver. 3.2 以上**（`acms-upgrade`・`acms-upgrade-theme`・`acms-upgrade-plugin` は、3.2 へ上げる前の 3.1 以前のサイトも扱います）
 - テーマ・テンプレートを制作する方（標準テンプレートと Twig テンプレートの両方）
 - プラグイン（拡張アプリ）を開発する方
 
@@ -16,7 +16,9 @@ a-blog cms 本体の開発用ではありません。
 |---|---|
 | [acms-router](skills/acms-router/SKILL.md) | a-blog cms に関する依頼を分類し、適切なスキルへ振り分ける |
 | [acms-project-triage](skills/acms-project-triage/SKILL.md) | 作業対象のバージョン・テーマ・テンプレートの種類・プラグイン（拡張アプリ）を判定する |
-| [acms-upgrade](skills/acms-upgrade/SKILL.md) | a-blog cms のバージョンアップ（Ver. 3.1 から 3.2 など）の手順と、テーマ・プラグイン（拡張アプリ）の要修正箇所の洗い出し |
+| [acms-upgrade](skills/acms-upgrade/SKILL.md) | a-blog cms のバージョンアップ（Ver. 3.1 から 3.2 など）の共通の手順（版の判定・バックアップ・検証環境・本体の更新・本番への反映）と、テーマ・プラグイン（拡張アプリ）の要修正箇所の洗い出し |
+| [acms-upgrade-theme](skills/acms-upgrade-theme/SKILL.md) | バージョンアップでのテーマの修正（非推奨・削除されたモジュール、組み込み JS、ユニットの HTML と acms.css、表示崩れ） |
+| [acms-upgrade-plugin](skills/acms-upgrade-plugin/SKILL.md) | バージョンアップでのプラグイン（拡張アプリ）と extension/acms の修正（PHP の要件、SQL ヘルパー、削除された関数・クラス、Hook） |
 | [acms-theme-development](skills/acms-theme-development/SKILL.md) | テーマの構成・継承・template.yaml・テンプレートの探索 |
 | [acms-template-acms](skills/acms-template-acms/SKILL.md) | 標準テンプレート（BEGIN_MODULE、ブロック、変数、校正オプション、@include） |
 | [acms-template-twig](skills/acms-template-twig/SKILL.md) | Twig テンプレート（module()、touch()、フィルター、include / extends） |
@@ -57,8 +59,8 @@ claude plugin install acms-plugin-developer@acms-agent-skills
 | プラグイン | 含まれるスキル |
 |---|---|
 | `acms-common` | acms-router、acms-project-triage、acms-upgrade（下の2つを入れると依存関係として自動で入ります） |
-| `acms-site-builder` | acms-theme-development、acms-template-acms、acms-template-twig、acms-module-reference、acms-form、acms-custom-field |
-| `acms-plugin-developer` | acms-plugin-development、acms-admin-frontend-plugin |
+| `acms-site-builder` | acms-theme-development、acms-template-acms、acms-template-twig、acms-module-reference、acms-form、acms-custom-field、acms-upgrade-theme |
+| `acms-plugin-developer` | acms-plugin-development、acms-admin-frontend-plugin、acms-upgrade-plugin |
 
 ### 手動
 
@@ -67,7 +69,7 @@ claude plugin install acms-plugin-developer@acms-agent-skills
 ## スクリプトの実行と外部通信
 
 - `acms-project-triage` は、作業対象のファイルを読むシェルスクリプト（`scripts/detect.sh`）を含みます。読むのはテーマ・CSS・プラグイン（拡張アプリ）のディレクトリだけで、DB 接続情報を含む `config.server.php` は読みません。外部への通信もしません。
-- `acms-upgrade` は、バージョンアップで直す箇所を洗い出すシェルスクリプト（`scripts/scan.sh`）を含みます。読むのは `themes/`（`system` を除く）と `extension/` だけで、`config.server.php`・`.env`・`private/` は読みません。外部への通信もしません。
+- `acms-upgrade` は、バージョンアップで直す箇所を洗い出すシェルスクリプト（`scripts/scan.sh`）を含みます。テーマ（`T-` で始まるチェック）とプラグイン（拡張アプリ）（`P-` で始まるチェック）の両方を調べ、それぞれの直し方は `acms-upgrade-theme`・`acms-upgrade-plugin` にあります。読むのは `themes/`（`system` を除く）と `extension/` だけで、`config.server.php`・`.env`・`private/` は読みません。外部への通信もしません。`acms-upgrade-theme`・`acms-upgrade-plugin` はスクリプトを含まず、`acms-upgrade` が入っていない環境では grep で探す文字列を案内します。
 - その他のスキルはスクリプトを含みません。エージェントが公式ドキュメント（developer.a-blogcms.jp）を Web から読むことがあります。
 
 ## フィードバック
