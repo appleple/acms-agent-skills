@@ -56,15 +56,17 @@
 
 ## checked / selected
 
-標準テンプレートの `{項目名:checked#値}` は Twig には無い。Twig の `in` で判定する。
+標準テンプレートの `{項目名:checked#値}` は Twig には無い。校正オプション由来の `|checked('値')` / `|selected('値')` フィルターで出す。
 
 ```twig
-<input type="checkbox" name="topics[]" value="採用" {{ '採用' in (f.topics.array ?? []) ? 'checked' }}>
-<option value="1" {{ '1' in (f.plan.array ?? []) ? 'selected' }}>プラン 1</option>
+<input type="checkbox" name="topics[]" value="採用" {{ f.topics.array|checked('採用') }}>
+<option value="1" {{ f.plan.value|selected('1') }}>プラン 1</option>
 ```
 
-- `in` は型をゆるく比べるので、数値に変換された値（`1`）と `'1'` が一致する。
-- 校正オプション由来の `|checked('値')` / `|selected('値')` フィルターもあるが、厳密な比較なので数値に変換された値と文字列の引数が一致しない。また `|selected` に配列（`.array`）を渡すと `checked` を返す（Ver. 3.2.38 時点のソースで確認）。`in` を使うほうが確実。
+- 値と引数を文字列として比べる。配列（`.array`）を渡すと、いずれかの要素と一致すれば出す。数値に変換された値（`1`）と `'1'` も一致し、真偽値は `'true'` / `'false'` として比べる。
+- 先頭が 0 の値（`'01'` など）は数値に変換されず文字列のまま渡るので、`'1'` とは一致しない。選択肢の値と引数は、同じ書き方にそろえる。
+- 初期表示で項目が無いときに備えて、`f.topics.array ?? []` のように `??` で受けてもよい。
+- Twig の `in`（`{{ '採用' in (f.topics.array ?? []) ? 'checked' }}`）でも書ける。`in` は型をゆるく比べる。
 
 ## エスケープ
 

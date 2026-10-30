@@ -23,7 +23,7 @@
     "query": "Twig のテーマで、興味のある分野をチェックボックスで複数選べるようにして。値は 1, 2, 3 で、修正画面に戻ったときもチェックが残るようにしたい。項目名は interest-area にしたい",
     "expected_behavior": [
       "module('V2_Form') の form.fields から値を読む",
-      "checked の判定に Twig の in（例: '1' in (form.fields['interest-area'].array ?? [])）を使い、値が数値に変換されて渡るため |checked('1') のような厳密な比較では一致しないことに触れる",
+      "checked の判定に |checked('1')（例: f['interest-area'].array|checked('1')）か Twig の in を使い、値が数値に変換されて渡っても文字列として比べるので一致すること、先頭が 0 の値は文字列のままなので選択肢の値と引数をそろえることに触れる",
       "ハイフンを含む項目名は form.fields['interest-area'] のように添字で読む（またはハイフンを使わない名前を勧める）",
       "初期表示で項目が無いことを考え ?? で既定値を与える"
     ],
