@@ -6,14 +6,14 @@
     "url": "https://www.a-blogcms.jp"
   },
   "metadata": {
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "plugins": [
     {
       "name": "acms-common",
       "displayName": "a-blog cms 共通",
       "description": "依頼の振り分け、作業対象の a-blog cms のバージョン・テーマ・プラグイン（拡張アプリ）の判定、バージョンアップ",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./",
       "strict": false,
       "license": "MIT",
@@ -32,7 +32,7 @@
       "name": "acms-site-builder",
       "displayName": "a-blog cms サイト制作",
       "description": "静的サイトのテーマ化・テーマ・標準テンプレート・Twig テンプレート・モジュールの選び方・メールフォーム・カスタムフィールド・会員制サイトなど、a-blog cms でサイトを制作するためのスキル",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./",
       "strict": false,
       "license": "MIT",
@@ -67,7 +67,7 @@
       "name": "acms-plugin-developer",
       "displayName": "a-blog cms プラグイン（拡張アプリ）開発",
       "description": "プラグイン（拡張アプリ）の PHP 実装と、管理画面 JavaScript プラグインを開発し、バージョンアップに合わせて直すためのスキル",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./",
       "strict": false,
       "license": "MIT",

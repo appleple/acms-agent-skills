@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-04
+
+claude.ai でアップロードできなかった 6 つのスキル（acms-template-acms・acms-template-twig・acms-theme-development・acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin）を直したパッチです。全 15 スキルが claude.ai に入ることを確かめています。
+
 ### Added
 
 - CI に Claude Code の検証（`claude plugin validate`）と、参考として GitHub CLI の検証（`gh skill publish --dry-run`）を足した
@@ -44,5 +48,6 @@
 - GitHub Actions のアクションを更新する Dependabot と、CI 通過後の自動マージ
 - タグ（`vX.Y.Z`）の push で、この CHANGELOG の節をリリースノートにした GitHub Release を作るワークフロー
 
-[Unreleased]: https://github.com/appleple/acms-agent-skills/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/appleple/acms-agent-skills/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/appleple/acms-agent-skills/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/appleple/acms-agent-skills/releases/tag/v0.1.0
