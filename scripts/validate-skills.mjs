@@ -110,8 +110,11 @@ for (const name of skillNames) {
   const description = unquote(data.description ?? '');
   if (!description) error(skillFile, 'description がない');
   else if (description.length > 1024) error(skillFile, `description が 1024 文字を超えている（${description.length}）`);
-  // claude.ai のスキルのアップロードは、description に XML タグ（山かっこ）があると受け付けない
-  if (/[<>]/.test(description)) error(skillFile, `description に山かっこ（< >）が含まれている（${description.match(/.{0,10}[<>].{0,10}/)[0]}）`);
+  // claude.ai のスキルのアップロードは、description に XML タグ（山かっこ）があると受け付けない。
+  // {% %}・{{ }}・%{VAR}・@include のようなテンプレートの記法に見える記号でも弾かれた例があるので、
+  // 言葉で書くことにして、これらもまとめて検出する。
+  const unsafeInDescription = description.match(/.{0,10}(?:[<>@]|\{|\}|\[[^\]]*\]).{0,10}/);
+  if (unsafeInDescription) error(skillFile, `description に記法に見える記号（< > { } [ ] @）が含まれている（${unsafeInDescription[0]}）`);
   if (data.compatibility && unquote(data.compatibility).length > 500) error(skillFile, 'compatibility が 500 文字を超えている');
   if (data.metadata !== undefined) {
     if (typeof data.metadata !== 'object') error(skillFile, 'metadata はマップで書く');

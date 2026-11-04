@@ -7,6 +7,7 @@
 ### Fixed
 
 - acms-template-acms・acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin の description から山かっこを除いた（claude.ai でスキルをアップロードすると「description cannot contain XML tags」で受け付けられなかったため）。検証スクリプトでも検出するようにした
+- acms-template-acms・acms-template-twig・acms-theme-development・acms-custom-field・acms-form・acms-admin-frontend-plugin の description から、テンプレートの記法に見える記号（`{% %}`・`{{ }}`・`%{VAR}`・`@include`・`子@親` など）を除き、言葉で書いた（claude.ai でアップロードできなかったため）。検証スクリプトでも検出するようにした
 
 ## [0.1.0] - 2026-10-30
 

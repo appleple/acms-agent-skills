@@ -2,10 +2,10 @@
 name: acms-form
 description: >-
   a-blog cms（acms）のメールフォーム（お問い合わせフォーム）を作る・直す・レビューするときの仕組みと判断基準。
-  フォーム ID と入力 → 確認 → 送信のステップ、POST モジュール（ACMS_POST_Form_Confirm / Submit / Chain）、field[] による値の登録、
+  フォーム ID と入力 → 確認 → 送信のステップ、POST モジュール（ACMS_POST_Form_Confirm / Submit / Chain）、送信する項目を field の hidden で登録すること、
   バリデーター（:v#、validator）とコンバーター（:c、converter、mb_convert_kana）、JavaScript のバリデーターとエラー表示（data-validator-label）、
   標準テンプレートの Form モジュールと Twig の V2_Form、メールテンプレート（mail template、自動返信・管理者宛）、
-  宛先・送信元の hidden（To[] / AdminFrom[] / AdminReply-To[]）と管理画面のフォーム設定、CSRF・二重送信・改ざんへの備え、送信データの確認を扱う。
+  宛先・送信元の hidden（To・AdminFrom・AdminReply-To）と管理画面のフォーム設定、CSRF・二重送信・改ざんへの備え、送信データの確認を扱う。
   「お問い合わせフォームを作って」「確認画面が出ない」「メールが届かない・迷惑メールになる」「入力チェックを足したい」と頼まれたとき、
   ACMS_POST_Form や BEGIN_MODULE Form、module('V2_Form') を含むテンプレートを触るときに使う。
   a-blog cms form, contact form, validator, converter, mail template.

@@ -4,7 +4,7 @@ description: >-
   a-blog cms（acms）のカスタムフィールドとカスタムユニットを、管理画面の入力欄の定義からテンプレートでの出力まで扱う。
   ブログ・カテゴリー・エントリー・ユーザー・モジュールの入力欄を置くファイル（admin/entry/field.html・field_foot.html など）、
   ブログやカテゴリーごとの入力欄の出し分け、カスタムフィールドメーカー、入力の種類の選び方（画像・ファイル・メディア、
-  テキストエリア・ブロックエディター）、フィールドグループ、{name@path} などの出力と Twig の fields.name.value、
+  テキストエリア・ブロックエディター）、フィールドグループ、画像やファイルのパス・代替テキストなどの出力と Twig の fields.name.value、
   画像のリサイズと width / height、カスタムユニット（include/unit/extend.html、unit#custom_名前）、検索の対象外にする :search を扱う。
   「エントリーに入力欄を足したい」「画像フィールドを作って」「カスタムフィールドが表示されない」「カスタムユニットを作りたい」と頼まれたときに使う。
   a-blog cms custom field, custom unit, field group, media field, image field.

@@ -26,7 +26,7 @@ metadata:
 
 - `description` は、エージェントがスキルを読み込むかどうかを決める唯一の材料になる。「何を扱うか」を先に、「どんな依頼・どんなファイルのときに使うか」を後に書く。英語で依頼されても発動するよう、`a-blog cms`、`acms`、`template`、`Twig` のような語を入れる。
 - 隣のスキルとの境界（「Twig の記法は acms-template-twig が担う」など）を最後に書くと、誤発動が減る。
-- `description` に山かっこ（`<` `>`）を書かない。claude.ai へのアップロードで XML タグとみなされて受け付けられないため。`<!-- BEGIN_MODULE -->` は「BEGIN_MODULE コメント」、`to-<バージョン>.md` は「to-3.2.md など」のように書き換える。`scripts/validate-skills.mjs` が検出する。
+- `description` には、記法に見える記号（`<` `>` `{` `}` `[` `]` `@`）を書かず、言葉で書く。claude.ai へのアップロードでは山かっこが XML タグとみなされて受け付けられず、`{% %}`・`{{ }}`・`%{VAR}`・`@include` のようなテンプレートの記法でも弾かれた例があるため。たとえば `<!-- BEGIN_MODULE -->` は「BEGIN_MODULE コメント」、`{{ }}` は「Twig の出力の記法」、`子@親` は「子テーマ名と親テーマ名をつないだディレクトリ名」と書く。本文（frontmatter より下）には書いてよい。`scripts/validate-skills.mjs` が検出する。
 
 ## 本文
 

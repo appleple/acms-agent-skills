@@ -3,9 +3,9 @@ name: acms-template-acms
 description: >-
   a-blog cms（acms）の標準テンプレート（従来の独自記法）を書く・直す・読むときの記法と判断基準。
   BEGIN_MODULE コメントによるモジュール配置とモジュール ID（id）・URL コンテキストの指定（ctx）、ブロック（:loop / :glue / :veil / :touch）、
-  変数 {var} とグローバル変数 %{VAR}、校正オプション [option] と既定のエスケープ・raw の扱い、BEGIN_IF の演算子と _and_ / _or_、
-  @include / @extends / @section、SetTemplate / SetRendered、実行順序とテンプレートキャッシュ、直接表示させないテンプレート（先頭の _）を扱う。
-  Twig が有効でないテーマの .html テンプレートを編集するとき、BEGIN_MODULE・BEGIN_IF・{var}[option]・@include を含むファイルを触るとき、
+  モジュールの変数とグローバル変数、校正オプションと既定のエスケープ・raw の扱い、BEGIN_IF の演算子と _and_ / _or_、
+  インクルードとテンプレートの継承（include・extends・section）、SetTemplate / SetRendered、実行順序とテンプレートキャッシュ、直接表示させないテンプレート（先頭の _）を扱う。
+  Twig が有効でないテーマの .html テンプレートを編集するとき、BEGIN_MODULE・BEGIN_IF・校正オプション付きの変数・インクルードを含むファイルを触るとき、
   「条件でモジュールを出し分けたい」「表示が重い」「インクルードが効かない」と頼まれたときに使う。
   a-blog cms standard template syntax, module, include, escape.
   Twig テンプレート（.twig、module('V2_...')）は acms-template-twig、フォームの記法は acms-form、

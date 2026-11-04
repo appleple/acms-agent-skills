@@ -5,7 +5,7 @@ description: >-
   Twig の有効化（template.yaml の tpl_twig）、.twig / .html の探索順、module('V2_...') と touch() の引数と戻り値、URL を組み立てる acms_link / acms_path とコンフィグを読む acms_config、
   グローバル変数、校正オプションのフィルターと acms_ 接頭辞、自動エスケープと safe_html / raw、include / extends、
   標準テンプレートとの併用順序、管理画面テンプレートとの関係、Twig のキャッシュを扱う。
-  template.yaml に tpl_twig: enabled があるテーマ、.twig ファイル、{% %} や {{ }} を含むテンプレートを編集するとき、
+  template.yaml に tpl_twig: enabled があるテーマ、.twig ファイル、Twig のタグや出力の記法を含むテンプレートを編集するとき、
   「Twig で書いて」「標準テンプレートを Twig に移して」「Twig で値が出ない・エスケープされる」と頼まれたときに使う。
   a-blog cms Twig template, V2 module. 標準テンプレート（BEGIN_MODULE）は acms-template-acms、
   フォームは acms-form、カスタムフィールドの値の構造は acms-custom-field、モジュール選びは acms-module-reference が担う。

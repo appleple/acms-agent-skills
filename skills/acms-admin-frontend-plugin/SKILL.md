@@ -4,7 +4,7 @@ description: >-
   a-blog cms（acms）の管理画面を JavaScript で拡張するプラグインを作るときの手順と判断基準（Ver. 3.2.29 以降）。
   ACMS.plugins.register と setup(ctx) によるプラグイン登録、ACMS.events のイベント（処理前に止める・値を変えるゲートと、処理後の通知）、
   Slot / Fill による UI の差し込み、ユニット・ブロック・エントリー一覧への機能登録、ctx.config、
-  プラグイン JS の読み込み方とビルド（React などを本体と共有する externals）、npm の @ablogcms/plugins・@ablogcms/events を扱う。
+  プラグイン JS の読み込み方とビルド（React などを本体と共有する externals）、npm で公開されている ablogcms の plugins・events パッケージを扱う。
   「管理画面にボタンを足したい」「メディアのアップロード前に確認を出したい」「独自のユニットやブロックを作りたい」
   「エントリー一覧に操作を足したい」「ACMS.addListener を置き換えたい」と頼まれたときに使う。
   a-blog cms admin JavaScript plugin, ACMS.plugins, ACMS.events, Slot, Fill.
