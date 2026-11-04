@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+### Added
+
+- CI に Claude Code の検証（`claude plugin validate`）と、参考として GitHub CLI の検証（`gh skill publish --dry-run`）を足した
+- claude.ai にアップロードする zip をスキルごとに作るスクリプト（`scripts/build-claude-ai-zips.sh`）
+- 検証の進め方（形式・受け入れ・振る舞いの 3 段）を docs/authoring-guide.md に書いた
+
 ### Fixed
 
 - acms-template-acms・acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin の description から山かっこを除いた（claude.ai でスキルをアップロードすると「description cannot contain XML tags」で受け付けられなかったため）。検証スクリプトでも検出するようにした

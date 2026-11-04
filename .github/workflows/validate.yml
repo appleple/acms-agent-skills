@@ -20,4 +20,17 @@ jobs:
         run: node scripts/validate-skills.mjs
       - name: シェルスクリプトの構文チェック
         run: |
-          find skills -name '*.sh' -print0 | xargs -0 -r -n1 sh -n
+          find skills scripts -name '*.sh' -print0 | xargs -0 -r -n1 sh -n
+      # Claude Code 自身の規則で、marketplace.json とスキルのファイルを確かめる
+      - name: Claude Code での検証
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude plugin validate .
+          claude plugin validate skills
+      # GitHub CLI の検証は結果を見るだけにする。description の長さをバイト数で数えるため、
+      # 日本語の description では仕様（文字数）の範囲内でも毎回警告が出るので
+      - name: GitHub CLI での検証（参考）
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh skill publish --dry-run

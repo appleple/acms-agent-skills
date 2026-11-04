@@ -21,3 +21,9 @@
 ```bash
 node scripts/validate-skills.mjs
 ```
+
+claude.ai でアップロードできるかを確かめるときは、次で zip を作ります（`dist/claude-ai/` に出ます）。検証の全体の流れは [docs/authoring-guide.md](docs/authoring-guide.md) の「検証」を見てください。
+
+```bash
+sh scripts/build-claude-ai-zips.sh
+```

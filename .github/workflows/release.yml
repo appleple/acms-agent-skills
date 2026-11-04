@@ -19,7 +19,7 @@ jobs:
         run: node scripts/validate-skills.mjs
       - name: シェルスクリプトの構文チェック
         run: |
-          find skills -name '*.sh' -print0 | xargs -0 -r -n1 sh -n
+          find skills scripts -name '*.sh' -print0 | xargs -0 -r -n1 sh -n
       # marketplace.json の version が古いままだと Claude Code が更新を配らないため、タグと揃っていなければ止める
       - name: タグと marketplace.json のバージョンの一致を確かめる
         run: |

@@ -48,4 +48,34 @@ metadata:
 ]
 ```
 
-評価は今のところ手動で行う。新しいセッションでスキルを入れた状態と入れない状態で `query` を依頼し、`expected_behavior` を満たすかを見る。
+評価のやり方は、下の「検証」の 3 を見る。
+
+## 検証
+
+スキルの検証は、確かめる範囲の違う 3 つを組み合わせる。どれか 1 つでは足りない（形式が正しくても配布先で受け付けられないことがあり、受け付けられても誤ったコードを書かせることがあるため）。
+
+| 段 | 何を確かめるか | いつ | 手段 |
+|---|---|---|---|
+| 1. 形式 | Agent Skills の仕様、配布先の制約、社内情報の混入、リンク切れ | 毎回（CI が自動で行う） | `node scripts/validate-skills.mjs`、`claude plugin validate .` と `claude plugin validate skills`（Claude Code の規則）。`gh skill publish --dry-run` は参考 |
+| 2. 受け入れ | 配布先で実際に入るか | リリースの前 | claude.ai・Claude Code・`npx skills` で入れてみる |
+| 3. 振る舞い | 入れたエージェントが正しく答えるか | スキルの内容を変えたとき | 評価シナリオを解かせて採点する |
+
+### 1. 形式
+
+- `scripts/validate-skills.mjs` を正とする。仕様の参照実装（agentskills の skills-ref）と同じ規則に、claude.ai の制約（description の記法に見える記号）、社内情報、リンク、評価シナリオ、marketplace.json の整合を足してある。
+- `gh skill publish --dry-run` は description の長さをバイト数で数えるため、日本語の description では仕様（1024 文字）の範囲内でも警告が出る。エラーが出たときだけ直す。
+- 新しい制約が分かったら（今回の claude.ai の記号のように）、`validate-skills.mjs` に規則として足し、この表と frontmatter の節に理由を書く。
+
+### 2. 受け入れ
+
+公式の要件を満たしていても、配布先で受け付けられないことがある。アップロードせずに判定を確かめる手段は公開されていないので、リリースの前に人が入れてみる。
+
+1. `sh scripts/build-claude-ai-zips.sh` で `dist/claude-ai/` にスキルごとの zip を作り、claude.ai の「設定 > Skills > Skills をアップロード」で、変更したスキル（初めてなら全部）を入れる。
+2. Claude Code で `claude plugin marketplace add ./` と `claude plugin install <プラグイン>@acms-agent-skills` を行い、スキルが一覧に出るかを見る。
+3. `npx skills add ./ --list` で、全スキルが見つかるかを見る。
+
+入らなかったら、エラーの文言を CHANGELOG と Issue に残し、1 の規則に足す。
+
+### 3. 振る舞い
+
+スキルだけを読める解答役（サブエージェント）に `evals/scenarios.json` の `query` を解かせ、別の採点役に `expected_behavior` と突き合わせさせる。解答役に `expected_behavior` を見せない。作業対象のサイトが要るシナリオには、検証用のサイトを用意する（`config.server.php` と `private/` に目印の文字列を置き、回答に出ないことを確かめる）。満たさない項目があれば、スキルを直して全件を解き直す。スキルの本文（references を含む）を変えたら、そのスキルのシナリオを解き直す。

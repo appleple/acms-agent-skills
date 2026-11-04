@@ -17,8 +17,9 @@
 
 1. `CHANGELOG.md` の `## [Unreleased]` を `## [X.Y.Z] - YYYY-MM-DD` に改め、新しい `## [Unreleased]` を上に足す。
 2. `.claude-plugin/marketplace.json` の `metadata.version` と各プラグインの `version` を `X.Y.Z` に揃える。
-3. main にコミットして push し、`git tag vX.Y.Z && git push origin vX.Y.Z` でタグを push する。
-4. `.github/workflows/release.yml` が、検証・タグと marketplace.json のバージョンの一致・CHANGELOG の節の有無を確かめてから、CHANGELOG の節をリリースノートにした GitHub Release を作る。どれかが合わなければ Release は作られないので、直してタグを打ち直す（`git tag -d vX.Y.Z && git push origin :refs/tags/vX.Y.Z`）。
+3. 前回のリリースから内容を変えたスキルについて、[docs/authoring-guide.md](authoring-guide.md) の「検証」の 2（受け入れ）と 3（振る舞い）を済ませる。
+4. main にコミットして push し、CI（validate）が通ったら、`git tag vX.Y.Z && git push origin vX.Y.Z` でタグを push する。
+5. `.github/workflows/release.yml` が、検証・タグと marketplace.json のバージョンの一致・CHANGELOG の節の有無を確かめてから、CHANGELOG の節をリリースノートにした GitHub Release を作る。どれかが合わなければ Release は作られないので、直してタグを打ち直す（`git tag -d vX.Y.Z && git push origin :refs/tags/vX.Y.Z`）。
 
 ## a-blog cms 本体との連動
 
