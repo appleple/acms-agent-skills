@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- GitHub Release に、スキルごとの zip を添付するようにした（`releases/latest/download/<スキル名>.zip` で取得できる）。README に zip での入れ方を書いた
+
+### Changed
+
+- zip を作るスクリプトを `scripts/build-claude-ai-zips.sh` から `scripts/build-zips.sh` に改名し、出力先を `dist/skills/` にした（Agent Skills の形式なので、claude.ai 以外の配布先にも同じ zip を使うため）
+
 ## [0.1.1] - 2026-11-04
 
 claude.ai でアップロードできなかった 6 つのスキル（acms-template-acms・acms-template-twig・acms-theme-development・acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin）を直したパッチです。全 15 スキルが claude.ai に入ることを確かめています。

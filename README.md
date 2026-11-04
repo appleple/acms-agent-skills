@@ -72,7 +72,8 @@ a-blog cms 本体の開発用ではありません。
 | GitHub Copilot | [gh skill](#github-cligh-skill) | [npx skills](#npx-skills)・[手動](#手動) |
 | Cursor | [npx skills](#npx-skills) | [gh skill](#github-cligh-skill)・[手動](#手動) |
 | Antigravity | [npx skills](#npx-skills) | [gh skill](#github-cligh-skill)・[手動](#手動) |
-| そのほかの Agent Skills 対応エージェント | [npx skills](#npx-skills) | [手動](#手動) |
+| claude.ai（Web・デスクトップアプリ） | [zip でダウンロード](#zip-でダウンロード) | — |
+| そのほかの Agent Skills 対応エージェント | [npx skills](#npx-skills) | [zip でダウンロード](#zip-でダウンロード)・[手動](#手動) |
 
 どの方法でも中身は同じ `skills/` です。インストールや更新のあとは、新しいセッションを始めると読み込まれます。
 
@@ -173,6 +174,24 @@ npx skills add appleple/acms-agent-skills -a antigravity
 npx skills add appleple/acms-agent-skills -g -a antigravity-cli
 ```
 
+### zip でダウンロード
+
+[Releases](https://github.com/appleple/acms-agent-skills/releases) に、スキルごとの zip を添付しています（Ver. 0.1.1 以降）。中身は Agent Skills の形式そのままなので、zip でスキルを受け付けるサービスへのアップロードにも、手動のインストールにも使えます。最新のバージョンの zip は、次の URL で取得できます。
+
+```text
+https://github.com/appleple/acms-agent-skills/releases/latest/download/<スキル名>.zip
+```
+
+```bash
+# 例: acms-form を取得する
+curl -LO https://github.com/appleple/acms-agent-skills/releases/latest/download/acms-form.zip
+
+# 全スキルを取得する
+gh release download --repo appleple/acms-agent-skills --pattern '*.zip'
+```
+
+claude.ai では、「設定 > Skills」の「Skills をアップロード」から zip を 1 つずつ入れます。スキルは 1 つずつ独立しているので、使うものだけ入れて構いません。ただし、振り分けを担う `acms-router` と、構成を判定する `acms-project-triage` は一緒に入れてください。ほかのスキルがこの 2 つを前提にしているためです。
+
 ### 手動
 
 リポジトリを clone して、`skills/` 配下の必要なディレクトリを、エージェントのスキル置き場にコピーします。
@@ -248,9 +267,9 @@ gh skill list
 
 `--pin` で固定したスキルは更新の対象外です。固定を外して更新するときは `--unpin` を付けます。
 
-### 手動
+### zip・手動
 
-手動で入れた場合は自動では更新されません。`git pull` してから、同じ手順でコピーし直してください。
+自動では更新されません。zip で入れた場合は、新しいバージョンの zip を取得して入れ直してください。手動で入れた場合は、`git pull` してから同じ手順でコピーし直してください。
 
 ## バージョン
 

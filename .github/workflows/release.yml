@@ -42,7 +42,10 @@ jobs:
             echo "::error::CHANGELOG.md に「## [${version}]」の節がない"
             exit 1
           fi
+      # zip でスキルを入れる配布先（claude.ai のアップロード、手動のインストールなど）向けに、スキルごとの zip を添付する
+      - name: スキルごとの zip を作る
+        run: sh scripts/build-zips.sh dist/skills
       - name: GitHub Release を作る
-        run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes-file release-notes.md
+        run: gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes-file release-notes.md dist/skills/*.zip
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

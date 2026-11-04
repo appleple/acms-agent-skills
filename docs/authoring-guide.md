@@ -70,7 +70,7 @@ metadata:
 
 公式の要件を満たしていても、配布先で受け付けられないことがある。アップロードせずに判定を確かめる手段は公開されていないので、リリースの前に人が入れてみる。
 
-1. `sh scripts/build-claude-ai-zips.sh` で `dist/claude-ai/` にスキルごとの zip を作り、claude.ai の「設定 > Skills > Skills をアップロード」で、変更したスキル（初めてなら全部）を入れる。
+1. `sh scripts/build-zips.sh` で `dist/skills/` にスキルごとの zip を作り（リリースでは GitHub Release に添付されるのと同じもの）、claude.ai の「設定 > Skills > Skills をアップロード」で、変更したスキル（初めてなら全部）を入れる。
 2. Claude Code で `claude plugin marketplace add ./` と `claude plugin install <プラグイン>@acms-agent-skills` を行い、スキルが一覧に出るかを見る。
 3. `npx skills add ./ --list` で、全スキルが見つかるかを見る。
 
