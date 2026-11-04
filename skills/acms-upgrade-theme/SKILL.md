@@ -4,7 +4,7 @@ description: >-
   a-blog cms（acms）のバージョンアップ（Ver. 3.1 から 3.2 など）で、テーマ（テンプレート・CSS・テーマの JavaScript・template.yaml・
   管理画面のカスタムフィールド定義など）を直すときの手順と判断基準。非推奨・削除されたモジュール（Entry_List・Entry_Headline など）の置き換え、
   廃止・非推奨の組み込み JS、ユニットの HTML と acms.css の変更、引用ユニットから埋め込みユニットへの変更、表側のエントリー編集の廃止、
-  Ogp モジュールの既定のフィールド、配置 v1 とユニットグループ、更新後の表示崩れの原因の切り分けを、移行先ごとの references/to-<バージョン>.md で扱う。
+  Ogp モジュールの既定のフィールド、配置 v1 とユニットグループ、更新後の表示崩れの原因の切り分けを、移行先ごとの 移行先ごとの references（to-3.2.md など） で扱う。
   「このテーマで Entry_Headline を使っている。3.2 で大丈夫？」「3.2 にしたら画像の横並びや埋め込みの見た目が崩れた」
   「バージョンアップでテーマの何を直せばいい？」「アップデートしたら OGP 画像が出なくなった」と頼まれたときに使う。
   a-blog cms upgrade, migration, theme, template, deprecated module, acms.css, unit, breaking changes.

@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- acms-template-acms・acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin の description から山かっこを除いた（claude.ai でスキルをアップロードすると「description cannot contain XML tags」で受け付けられなかったため）。検証スクリプトでも検出するようにした
+
 ## [0.1.0] - 2026-10-30
 
 最初の公開バージョンです。a-blog cms Ver. 3.2 以上を対象に、15 のスキルを 3 つのプラグインに分けて提供します。仕様は a-blog cms Ver. 3.2.38 の本体ソースと公式ドキュメントで確かめています（3.2.x の途中で入った機能には、本文に導入バージョンを注記しています）。

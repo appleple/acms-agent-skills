@@ -4,7 +4,7 @@ description: >-
   a-blog cms（acms）のバージョンアップ（Ver. 3.1 から 3.2 など）で、プラグイン（拡張アプリ）と extension/acms のユーザー拡張
   （PHP・管理画面の JavaScript）を直すときの手順と判断基準。PHP の要件、配布されているプラグインの対応バージョンの確認、
   SQL ヘルパーの変更（get() の戻り値、setInsert / setReplace の削除）、削除されたグローバル関数とファサードへの置き換え、
-  削除されたモジュール・クラス、標準の GET モジュールの継承、非推奨のクラス、Hook の変化を、移行先ごとの references/to-<バージョン>.md で扱う。
+  削除されたモジュール・クラス、標準の GET モジュールの継承、非推奨のクラス、Hook の変化を、移行先ごとの 移行先ごとの references（to-3.2.md など） で扱う。
   「自作プラグインは 3.2 で動く？」「SQL::newSelect() を使っている箇所は直す必要がある？」「createImages が見つからないエラーが出た」
   「PHP 8.1 に上げたらプラグインが動かない」と頼まれたときに使う。
   a-blog cms upgrade, migration, plugin, extension/acms, PHP 8.1, SQL helper, removed function, facade, Hook, breaking changes.
