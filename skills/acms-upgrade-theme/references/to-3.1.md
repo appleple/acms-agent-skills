@@ -119,7 +119,7 @@
 
 | 変更 | 見つけ方 | 直し方 | 根拠 |
 |---|---|---|---|
-| 今いるページへのリンクを自動で外す機能が、既定で無効になった（`viewingEraseMark` が `a:not(.js-viewing-indelible)` から `a.js-viewing-erase` に）。3.0 ではナビの現在地のリンクがテキストになっていたが、3.1 ではリンクのまま | scan.sh・grep では見つけられない（クラスを付けていなくても効いていたため）。ナビ・パンくずを目で見る | 外したいリンクに `js-viewing-erase` を付けるか、テーマの JavaScript で `ACMS.Config({ viewingEraseMark: 'a:not(.js-viewing-indelible)' })` と書いて 3.0 の動きに戻す（どちらも 3.0 のままで書いてよい） | `v3.0.68:ablogcms/js/config.js:1188`、`v3.1.0:ablogcms/js/config.js:1196` |
+| 今いるページへのリンクを自動で外す機能が、既定で無効になった（`viewingEraseMark` が `a:not(.js-viewing-indelible)` から `a.js-viewing-erase` に）。3.0 ではナビの現在地のリンクがテキストになっていたが、3.1 ではリンクのまま | scan.sh・grep では見つけられない（クラスを付けていなくても効いていたため）。ナビ・パンくずを目で見る | 外したいリンクに `js-viewing-erase` を付けるか、テーマの JavaScript の `ACMS.Ready` の中で `ACMS.Config.viewingEraseMark = 'a:not(.js-viewing-indelible)';` と代入して 3.0 の動きに戻す（どちらも 3.0 のままで書いてよい） | `v3.0.68:ablogcms/js/config.js:1188`、`v3.1.0:ablogcms/js/config.js:1196` |
 | 翻訳（`.js-translate`。Ver. 3.1.12 以降）と、管理画面のカスタムフィールドのカラーピッカー（`.js-acms-color-picker`。Ver. 3.1.59 以降）を廃止 | `T-REMOVED-BUILTIN-JS`（grep: `js-translate\|googleTranslateMark\|js-acms-color-picker`） | 翻訳は外す。カラーピッカーは `<input type="color">` にする（3.1 の blog テーマと同じ） | `git log -S js-acms-color-picker v3.1.58..v3.1.59 -- ablogcms/js` |
 | `acms-base.min.css`・`acms-fonts.min.css` をビルドの対象から外した（Ver. 3.1.23 以降）。system の画像 `images/banner/a-blogcmsM.gif`・`a-blogcmsS.gif`・`images/loginLogo.gif`・`loginLogo.png`・`images/default/nofile.pdf` を削除（Ver. 3.1.17 以降） | `T-REMOVED-ASSETS`（grep: `acms-(base\|fonts)(\.min)?\.css\|images/(banner/a-blogcms[MS]\.gif\|loginLogo\.(gif\|png)\|default/nofile\.pdf)`） | `acms.min.css` に替えるか、必要なスタイル・画像をテーマに置く | `v3.1.22:ablogcms/themes/system/webpack.common.js` と `v3.1.23` の比較 |
 | `acms.css` のボタン・アラート・バッジなどの配色が変わった（3.1.0） | grep: `acms-(btn\|alert\|badge\|label)` | 見た目を確かめ、必要ならテーマの CSS で色を指定する | `git log v3.0.28..v3.1.0 -- ablogcms/themes/system/src/scss`（a6e0f7d5b2） |
@@ -152,7 +152,7 @@
    - `T-LOGIN-LAYOUT`: テーマの `login.html`・`_layouts/login.html` を消すか名前を変える。更新後に管理者がログインできなくなるのを防ぐため、必ず更新の前に行う。
    - `T-REMOVED-MODULE`・`T-REMOVED-POST`・`T-REMOVED-VARS`・`T-REMOVED-ASSETS`・`T-REMOVED-BUILTIN-JS`: 外すか置き換える。
    - 3 章のテーマの `callback/signin/*.html` を消す。
-   - 7 章の `viewingEraseMark`: 3.0 の動きを保つなら、`ACMS.Config` を先に書く。
+   - 7 章の `viewingEraseMark`: 3.0 の動きを保つなら、テーマの JavaScript の `ACMS.Ready` の中で `ACMS.Config.viewingEraseMark` に代入する行を先に足す（3.0 でも同じ書き方で効く）。
    - 6 章の `tpl_*` と `index.html`: `template.yaml` とファイル名を確かめる。
 3. 本体を更新した後に、3.1 のモジュールとテンプレートで作り直すもの。
    - 会員の画面（`_member/*.html`）とレイアウト（`_layouts/member.html`）。3.1 の system か member テーマを写して直す。旧 `_layouts/login.html` の会員向けの部分（`subscribe`・`remind`）の内容を移す。
