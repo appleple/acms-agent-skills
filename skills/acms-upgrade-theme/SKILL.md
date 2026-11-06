@@ -1,17 +1,18 @@
 ---
 name: acms-upgrade-theme
 description: >-
-  a-blog cms（acms）のバージョンアップ（Ver. 3.1 から 3.2 など）で、テーマ（テンプレート・CSS・テーマの JavaScript・template.yaml・
+  a-blog cms（acms）のバージョンアップ（Ver. 3.0 から 3.1、3.1 から 3.2 など）で、テーマ（テンプレート・CSS・テーマの JavaScript・template.yaml・
   管理画面のカスタムフィールド定義など）を直すときの手順と判断基準。非推奨・削除されたモジュール（Entry_List・Entry_Headline など）の置き換え、
   廃止・非推奨の組み込み JS、ユニットの HTML と acms.css の変更、引用ユニットから埋め込みユニットへの変更、表側のエントリー編集の廃止、
-  Ogp モジュールの既定のフィールド、配置 v1 とユニットグループ、更新後の表示崩れの原因の切り分けを、移行先ごとの 移行先ごとの references（to-3.2.md など） で扱う。
+  Ogp モジュールの既定のフィールド、配置 v1 とユニットグループ、3.1 のログイン画面と会員の画面（login.html から _member・_member-admin へ）、
+  更新後の表示崩れの原因の切り分けを、移行先ごとの 移行先ごとの references（to-3.2.md など） で扱う。
   「このテーマで Entry_Headline を使っている。3.2 で大丈夫？」「3.2 にしたら画像の横並びや埋め込みの見た目が崩れた」
-  「バージョンアップでテーマの何を直せばいい？」「アップデートしたら OGP 画像が出なくなった」と頼まれたときに使う。
-  a-blog cms upgrade, migration, theme, template, deprecated module, acms.css, unit, breaking changes.
+  「バージョンアップでテーマの何を直せばいい？」「アップデートしたら OGP 画像が出なくなった」「3.1 にしたらログインできない・会員登録できない」と頼まれたときに使う。
+  a-blog cms upgrade, migration, theme, template, deprecated module, acms.css, unit, login, member, breaking changes.
   バージョンの判定・バックアップ・本体の更新などの共通手順と scripts/scan.sh は acms-upgrade、プラグイン（拡張アプリ）の修正は acms-upgrade-plugin、
   テンプレートの記法は acms-template-acms / acms-template-twig、代替モジュールの選び方は acms-module-reference が担う。
 license: MIT
-compatibility: 移行先 Ver. 3.2。移行元が Ver. 3.2 未満（3.1 以前）のサイトのテーマも扱う。要修正箇所の洗い出しは acms-upgrade の scripts/scan.sh を使い、入っていなければ grep で探す。
+compatibility: 移行先 Ver. 3.1・3.2。移行元が Ver. 3.2 未満（3.0・3.1）のサイトのテーマも扱う。要修正箇所の洗い出しは acms-upgrade の scripts/scan.sh を使い、入っていなければ grep で探す。
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -23,6 +24,7 @@ metadata:
 
 | 移行先 | 移行元 | 読むファイル | 洗い出し |
 |---|---|---|---|
+| Ver. 3.1 | Ver. 3.0.x | [references/to-3.1.md](references/to-3.1.md) | acms-upgrade の `scripts/scan.sh <設置ディレクトリ> 3.1` の `T-` で始まるチェック |
 | Ver. 3.2 | Ver. 3.1.x | [references/to-3.2.md](references/to-3.2.md) | acms-upgrade の `scripts/scan.sh <設置ディレクトリ> 3.2` の `T-` で始まるチェック |
 
 移行先を足すときは [references/_template.md](references/_template.md) を写して `to-<バージョン>.md` を作り、この表に 1 行足す（acms-upgrade・acms-upgrade-plugin の同じバージョンのファイルもそろえる）。
@@ -53,6 +55,7 @@ acms-upgrade が入っていないときは、`references/to-<バージョン>.m
 
 `references/to-<バージョン>.md` の「直す手順」に沿って、移行元のバージョンのままで直せるもの（代替のモジュールが移行元にもある、廃止された記述を外す）を先に直す。
 
+- 3.0 から 3.1 に上げるときは、`T-LOGIN-LAYOUT` が出たテーマの `login.html`・`_layouts/login.html` を、必ず本体の更新の前に消すか名前を変える。残したまま更新すると管理ログイン画面からフォームが消え、管理者もログインできなくなって、管理画面から直せないため。会員の画面（`_member/`）は更新後に 3.1 の system か member テーマを写して作る。
 - 旧バージョンの `themes/system` から取っておくもの（3.2 なら `T-ACMS-CSS` が出たテーマの旧 `acms.css`・`acms.min.css`）は、本体の更新前にテーマへコピーする。更新すると system の中身が置き換わり、旧バージョンを取れなくなるため。
 - 非推奨のモジュールを代替に置き換えるときは、モジュール ID の設定（表示件数・並び順など）を代替モジュール側で作り直す必要があるので、利用者に管理画面での作業を頼む。変数名の違いは代替モジュールの変数表で確かめる（acms-module-reference）。
 - 非推奨の機能は移行先でも動く。「今すぐ動かなくなる」とは説明しない。削除・廃止されたもの（効かなくなる・何も出力されなくなる）と区別して伝える。
@@ -77,6 +80,7 @@ acms-upgrade が入っていないときは、`references/to-<バージョン>.m
 
 ## 公式ドキュメント
 
+- 移行ガイド（Ver. 3.0.x から 3.1.x）: <https://developer.a-blogcms.jp/document/migration/301x/>
 - 移行ガイド（Ver. 3.1.x から 3.2.x）: <https://developer.a-blogcms.jp/document/migration/302x/>
 - テーマについて（3.2）: <https://developer.a-blogcms.jp/document/migration/302x/theme.html>
 - リリースノート: <https://developer.a-blogcms.jp/releasenote.html>

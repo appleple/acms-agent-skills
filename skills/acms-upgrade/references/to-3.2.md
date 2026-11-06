@@ -8,7 +8,7 @@
 
 | 項目 | 内容 | 根拠 |
 |---|---|---|
-| 移行元 | Ver. 3.1.x。3.0 以前からは、途中のバージョンの移行ガイドも読む（SKILL.md の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
+| 移行元 | Ver. 3.1.x。3.0 からは、先に同じスキルの `references/to-3.1.md` の変更も直す（SKILL.md の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
 | PHP | 3.2 は PHP 8.1 以上。上限はパッチバージョンで変わるので、動作条件のページで移行先のバージョンの範囲を確かめる | [下位互換性のない変更点](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html)、[動作条件](https://developer.a-blogcms.jp/document/requirements.html) |
 | MySQL | MySQL 8.0 以上（MariaDB は動作条件のページのバージョン） | 同上 |
 | オンラインアップデートと PHP | 更新の候補は、サーバーの PHP のバージョンに合うパッケージから選ばれる。PHP 8.1 未満のままでは 3.2 が候補に出ないので、先に PHP を上げられるか（3.1 がその PHP で動くか）をサーバーの管理者と決める | `v3.1.79:ablogcms/php/ACMS/POST/Update/Exec.php:64-71`（`checkUseCache(phpversion(), $range)`）、`v3.1.79:ablogcms/php/Services/Update/System/CheckForUpdate.php:431-448` |

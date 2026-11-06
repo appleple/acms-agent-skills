@@ -10,7 +10,7 @@ MySQL の要件、オンラインアップデート、DB の更新など、プ�
 
 | 項目 | 内容 | 根拠 |
 |---|---|---|
-| 移行元 | Ver. 3.1.x。3.0 以前からは、途中のバージョンの移行ガイドも読む（acms-upgrade の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
+| 移行元 | Ver. 3.1.x。3.0 からは、先に同じスキルの `references/to-3.1.md` の変更も直す（acms-upgrade の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
 | PHP | 3.2 は PHP 8.1 以上。上限はパッチバージョンで変わるので、動作条件のページで移行先のバージョンの範囲を確かめる。プラグインのコードが PHP 8.1 以上で動くか（PHP 8 系で使えなくなった関数・書き方）を確かめる。scan.sh は PHP のバージョンの違いを調べない | [下位互換性のない変更点](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html)、[動作条件](https://developer.a-blogcms.jp/document/requirements.html) |
 | オンラインアップデートと PHP | PHP 8.1 未満のサーバーでは、オンラインアップデートの候補に 3.2 が出ない。PHP を先に上げるときは、3.1 と今のプラグインがその PHP で動くかも確かめる | `v3.1.79:ablogcms/php/ACMS/POST/Update/Exec.php:64-71`（`checkUseCache(phpversion(), $range)`） |
 | 配布されているプラグイン（拡張アプリ） | 3.2 対応バージョンが出ているかを配布元で先に確かめる（3.2.0 の時点では全部は対応していない） | [下位互換性のない変更点](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html) |

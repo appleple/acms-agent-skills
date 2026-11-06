@@ -10,7 +10,7 @@ PHP・MySQL の要件、オンラインアップデート、DB の更新など�
 
 | 項目 | 内容 | 根拠 |
 |---|---|---|
-| 移行元 | Ver. 3.1.x。3.0 以前からは、途中のバージョンの移行ガイドも読む（acms-upgrade の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
+| 移行元 | Ver. 3.1.x。3.0 からは、先に同じスキルの `references/to-3.1.md` の変更も直す（acms-upgrade の手順 2） | [移行ガイド 3.1.x → 3.2.x](https://developer.a-blogcms.jp/document/migration/302x/) |
 | 更新前にしか取れないもの | 本体を更新すると `themes/system` の中身が 3.2 に置き換わり、旧バージョンの `acms.css`・`acms.min.css` やユニットのテンプレートを取れなくなる。`T-ACMS-CSS` が出たテーマは、更新前にテーマの `css/` へコピーしておく | [incompatible.html](https://developer.a-blogcms.jp/document/migration/302x/incompatible.html) |
 | 直す場所 | テーマ（`themes/<テーマ>/`）だけを直す。`themes/system/` は本体の更新で上書きされるので直さない | [オンラインアップデート](https://developer.a-blogcms.jp/document/update/online-update.html)の「更新されるファイル」（`themes/system`・`php`・`js` などが置き換わる） |
 

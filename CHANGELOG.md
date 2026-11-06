@@ -7,10 +7,15 @@
 ### Added
 
 - GitHub Release に、スキルごとの zip を添付するようにした（`releases/latest/download/<スキル名>.zip` で取得できる）。README に zip での入れ方を書いた
+- acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin に Ver. 3.0 から 3.1 への移行（`references/to-3.1.md` と `scripts/checks/to-3.1.tsv`）を足した。ログイン・会員の作り直し、設定値の既定値の変更、オンラインアップデートで 3.1 に止められないことなどを、本体ソースの差分から整理した
 
 ### Changed
 
 - zip を作るスクリプトを `scripts/build-claude-ai-zips.sh` から `scripts/build-zips.sh` に改名し、出力先を `dist/skills/` にした（Agent Skills の形式なので、claude.ai 以外の配布先にも同じ zip を使うため）
+
+### Fixed
+
+- acms-theme-development に、htmx などの Ajax で読む `/tpl/` の部品がテンプレートの直接指定の制限を受けない条件と確かめ方を書いた（ヘッダーなしで取得した 404 を不具合と誤って判断していたため）
 
 ## [0.1.1] - 2026-11-04
 

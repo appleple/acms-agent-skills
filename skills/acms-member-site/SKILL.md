@@ -26,7 +26,7 @@ metadata:
 - 会員サインイン: <https://developer.a-blogcms.jp/document/auth/signin.html>、会員登録: <https://developer.a-blogcms.jp/document/auth/signup.html>、メール認証によるサインイン: <https://developer.a-blogcms.jp/document/auth/signin-with-email.html>
 - member テーマの使い方: <https://developer.a-blogcms.jp/document/themes/member.html>
 
-`/document/auth/` の配下には Ver. 3.0 以前のページ（Login モジュール・Login_Auth・Login_Subscribe・Login_Remind など。ページ名に「~ Ver. 3.0」）も残っている。Ver. 3.1 で廃止されたので、それらを手本にしない。
+`/document/auth/` の配下には Ver. 3.0 以前のページ（Login モジュール・Login_Auth・Login_Subscribe・Login_Remind など。ページ名に「~ Ver. 3.0」）も残っている。Ver. 3.1 で廃止されたので、それらを手本にしない。Ver. 3.0 で作った会員サイト（`login.html` の Login モジュール、`/login/alt/subscribe/` など）を 3.1 以降に上げるときの直し方は、acms-upgrade-theme の `references/to-3.1.md`（設定は acms-upgrade の `references/to-3.1.md`）にある。
 
 ## 書く前に
 

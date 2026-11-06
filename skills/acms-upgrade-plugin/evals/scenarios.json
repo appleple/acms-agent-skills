@@ -32,5 +32,16 @@
       "acms-upgrade の scan.sh の P- のチェック（SQL ヘルパー・削除された関数など）でも洗い出す"
     ],
     "source": "本体の要件だけを見て、PHP 8 系で動かなくなるプラグインのコードや、PHP を上げる順番（3.1 のまま PHP を上げる期間）を見落としやすい"
+  },
+  {
+    "query": "3.0 用に作った自作プラグインで、ACMS_POST_Login_Auth を継承した独自のログイン処理と、ACMS_POST_Api::addUserFromOauth を使った SNS 登録をしている。3.1 で動く？",
+    "expected_behavior": [
+      "ACMS_POST_Login_Auth と ACMS_POST_Api は 3.1.0 で削除され、継承していると Class not found になると説明する",
+      "ログインは ACMS_POST_Member_Signin（管理者は ACMS_POST_Member_Admin_Login）、addUserFromOauth は Login ファサードの Login::addUserFromOauth に移すと説明する",
+      "ACMS_POST の extract() に戻り値の型が付いたので、オーバーライドしているなら合わせる必要があることに触れる",
+      "3.1.x の途中で変わった API があるので、移行先のパッチバージョンのソースで引数を確かめるよう伝える",
+      "acms-upgrade の scan.sh を 3.1 で実行し、P-REMOVED-AUTH-CLASS などの P- のチェックで洗い出す（なければ grep で探す）"
+    ],
+    "source": "公式の移行ガイドに PHP の API の変更が書かれておらず、削除されたクラスを継承したプラグインが更新後に Fatal になってから気づきやすい"
   }
 ]

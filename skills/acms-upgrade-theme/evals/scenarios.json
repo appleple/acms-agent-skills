@@ -42,5 +42,17 @@
       "js-autoheight と %{META_DESCRIPTION} の記述は 3.1 のままでも外せるので、本体の更新前に直してよいと伝える"
     ],
     "source": "廃止と非推奨の違いを区別せず、効かなくなる組み込み JS やグローバル変数を残したまま更新して、表示や SEO の不具合に後から気づきやすい"
+  },
+  {
+    "query": "3.0 のサイトで、テーマに login.html と _layouts/login.html を置いて会員の登録画面とログイン画面をデザインしている。3.1 に上げるとき、テーマで何をすればいい？",
+    "expected_behavior": [
+      "3.1 では Login モジュールと system の _layouts/login.html が削除され、テーマに login.html を残すと管理ログイン画面のフォームが消えて管理者もログインできなくなると説明する",
+      "テーマの login.html と _layouts/login.html は本体の更新の前に消すか名前を変えるよう案内する",
+      "会員の画面は /signin/・/signup/・/reset-password/ などに分かれ、_member/*.html（tpl_signin・tpl_signup など）を 3.1 の system か member テーマを写して作ると説明する",
+      "旧 POST（ACMS_POST_Login_Auth・Login_Subscribe・Login_Remind など）を ACMS_POST_Member_* に置き換え、/login/alt/subscribe/ などのリンクを %{SIGNUP_SEGMENT} などに変えると説明する",
+      "パスワード再設定メールのテンプレートが mail/remind/ から mail/reset-password/ に移り、{resetUrl} が {authUrl} になったことに触れる",
+      "acms-upgrade の scan.sh を 3.1 で実行し、T-LOGIN-LAYOUT・T-AUTH-POST・T-AUTH-LINK などで洗い出す（なければ grep で探す）"
+    ],
+    "source": "公式の移行ガイドは「login.html をカスタマイズしているとログインできなくなる可能性」としか書いておらず、何をどの順で直すか（更新前に退避する、画面ごとの対応）が分からないまま更新して、管理者もログインできなくなりやすい"
   }
 ]
