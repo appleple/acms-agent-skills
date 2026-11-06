@@ -78,13 +78,13 @@
 | 変更 | 見つけ方 | 直し方 | 根拠 |
 |---|---|---|---|
 | `RVID` が整数になった（3.0 は文字列） | `P-RVID-STRICT`（grep: `RVID[[:space:]]*(===\|!==)[[:space:]]*['"]`） | 整数で比べる | `v3.0.68:ablogcms/php/main.php:676`、`v3.1.80:ablogcms/php/main.php:816` |
-| 3.0 の Hook は名前・引数ともすべて残っている。ログイン・会員登録の専用の Hook はない（3.0 も 3.1 も）。追加された Hook: `addGlobalVarsInIncludePath`（3.1.0）、`saveMedia`（Ver. 3.1.17）、`filterEntryFulltext` など 4 つ（Ver. 3.1.36）、`unserializeAllowedClasses`（Ver. 3.1.43） | Hook のクラスに同じ名前のメソッドがあると、本体から呼ばれるようになる。grep: `function (addGlobalVarsInIncludePath\|saveMedia\|filter(Entry\|User\|Category\|Blog)Fulltext\|unserializeAllowedClasses)\b` | 名前がぶつかるなら変える。会員登録などの前後に処理を挟むなら `beforePostFire`・`afterPostFire` でモジュールのクラスを見て分ける（動作は未確認） | `git diff v3.0.68 v3.1.80 -- ablogcms/extension/acms/Hook.php` |
+| 3.0 の Hook は名前・引数ともすべて残っている。ログイン・会員登録の専用の Hook はない（3.0 も 3.1 も）。追加された Hook: `addGlobalVarsInIncludePath`（3.1.0）、`saveMedia`（Ver. 3.1.17）、`filterEntryFulltext` など 4 つ（Ver. 3.1.36）、`unserializeAllowedClasses`（Ver. 3.1.43） | Hook のクラスに同じ名前のメソッドがあると、本体から呼ばれるようになる。grep: `function (addGlobalVarsInIncludePath\|saveMedia\|filter(Entry\|User\|Category\|Blog)Fulltext\|unserializeAllowedClasses)\b` | 名前がぶつかるなら変える。会員系の POST（`ACMS_POST_Member_*`）にも `beforePostFire` は呼ばれるので、引数のモジュールのクラス（`$thisModule instanceof ACMS_POST_Member_Signin` など）で分けて処理を挟める。`afterPostFire` は、処理の最後にリダイレクトする POST では呼ばれない（`redirect()` が `die()` で終わるため）。呼ばれないのは、サインイン・管理ログイン・確認コードでのログインの成功、SNS のボタン、退会、メールの確認をしない設定（`subscribe_activation: off`）での会員登録の送信。失敗して同じ画面に戻るとき、会員登録の確認画面、メールで確認する設定での会員登録の送信では呼ばれる（3.1.80 の実機で確認） | `git diff v3.0.68 v3.1.80 -- ablogcms/extension/acms/Hook.php`、`v3.1.80:ablogcms/php/ACMS/POST.php:244-251`（`fire()` の Hook）、`v3.1.80:ablogcms/php/ACMS/function.php:140-160`（`redirect()` の `die()`）、`v3.1.80:ablogcms/php/ACMS/POST/Member/Signup/Submit.php:141-156`（`subscribe_activation: off` のときだけリダイレクト） |
 
 ### 6. 本体の vendor のライブラリ
 
 | 変更 | 見つけ方 | 直し方 | 根拠 |
 |---|---|---|---|
-| `google/apiclient` が v1 から v2 に（3.1.0）。apiclient-services は Ver. 3.1.14 から Translate だけ。`react/react` が 0.4 から 1.x に（Ver. 3.1.14）。`monolog/monolog` 2・`league/oauth1-client` を追加（3.1.0）。guzzlehttp/psr7 は 2.x に | `P-VENDOR-LIBRARY`（要確認。grep: `Google_(Client\|Service_)\|Google\\(Client\|Service)\\\|React\\(EventLoop\|Http\|Promise)\|Monolog\\`）と、`extension/plugins/*/composer.json`・`vendor/` の有無 | 本体の vendor に頼っているなら、移行先のバージョンで動くかを確かめる。自前の vendor で同じライブラリの別バージョンを持っていると、クラスがぶつかることがある | `ablogcms/composer.json`・`composer.lock` の v3.0.68 と v3.1.80 の比較 |
+| `google/apiclient` が v1 から v2 に（3.1.0）。apiclient-services は Ver. 3.1.14 から Translate だけ。`react/react` が 0.4 から 1.x に（Ver. 3.1.14）。`monolog/monolog` 2・`league/oauth1-client` を追加（3.1.0）。guzzlehttp/psr7 は 2.x に | `P-VENDOR-LIBRARY`（要確認。grep: `Google_(Client\|Service_)\|Google\\(Client\|Service)\\\|React\\(EventLoop\|Http\|Promise)\|Monolog\\`）と、`extension/plugins/*/composer.json`・`vendor/` の有無 | 本体の vendor に頼っているなら、移行先のバージョンで動くかを確かめる。自前の vendor で同じライブラリの別バージョンを持っていると、同じ名前のクラスは先に読み込まれた方（本体かプラグインか）だけが使われ、もう一方のバージョンの API で呼ぶと動かない | `ablogcms/composer.json`・`composer.lock` の v3.0.68 と v3.1.80 の比較 |
 
 ## 非推奨になった機能と代替
 

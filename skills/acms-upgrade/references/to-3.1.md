@@ -2,6 +2,8 @@
 
 公式の移行ガイドは <https://developer.a-blogcms.jp/document/migration/301x/>。ガイドに書かれているのは「login.html をカスタマイズしているとログインできなくなる可能性」と「外部サービス連携の廃止」の 2 点だけなので、このファイルと acms-upgrade-theme・acms-upgrade-plugin の `references/to-3.1.md` は、本体ソースの差分（3.0 系の最新 v3.0.68 と 3.1 系の最新 v3.1.80。3.1.x の途中で入ったものは「Ver. 3.1.NN 以降」）から、移行で直す・確かめるものを洗い出して整理した。
 
+次の項目は、配布パッケージで 3.0.68 のサイトを作り、3.1.80 へ手動アップデートして実機（PHP 8.1・MySQL 8.0）でも確かめた: テーマの 3.0 形式の `login.html` で管理者がログインできなくなること、メールを確認していない会員が `/signin/` からログインできること、読者が管理画面で 403 になること、更新前に送ったパスワード再設定のリンクが使えないこと、`mail_remind_from` が読まれず差出人が既定に戻ること、`signin` カテゴリーのトップがサインイン画面になること、https のアクセスで `SSL_ENABLE` が 0 だと Facebook・LINE に http のコールバック URL を送ること（3.0.68 では https）、`SSL_ENABLE` を 1 にすると https になること、DB の設定が `private/config.system.yaml` より優先されること、Hook の `beforePostFire` は会員系の POST でも呼ばれ、`afterPostFire` はリダイレクトで終わる POST（ログインの成功など）では呼ばれないこと。
+
 このファイルには、テーマにもプラグイン（拡張アプリ）にも当てはまるもの（要件・更新の方法・ライセンス・DB・設定値・サーバーの設定）を書く。テンプレート・CSS・テーマの JavaScript・メールテンプレートは acms-upgrade-theme、`extension/` の PHP は acms-upgrade-plugin の `references/to-3.1.md` にある。1 つの変更は 3 ファイルのどれか 1 か所にだけ書き、ほかからは名前で参照する。チェック ID の定義は `scripts/checks/to-3.1.tsv`（`T-` はテーマ、`P-` はプラグイン）。`要確認` と付いたチェックは、直す箇所ではなく見比べる箇所を出す。
 
 ## 前提（移行元・PHP などの要件）
@@ -45,7 +47,7 @@
 | 会員のサインインの IP 制限が `signin_white_hosts` / `signin_black_hosts` に分かれた | 3.0 の `login_white_hosts` などは会員を含むすべてのログインにかかっていた。3.1 では管理ログインだけにかかり、会員のサインインは既定で制限なし | 管理画面 > コンフィグ > アクセス設定 | 会員にも制限をかけていたなら signin 側にも設定し、`.htaccess` で制限しているなら `/signin/` なども対象にする | `v3.1.80:ablogcms/php/Services/Login/Helper.php:183,193` |
 | `tpl_top`・`tpl_detail`・`tpl_entry_edit`・`tpl_entry_add` の既定が `top.html`・`entry.html` から `_top.html`・`_entry.html` に、`tpl_login` が `_member-admin/login.html` になった | `template.yaml` にも DB にも値がないテーマで、テーマに `top.html`・`entry.html` しかないと、トップ・詳細が 404 になる。3.0・3.1 の公式テーマは `template.yaml` に書いているので影響しない。`tpl_login` は acms-upgrade-theme | テーマの `template.yaml`、エクスポートの YAML の `tpl_*` | `template.yaml` にキーを書くか、ファイル名を `_top.html`・`_entry.html` にそろえる（acms-upgrade-theme） | `v3.0.68:ablogcms/private/config.system.default.yaml:188-198`、`v3.1.80:同:222-233` |
 | `mail_remind_*` が `mail_reset_password_*` に改名（パスワード再設定メール） | DB の値は引き継がれない。差出人などが既定（`info@example.com`）に戻る。テンプレートは acms-upgrade-theme | 管理画面 > コンフィグ > メール設定 | パスワード再設定メールと、新しく増えたメール（メールアドレスの変更、メール認証のログイン・サインイン）の差出人などを設定し直す | `v3.0.68:ablogcms/private/config.system.default.yaml:289-296`、`v3.1.80:同:354-361`、`v3.1.80:ablogcms/php/ACMS/POST/Member/ResetPassword.php:36-76` |
-| `permission_dir` / `permission_file`（0777 / 0666）を削除し、`config.server.php` の `CHMOD_DIR` / `CHMOD_FILE`（0775 / 0664 から umask を引いた値）を使う（Ver. 3.1.17 以降） | 新しく作るファイルとディレクトリが全員書き込み可でなくなる。FTP のユーザーと PHP の実行ユーザーが違うサーバーでは、書き込みで問題が出ることがある。`private/config.system.yaml` の `permission_*` は無視される | 利用者に、`config.server.php` の `CHMOD_*` と `private/config.system.yaml` の `permission_*` を見てもらう | 必要なら `config.server.php` の `CHMOD_*` を調整してもらう | `v3.0.68:ablogcms/php/main.php:116-117`、`v3.1.80:ablogcms/php/Services/Storage/StorageServiceProvider.php:24-29` |
+| `permission_dir` / `permission_file`（0777 / 0666）を削除し、`config.server.php` の `CHMOD_DIR` / `CHMOD_FILE`（0775 / 0664 から umask を引いた値）を使う（Ver. 3.1.17 以降） | 新しく作るファイルとディレクトリが全員書き込み可でなくなる。PHP が作ったファイルは、PHP の実行ユーザーと同じグループに入っていない FTP のユーザーからは書き換え・削除できなくなる（3.0 の 0666 / 0777 では誰でも書き換えられた）。`private/config.system.yaml` の `permission_*` は無視される | 利用者に、`config.server.php` の `CHMOD_*` と `private/config.system.yaml` の `permission_*` を見てもらう | 必要なら `config.server.php` の `CHMOD_*` を調整してもらう | `v3.0.68:ablogcms/php/main.php:116-117`、`v3.1.80:ablogcms/php/Services/Storage/StorageServiceProvider.php:24-29` |
 | `image_jpeg_quality` の既定が 85 から 75 に（Ver. 3.1.21 以降） | 編集設定を保存していないサイトでは、新しくアップロードした JPEG の画質が下がる | エクスポートの YAML | 85 のままにしたいなら管理画面 > コンフィグ > 編集設定で設定する | `v3.0.68:ablogcms/private/config.system.default.yaml:897`、`v3.1.80:同:973` |
 | `allow_template_extension`（Ver. 3.1.12 以降）、`forbid_direct_access_file`（Ver. 3.1.62 以降）を追加 | 一覧にない拡張子のテンプレートと、`package.json`・ドットファイル・`*.config.*` などは URL から表示されなくなる | テーマに、URL で開かせている `.html`・`.htm`・`.csv`・`.xml`・`.json`・`.css`・`.yaml`・`.txt`・`.js` 以外のファイルがあるか | 必要なら利用者に `private/config.system.yaml` へ足してもらう | `v3.1.80:ablogcms/private/config.system.default.yaml:12,128`、`v3.1.80:ablogcms/php/main.php:1944-1949` |
 | `entry_lock_enable: on`（エントリーの排他ロック）を追加 | 他のユーザーが編集中のエントリーに警告・ロックが出る | — | 運用に合わなければ管理画面 > コンフィグ > 機能設定で変える | `v3.1.80:ablogcms/private/config.system.default.yaml:131-133` |
@@ -65,16 +67,18 @@
 | 変更 | 影響 | 直し方 | 根拠 |
 |---|---|---|---|
 | テーブル・列の追加（`audit_log`・`cache_data`・`cache_tag`・`token`、user の `user_mode`・`user_withdrawal_datetime`、blog・category のテーマセット・編集画面セット、entry の `entry_members_only`・ロックの列など）。3.1.x の途中でも足される | DB の更新で足される | 管理画面 > 更新で、データベースが「一致」になったことを確かめる | `ablogcms/php/config/schema/db.schema.yaml` の v3.0.68 と v3.1.80 の比較 |
-| 定義から外れたもの（`log_access` テーブル、`shop_receipt*` テーブル、user の `user_confirmation_token`・`user_reset_password_token` 列）は DROP されずに残る | 3.1 はこれらを読まない。アクセスログは監査ログに置き換わり、旧データは管理画面で見られない | 消すかは任意（消すならバックアップの後） | `v3.1.80:ablogcms/php/Services/Update/Database/Schema.php:319-343` |
-| パスワード再設定・会員登録の確認のトークンの持ち方が変わった（データの移し替えはない） | 更新前に送ったパスワード再設定・会員登録の確認メールのリンクは、3.1 が旧列と旧 URL（`/login/?type=...`）を読まないので使えない見込み（実機では未確認） | 更新の作業時間を案内し、必要なら送り直してもらう | `v3.1.80:ablogcms/php/Services/Update/Database/Rule.php:39-77`（該当する変換がない）、`git grep user_reset_password_token v3.1.80 -- ablogcms/php` が 0 件 |
+| 定義から外れたもの（`log_access` テーブル、`shop_receipt*` テーブル、user の `user_confirmation_token`・`user_reset_password_token` 列）は DROP されずに残る | 3.1 はこれらを読まない。アクセスログは監査ログに置き換わり、旧データは管理画面で見られない | 消すかは任意（消すならバックアップの後）。DB の更新の最後の画面に、使われなくなった列（`user_confirmation_token`・`user_reset_password_token` など）が一覧で出て、選ぶと削除できる。メールを確認していない会員を調べる前（下の ★）には選ばない | `v3.1.80:ablogcms/php/Services/Update/Database/Schema.php:319-343`。3.0.68 → 3.1.80 の更新を実機で確認 |
+| パスワード再設定・会員登録の確認のトークンが、user テーブルの列（`user_reset_password_token`・`user_confirmation_token`）から `token` テーブルに移った（データの移し替えはない） | 更新前に送ったパスワード再設定・会員登録の確認メールのリンク（`/login/?type=reset&...`・`/login/?type=subscribe&...`）は使えない。3.1 の `/login/` は管理ログイン画面で `type` を読まず、トークンも `token` テーブルでしか照合しないため | 更新の作業時間を案内し、パスワード再設定は更新後にやり直してもらう | `v3.0.68:ablogcms/php/ACMS/POST/Login/Remind.php:92-105`、`v3.1.80:ablogcms/php/Services/Login/Traits/ValidateAuthUrl.php`（`validateToken`）、`git grep user_reset_password_token v3.1.80 -- ablogcms/php` が 0 件 |
+| ★ 3.0 で会員登録してメールを確認していない会員（状態は `open` のまま、`user_confirmation_token` が空でない）が、3.1 ではメールを確認しないままログインできる。3.0 のログインはトークンが空のユーザーだけを通していたが、3.1 はこの列を見ず、未確認を状態 `pseudo` で表す。DB の更新はこの変換をしない。同じメールアドレスでの登録し直しも「すでに存在するメールアドレス」で断られる | 更新の**前に**、利用者（DB の管理者）に `SELECT user_id, user_mail FROM <テーブルの接頭辞>user WHERE user_confirmation_token <> ''` で該当する会員を調べてもらう | 該当する会員は、更新の前に削除するか、管理画面のユーザー編集で「有効」のチェックを外す（状態が close になり、3.1 でもログインできない）。3.0 の確認リンクは更新後には使えないので、登録し直しを案内する | `v3.0.68:ablogcms/php/ACMS/POST/Login/Auth.php:200-214`（`user_confirmation_token = ''` の条件）、`v3.1.80:ablogcms/php/ACMS/POST/Member/Signin.php:198-213`（条件なし）、`v3.1.80:ablogcms/php/ACMS/POST/Member/Signup/Confirm.php:130-145`（`doubleMail`） |
 
 ### サーバーの設定（`.htaccess`・`config.server.php`・URL）
 
 | 変更 | 影響 | 直し方 | 根拠 |
 |---|---|---|---|
-| ルートの `htaccess.txt` の変更（エンコードされたパスの扱い `has_encoded_query`、末尾スラッシュの付与と `index.html` の除去のリダイレクト先が `%{REQUEST_SCHEME}`） | 更新で `.htaccess` は置き換わらないので、取り込まないと入らない。必須ではない | 利用者に 3.1.80 の `htaccess.txt` と見比べて取り込んでもらう。TLS を終端するプロキシの後ろでは `%{REQUEST_SCHEME}` が http になることがあるので、リダイレクト先を確かめる | `v3.1.80:ablogcms/htaccess.txt:233-235,265,301-311` |
+| ルートの `htaccess.txt` の変更（エンコードされたパスの扱い `has_encoded_query`、末尾スラッシュの付与と `index.html` の除去のリダイレクト先が `%{REQUEST_SCHEME}`） | 更新で `.htaccess` は置き換わらないので、取り込まないと入らない。必須ではない | 利用者に 3.1.80 の `htaccess.txt` と見比べて取り込んでもらう。`%{REQUEST_SCHEME}` は Apache が受けた接続のスキームなので、TLS を終端するプロキシ（ロードバランサー・CDN）の後ろのサーバーでは http になり、https のサイトでも http へリダイレクトされる。その構成ではこの規則を取り込まないか、リダイレクト先を https に固定する | `v3.1.80:ablogcms/htaccess.txt:233-235,265,301-311` |
 | `config.server.php` に定数が足される（`CHMOD_DIR`・`CHMOD_FILE`・`PROXY_IP`・`PROXY_PORT`・会員系の URL の `*_SEGMENT`） | DB の更新のときに、ない定数が既定値で足される（既存の値は保たれる） | 不要 | `v3.1.80:ablogcms/php/Services/Update/System/ConfigServer.php:15-48` |
-| `signin`・`signup`・`reset-password`・`reset-password-auth`・`tfa-recovery`・`admin-reset-password` など会員系の URL が予約語になった | 同じコードのブログ・カテゴリー・エントリーは保存時にエラーになり、既存のものは URL がぶつかる可能性がある（URL の解釈の順は未確認） | 管理画面でブログ・カテゴリーのコードを確かめ、ぶつかるなら `config.server.php` の `*_SEGMENT` を変えてもらうかコードを変える | `v3.1.80:ablogcms/php/ACMS/function.php:2608-2621`、`v3.1.80:ablogcms/php/Services/Login/LoginServiceProvider.php:21-66` |
+| 会員系の URL（`signin`・`reset-password`・`reset-password-auth`・`tfa-recovery`・`admin-reset-password`・`admin-reset-password-auth`・`admin-tfa-recovery`）が予約語に加わった（`login`・`signup` は 3.0 から予約語） | 同じコードのブログ・カテゴリーは保存時にエラーになる。3.0 で作った同じコードのものは、URL の解析でパスの末尾のセグメントが認証系の画面として先に取られるので、そのブログ・カテゴリーのトップ（例: コードが `signin` のカテゴリーの `/signin/`）が認証系の画面（会員のサインインなど）になる。その下のエントリー（`/signin/entry.html`）は今までどおり表示される（3.0.68 → 3.1.80 の更新を実機で確認） | 管理画面でブログ・カテゴリーのコードを確かめ、ぶつかるならコードを変えるか、`config.server.php` の `*_SEGMENT` を変えてもらう | `v3.0.68:ablogcms/php/ACMS/function.php:2315-2343`（3.0 の予約語）、`v3.1.80:ablogcms/php/ACMS/function.php:2608-2621`（3.1 の予約語）、`v3.1.80:ablogcms/php/ACMS/function.php:6960-7034` の `parseAcmsPath` の `aryBool`（`'@(?:^\|/)' . $Seg[$key] . '/?$@'` で末尾を先に取り除く）、`v3.1.80:ablogcms/php/Services/Login/LoginServiceProvider.php:21-66` |
+| Facebook・LINE・X の SNS ログインのコールバック URL のスキームが、アクセス中のスキームから `config.server.php` の `SSL_ENABLE`（既定 0）で決まるようになった（Google はアクセス中のスキームのまま）。3.0 の LINE・X に書かれていた `'_protocol' => 'http'` は `acmsLink` が読まないキーで、効いていなかった | https で配信していて `SSL_ENABLE` が 0 のサイトでは、3.1 で Facebook・LINE・X に `http://…/callback/signin/*.html` を送り、各サービスに登録した https の URL と一致せずにログインできない | https のサイトなら、利用者に `config.server.php` の `SSL_ENABLE` が 1 かを確かめてもらう（エージェントは開かない）。パスは同じなので、各サービスに登録した URL は変えなくてよい | `v3.0.68:ablogcms/php/Services/SocialLogin/Line.php:158`、`v3.0.68:ablogcms/php/ACMS/function.php` の `acmsLink`（`protocol` だけを読む）、`v3.1.80:ablogcms/php/Services/SocialLogin/Facebook.php:126-129`・`Line.php:153-157`・`Twitter.php:72-76`・`Google.php:109` |
 
 ### 機能の廃止
 
@@ -94,7 +98,7 @@
 
 1. 更新前のサイト（3.0）で `sh scripts/scan.sh <設置ディレクトリ> 3.1` を実行し、結果を保存する。3.2 まで上げるなら `3.2` でも実行する。
 2. 要件を確かめる。PHP が 7.3〜8.1 か（7.2 なら先に上げる）、ライセンスが 3.1 に対応しているか、配布プラグインの 3.1 対応版があるか。
-3. 利用者に、管理画面 > コンフィグ > エクスポートの YAML と、`private/config.system.yaml` の該当キーの有無（`subscriber_access_admin_page`・`permission_*`・`tpl_*`）を確かめてもらい、上の「設定値」のどれが効くかを決める。
+3. 利用者に、管理画面 > コンフィグ > エクスポートの YAML と、`private/config.system.yaml` の該当キーの有無（`subscriber_access_admin_page`・`permission_*`・`tpl_*`）を確かめてもらい、上の「設定値」のどれが効くかを決める。会員登録を使っているサイトでは、メールを確認していない会員を調べて削除か無効にする（上の「データベース」の ★）。SNS ログインを使っている https のサイトでは、`SSL_ENABLE` を確かめてもらう（上の「サーバーの設定」）。
 4. 本体を更新する前に、テーマとプラグインで 3.0 のままでも直せるもの（削除されたモジュール・クラスの利用を外す、3.0 形式の `login.html` を退避する）を直す。`T-` は acms-upgrade-theme、`P-` は acms-upgrade-plugin の手順で直す。
 5. 簡単アップデートか手動アップデートで 3.1 系の最新のパッケージを置き、DB を更新する（SKILL.md の手順 7）。オンラインアップデートでは 3.1 が候補に出ない（「前提」）。
 6. 更新後に、会員の画面（`_member/`）を作り、設定（ログイン設定・メール設定・アクセス設定）を見直す。
@@ -108,6 +112,8 @@
 - パスワード再設定（管理者は `/admin-reset-password/`、会員は `/reset-password/`）のメールが届き、差出人が正しいか。
 - 会員登録（`subscribe: on` のとき `/signup/`）の確認メールが届き、登録が完了するか。
 - 読者でログインして、マイページ（`/mypage/update-profile/` など）でプロフィールとパスワードを変えられるか。
+- 3.0 でメールを確認していなかった会員が、ログインできないか（更新前に削除か無効にしたか）。
+- SNS ログイン（Facebook・LINE・X）で、各サービスの画面から戻ってこられるか。
 - シークレットブログ・シークレットカテゴリーを未ログインで開いたとき、意図したログイン画面が出るか。
 - 管理画面 > 更新で、データベースが「一致」になっているか。監査ログに error・warning が出ていないか。
 - 新しくアップロードした画像の画質と、作られたファイルの書き込み権限。
