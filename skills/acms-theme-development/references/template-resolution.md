@@ -72,6 +72,16 @@ URL からどのテンプレートファイルが選ばれるかの要点。カ�
 
 `/tpl/` 指定と Ajax の関係は <https://developer.a-blogcms.jp/document/security/forbid_tpl_url_context.html> を参照する。
 
+`forbid_tpl_url_context` と `html_format_validate` は、設定 `ajax_security_level` を満たすリクエストには効かない。満たす条件は次のとおり（`v3.2.38:ablogcms/php/Services/Security/CsrfTokenManager.php` の `isAuthorizedAjaxRequest`）。
+
+| `ajax_security_level` | 要るもの |
+|---|---|
+| 0 | なし（チェックしない） |
+| 1（設定が無いときの既定） | `X-Requested-With: XMLHttpRequest` か `HX-Request: true` のヘッダーと、サイトのドメインの Referer（`referrer_validation` による） |
+| 2（新規インストールの `config.system.yaml`） | 1 に加えて、セッションの CSRF トークンと一致する `X-CSRF-Token` ヘッダー |
+
+このため、ログアウト状態で curl などからこれらを付けずに `/tpl/...` を取得すると 404 になるが、ブラウザの htmx からは部品が返る。動作を確かめるときは、トップページを開いて得たセッションの Cookie と CSRF トークンを使い、上のヘッダーと Referer を付けて取得する。
+
 ## template.yaml で本体が読むキー
 
 キーごとに子テーマ → 親テーマの順に template.yaml を見て、最初に値があるものを使う。どの template.yaml にも無ければテーマ設定（管理画面）の値、それも無ければ `config.system.default.yaml` の既定値になる。
