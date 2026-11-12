@@ -13,7 +13,7 @@ description: >-
   a-blog cms theme, child theme, template.yaml, theme set, path rewrite, acms.js, large site, multi-blog, staging, deploy, cache.
   テンプレートの記法は acms-template-acms（標準）/ acms-template-twig（Twig）、サイトの構成の判定は acms-project-triage が担う。
 license: MIT
-compatibility: a-blog cms Ver. 3.2 以上
+compatibility: a-blog cms Ver. 3.2 以上。Ver. 3.3 の変化は references/ver-3.3.md
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -32,7 +32,8 @@ metadata:
 
 1. `acms-project-triage` でバージョン・テーマの継承関係・Twig か標準かを確かめる。
 2. どのブログ・カテゴリーにどのテーマが割り当てられているかは DB にあり、ファイルからは分からない。利用者に確認する（下の「テーマの割り当て」）。
-3. 直すファイルを推測で決めない。デバッグモードで実際に使われているテンプレートを確かめる（下の「使われているテンプレートを調べる」）。
+3. a-blog cms が Ver. 3.3 以上なら references/ver-3.3.md も読む（テーマに置けるファイル、htmx 4、公開側の URL のクエリ。Ver. 3.2 のサイトでは読まない）。
+4. 直すファイルを推測で決めない。デバッグモードで実際に使われているテンプレートを確かめる（下の「使われているテンプレートを調べる」）。
 
 ## テンプレートの探索順
 

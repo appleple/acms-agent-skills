@@ -8,9 +8,9 @@ description: >-
   画像のリサイズと width / height、カスタムユニット（include/unit/extend.html、unit#custom_名前）、検索の対象外にする :search を扱う。
   「エントリーに入力欄を足したい」「画像フィールドを作って」「カスタムフィールドが表示されない」「カスタムユニットを作りたい」と頼まれたときに使う。
   a-blog cms custom field, custom unit, field group, media field, image field.
-  記法一般は acms-template-acms / acms-template-twig、フォームは acms-form、モジュール選びは acms-module-reference が担う。
+  記法一般は acms-template-acms / acms-template-twig、フォームは acms-form、モジュール選びは acms-module-reference、Ver. 3.3 以降の管理画面・テーマの JSON での定義は acms-field-definition が担う。
 license: MIT
-compatibility: a-blog cms Ver. 3.2 以上
+compatibility: a-blog cms Ver. 3.2 以上。Ver. 3.3 の変化は references/ver-3.3.md
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -28,6 +28,7 @@ metadata:
 - テーマが標準テンプレートか Twig かを確かめる（acms-project-triage）。**管理画面の入力欄は、どちらのテーマでも標準テンプレートの記法で書く**（下記）。出力側だけがテーマの記法に従う。
 - 入力欄の HTML は手で書かず、カスタムフィールドメーカーで生成してから直す。`field[]`・`:extension`・`@old` などの隠し項目の書き漏れを防げるため。
 - フィールド名は Twig から `fields.name` で参照するので、ハイフンを使わず英数字とアンダースコアにする（ハイフンを含む名前は Twig のドット記法で書けない）。
+- a-blog cms が Ver. 3.3 以上なら references/ver-3.3.md も読む（Ver. 3.2 のサイトでは読まない）。
 
 ## 1. 入力欄をどこに書くか
 

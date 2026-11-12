@@ -18,7 +18,9 @@ a-blog cms 本体の開発用ではありません。
 
 ## スキル一覧
 
-スキルは3つのプラグインに分かれています。サイトを制作する方は `acms-site-builder`、プラグイン（拡張アプリ）を開発する方は `acms-plugin-developer` を入れてください。`acms-common` はどちらにも依存関係として入ります。
+スキルは4つのプラグインに分かれています。サイトを制作する方は `acms-site-builder`、プラグイン（拡張アプリ）を開発する方は `acms-plugin-developer`、Ver. 3.3 以降の REST API・MCP を使う方は `acms-api` を入れてください。`acms-common` はどれにも依存関係として入ります。
+
+「Ver. 3.3 以降」と書いたスキルは、作業対象が Ver. 3.3 以上のときだけ使われます（Ver. 3.2 のサイトでは案内しません）。Ver. 3.3 はプレリリースの段階で、内容は Ver. 3.3.0-alpha.1 で確かめたものです。
 
 ### acms-common（共通）
 
@@ -39,6 +41,7 @@ a-blog cms 本体の開発用ではありません。
 | [acms-module-reference](skills/acms-module-reference/SKILL.md) | 目的に合うモジュールの選び方、モジュール ID、変数表の引き方 |
 | [acms-form](skills/acms-form/SKILL.md) | メールフォーム（フォーム ID、バリデーター、コンバーター、確認画面、メールテンプレート） |
 | [acms-custom-field](skills/acms-custom-field/SKILL.md) | カスタムフィールド・画像やメディアの入力欄・フィールドグループ・カスタムユニット |
+| [acms-field-definition](skills/acms-field-definition/SKILL.md) | **Ver. 3.3 以降。** カスタムフィールド定義（管理画面の定義・テーマの JSON による宣言・型の選び方・参照型・キーや型の変更の影響） |
 | [acms-member-site](skills/acms-member-site/SKILL.md) | 会員制サイト（会員登録・ログイン・マイページ・会員限定のカテゴリーと記事・会員情報の項目・退会）と、会員限定の内容が漏れる経路 |
 | [acms-upgrade-theme](skills/acms-upgrade-theme/SKILL.md) | バージョンアップでのテーマの修正（非推奨・削除されたモジュール、組み込み JS、ユニットの HTML と acms.css、表示崩れ） |
 
@@ -49,6 +52,13 @@ a-blog cms 本体の開発用ではありません。
 | [acms-plugin-development](skills/acms-plugin-development/SKILL.md) | プラグイン（拡張アプリ）の PHP 実装（ServiceProvider、Hook、独自モジュール、校正・検証オプション）、独自テーブル・テスト・配布 |
 | [acms-admin-frontend-plugin](skills/acms-admin-frontend-plugin/SKILL.md) | 管理画面 JavaScript プラグイン（ACMS.plugins、ACMS.events、Slot）。Ver. 3.2.29 以降 |
 | [acms-upgrade-plugin](skills/acms-upgrade-plugin/SKILL.md) | バージョンアップでのプラグイン（拡張アプリ）と extension/acms の修正（PHP の要件、SQL ヘルパー、削除された関数・クラス、Hook） |
+
+### acms-api（REST API・MCP。Ver. 3.3 以降）
+
+| スキル | 内容 |
+|---|---|
+| [acms-rest-api](skills/acms-rest-api/SKILL.md) | REST API の有効化・API トークンとスコープ・OAuth・安全な読み書き（dry-run・ETag・冪等キー）・プラグインからのルートの追加 |
+| [acms-mcp](skills/acms-mcp/SKILL.md) | 内蔵の MCP サーバーに Claude などの AI エージェントをつなぎ、安全に操作する |
 
 ### 依頼の例
 
@@ -88,6 +98,7 @@ claude plugin marketplace add appleple/acms-agent-skills
 # 2. 必要なプラグインを入れる（acms-common は依存関係として自動で入ります）
 claude plugin install acms-site-builder@acms-agent-skills
 claude plugin install acms-plugin-developer@acms-agent-skills
+claude plugin install acms-api@acms-agent-skills
 ```
 
 セッションの中では `/plugin marketplace add appleple/acms-agent-skills` と `/plugin install acms-site-builder@acms-agent-skills` でも同じことができます。スキルは `/acms-site-builder:acms-form` のようにプラグイン名付きで表示されます。

@@ -36,7 +36,8 @@ echo "## a-blog cms"
 version=""
 for css in "$root/themes/system/css/acms.css" "$root/themes/system/css/acms.min.css"; do
   [ -f "$css" ] || continue
-  version=$(head -n 10 "$css" | sed -n 's/.*@ablogcms\/acms\.css Ver\. \([0-9][0-9.]*\).*/\1/p' | head -n 1)
+  # プレリリース（3.3.0-alpha.1 など）の接尾辞まで読む。数字だけで切ると正式版と見分けられないため
+  version=$(head -n 10 "$css" | sed -n 's/.*@ablogcms\/acms\.css Ver\. \([0-9][0-9.]*\(-[0-9A-Za-z.]*\)\{0,1\}\).*/\1/p' | head -n 1)
   if [ -n "$version" ]; then
     echo "version: $version (themes/system/css/$(basename "$css") の先頭コメント)"
     break
@@ -70,6 +71,14 @@ else
   if [ "$major" -lt 3 ] || { [ "$major" -eq 3 ] && [ "$minor" -lt 2 ]; }; then
     echo "warning: Ver. 3.2 未満のため acms-agent-skills の対象外（バージョンを上げるなら acms-upgrade）"
   fi
+  if [ "$major" -gt 3 ] || { [ "$major" -eq 3 ] && [ "$minor" -ge 3 ]; }; then
+    echo "note: Ver. 3.3 以上。acms-field-definition・acms-rest-api・acms-mcp と、各スキルの references/ver-3.3.md を使える"
+  else
+    echo "note: Ver. 3.3 未満。acms-field-definition・acms-rest-api・acms-mcp と references/ver-3.3.md は使わない"
+  fi
+  case "$version" in
+    *-*) echo "warning: プレリリース版（${version}）。本番には使わず、スキルの Ver. 3.3 の内容は正式版で変わることがある" ;;
+  esac
 fi
 
 echo

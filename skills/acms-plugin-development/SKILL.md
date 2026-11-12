@@ -9,9 +9,9 @@ description: >-
   「エントリー保存時に処理を足したい」「独自モジュールを作りたい」「プラグインを作って」「Hook.php に書いたのに動かない」と頼まれたとき、
   ServiceProvider.php・Hook.php・Corrector.php・Validator.php・extension/plugins/ を触るときに使う。
   a-blog cms plugin, Hook, ServiceProvider, custom module, corrector, validator, DB table, migration, testing, distribution.
-  管理画面の JavaScript プラグインの中身（ACMS.plugins、ACMS.events）は acms-admin-frontend-plugin、テンプレートの記法は acms-template-acms / acms-template-twig が担う。
+  管理画面の JavaScript プラグインの中身（ACMS.plugins、ACMS.events）は acms-admin-frontend-plugin、テンプレートの記法は acms-template-acms / acms-template-twig、Ver. 3.3 以降の REST API のルートは acms-rest-api、MCP のツールは acms-mcp、カスタムフィールド定義の拡張は acms-field-definition が担う。
 license: MIT
-compatibility: a-blog cms Ver. 3.2 以上。Twig の管理画面と Twig の Filter 登録は Ver. 3.2.24 以降、Asset API は Ver. 3.2.29 以降。
+compatibility: a-blog cms Ver. 3.2 以上。Twig の管理画面と Twig の Filter 登録は Ver. 3.2.24 以降、Asset API は Ver. 3.2.29 以降。Ver. 3.3 の拡張点は references/ver-3.3.md
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -47,6 +47,7 @@ metadata:
    - 独自の GET / V2 GET / POST モジュールを作るときは references/modules.md を読む。
    - 校正オプション・検証オプション・グローバル変数を足すときは references/corrector-validator-global-variables.md を読む。
    - 独自テーブル・設定画面・テスト・配布を伴うプラグイン（拡張アプリ）を作るときは references/production-plugin.md を読む（install / update / uninstall の本体の動き、DB_PREFIX とマイグレーション、API キーの置き場所、POST の権限、composer の依存、対応バージョンの宣言）。
+   - a-blog cms が Ver. 3.3 以上なら references/ver-3.3.md も読む（REST API・MCP・フィールド定義・定期実行などの拡張点。Ver. 3.2 のサイトでは読まない）。
 3. 書いたら「確認とデバッグ」の順で動作を確かめる。
 
 ## 守ること

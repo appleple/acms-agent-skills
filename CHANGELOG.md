@@ -6,6 +6,10 @@
 
 ### Added
 
+- a-blog cms Ver. 3.3（Ver. 3.3.0-alpha.1 で確かめた内容）向けに、acms-field-definition（カスタムフィールド定義）、acms-rest-api（REST API・API トークン・OAuth）、acms-mcp（MCP サーバー）を足した。REST API と MCP は新しいプラグイン acms-api に入れた。いずれも status は draft で、Ver. 3.2 のサイトでは使わない
+- acms-custom-field・acms-plugin-development・acms-admin-frontend-plugin・acms-theme-development・acms-member-site に、Ver. 3.3 以上のときだけ読む `references/ver-3.3.md` を足した
+- acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin に Ver. 3.2 から 3.3 への移行（`references/to-3.3.md` と `scripts/checks/to-3.3.tsv`）を足した（PHP 8.3 以上、jQuery 4・htmx 4、予約される URL、エントリー保存の POST モジュールの変更など）
+- acms-project-triage の detect.sh が、プレリリース版のバージョン（`3.3.0-alpha.1` など）を読み、Ver. 3.3 の内容を使えるかを出すようにした
 - GitHub Release に、スキルごとの zip を添付するようにした（`releases/latest/download/<スキル名>.zip` で取得できる）。README に zip での入れ方を書いた
 - acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin に Ver. 3.0 から 3.1 への移行（`references/to-3.1.md` と `scripts/checks/to-3.1.tsv`）を足した。ログイン・会員の作り直し、設定値の既定値の変更、オンラインアップデートで 3.1 に止められないことなどを、本体ソースの差分から整理した
 

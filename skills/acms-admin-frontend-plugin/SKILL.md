@@ -10,7 +10,7 @@ description: >-
   a-blog cms admin JavaScript plugin, ACMS.plugins, ACMS.events, Slot, Fill.
   PHP 側（ServiceProvider・Hook・アセットの登録）は acms-plugin-development が担う。
 license: MIT
-compatibility: a-blog cms Ver. 3.2.29 以上（管理画面の JavaScript 拡張基盤は Ver. 3.2.29 で追加）
+compatibility: a-blog cms Ver. 3.2.29 以上（管理画面の JavaScript 拡張基盤は Ver. 3.2.29 で追加）。Ver. 3.3 の変化は references/ver-3.3.md
 metadata:
   acms-min-version: "3.2.29"
   status: stable
@@ -40,6 +40,8 @@ metadata:
 | 組み込み JS の設定値（`ACMS.Config.xxx`）を変える | 従来どおり `ACMS.Ready` の中で `ACMS.Config` を上書きする（js-edit.html） |
 | 公開側のページの JavaScript | `ACMS.plugins` は使えない（管理画面用の `admin.js` が作るため）。`ACMS.Ready` を使う |
 | エントリー一覧の列の並び替え・削除 | `ACMS.Config.entryAdminConfig.getColumns`（代わりの API がない） |
+
+a-blog cms が Ver. 3.3 以上なら references/ver-3.3.md も読む（カスタムフィールド定義のイベント、再読み込みなしの保存の後の再初期化など。Ver. 3.2 のサイトでは読まない）。
 
 一覧にない場所や操作は拡張ポイントがない。管理画面の DOM やクラス名を直接書き換えて実現しない（バージョンアップで壊れる）。
 必要なら本体への要望として伝える。

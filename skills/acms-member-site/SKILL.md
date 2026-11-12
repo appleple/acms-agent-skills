@@ -13,7 +13,7 @@ description: >-
   テーマの作り方は acms-theme-development、記法は acms-template-acms / acms-template-twig、
   フォームの検証の書き方は acms-form、ユーザーのカスタムフィールドの入力欄と出力は acms-custom-field が担う。
 license: MIT
-compatibility: a-blog cms Ver. 3.2 以上（会員機能は Ver. 3.1 で現在の形になった）。全エディションで使える。
+compatibility: a-blog cms Ver. 3.2 以上（会員機能は Ver. 3.1 で現在の形になった）。全エディションで使える。Ver. 3.3 の変化は references/ver-3.3.md
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -32,6 +32,7 @@ metadata:
 
 - バージョンとテーマの種類（標準テンプレート / Twig）、テーマの継承を確かめる（acms-project-triage）。
 - 会員の画面の URL（`signin`・`signup`・`mypage/update-profile` など）はサイトごとに変えられる。テンプレートには `%{SIGNIN_SEGMENT}` `%{SIGNUP_SEGMENT}` `%{RESET_PASSWORD_SEGMENT}` `%{PROFILE_UPDATE_SEGMENT}` `%{WITHDRAWAL_SEGMENT}` などのグローバル変数で書き、パスを直書きしない。設定ファイル（config.server.php）は読まない。
+- a-blog cms が Ver. 3.3 以上なら references/ver-3.3.md も読む（パスキー・メールの 2 段階認証・本人確認の画面。Ver. 3.2 のサイトでは読まない）。
 - 管理画面の設定（会員登録の受け付け・登録時の権限・メールの送信元など）はエージェントが変えず、references/admin-settings.md の表を使って利用者に依頼する。
 
 ## 仕組みの要点
