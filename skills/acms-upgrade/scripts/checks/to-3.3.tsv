@@ -1,0 +1,25 @@
+id	target	pattern	message	section
+# Ver. 3.3 への移行で直す箇所のチェック定義。scan.sh が読む。Ver. 3.3.0-alpha.1 のソースで確かめたもので、正式版で変わることがある。
+# 1 行目はヘッダー。2 行目以降は 1 行 1 チェックで、列はタブで区切る。# で始まる行と空行は読み飛ばす。
+# message が「要確認:」で始まるものは、直す箇所ではなく見比べる箇所。
+# 列: id / target（theme・plugin。両方なら theme,plugin）/ pattern（grep -E の正規表現）/ message / section（直し方を書いた場所。「<スキル名>: <references のファイル>#<見出し>」）
+# id はテーマのチェックを T-、プラグイン（拡張アプリ）のチェックを P- で始める。どう直すかと根拠は、T- は acms-upgrade-theme、P- は acms-upgrade-plugin の references/to-3.3.md に書く。
+T-JQUERY4	theme	\.size\(\)|\$\.isFunction|jQuery\.isFunction|jQuery\.expr\.filters|\.bind\(|\.unbind\(|jquery-3\.[0-9.]+(\.min)?\.js|jquery-migrate-3|ui_1\.13\.2	jQuery 4 で動かない書き方か、jQuery 3 を直接読み込んでいる。.size() は .length、.bind()/.unbind() は .on()/.off()、$.isFunction は typeof にし、読み込みのパスは %{JS_LIB_JQUERY_DIR_VERSION} を使う（Function.prototype.bind の .bind( も拾うので見分ける）	acms-upgrade-theme: to-3.3.md#下位互換性のない変更
+T-HTMX4	theme	htmx:(afterSwap|afterSettle|configRequest|beforeRequest|afterRequest|beforeSwap|load)|htmx\.defineExtension|historyCacheSize|allowEval	要確認: htmx 2 のイベント名・API。既存サイトは互換の拡張 htmx-2-compat で動くが、新しい書き方（htmx:after:settle など）へ移す	acms-upgrade-theme: to-3.3.md#下位互換性のない変更
+T-HTMX-CONFIG	theme	htmxMark|htmxConfig	ACMS.Config.htmxMark・htmxConfig は削除された。htmx の設定はシステム設定 htmx_config か meta name="htmx-config" に書く	acms-upgrade-theme: to-3.3.md#下位互換性のない変更
+T-ADMIN-DROPDOWN	theme	js-acms-dropdown-(toggle|btn)	管理画面の jQuery のドロップダウンは削除された。上書きした管理画面のテンプレートを acms-dropdown-menu 要素に書き換えるか、上書きをやめる	acms-upgrade-theme: to-3.3.md#下位互換性のない変更
+T-ADMIN-REMOVED-PARTS	theme	admin/entry/js\.html|module-id-header|schedule/parts/header	3.3 の themes/system から削除された管理画面の部品を読み込んでいる。インクルードを外し、3.3 の system と見比べる	acms-upgrade-theme: to-3.3.md#下位互換性のない変更
+T-ENTRY-FIELD-SECTION	theme	@section\("?entry-field"?\)	要確認: エントリー編集画面の入力欄のセクションを上書きしている。3.3 で編集画面が作り直され、カスタムフィールド定義の入力欄もここに出る。上書きをやめるか 3.3 の system と見比べる	acms-upgrade-theme: to-3.3.md#下位互換性のない変更
+T-KEYWORD-PATH	theme	/keyword/	要確認: キーワード検索の URL をパスの形で前提にしている。3.3 ではキーワードのリンクが ?keyword= の形になる	acms-upgrade-theme: to-3.3.md#下位互換性のない変更
+T-PING	theme	ping_weblog|PingWeblogUpdate|weblog-updates-ping	Ping 送信は 3.3 で削除された。記述を消す	acms-upgrade-theme: to-3.3.md#下位互換性のない変更
+T-ENTRY-CODE	theme	entry_code_title|entry-[0-9]+\.html	要確認: エントリーのファイル名の形（entry-ID.html）やタイトルからの命名を前提にしている。3.3 では初期値がランダムな名前になる	acms-upgrade-theme: to-3.3.md#下位互換性のない変更
+P-POST-ENTRY-EXTENDS	plugin	extends[[:space:]]+\\?ACMS_POST_(Entry_(Insert|Update|Duplicate)|Revision_Duplicate|Approval_Comment)([^A-Za-z0-9_]|$)	要確認: エントリー保存の POST モジュールを継承している。3.3 で protected メソッドが削除された。削除されたメソッドを呼んでいれば Hook かサービスの上書きへ移す	acms-upgrade-plugin: to-3.3.md#下位互換性のない変更
+P-POST-ENTRY-METHODS	plugin	(->|::)(saveUnit|insertEntry|updateEntry|saveTag|relationDupe|getNotifyAddreses)\(	3.3 で削除された保存処理のメソッドを呼んでいる。Hook かサービスの上書きへ移す	acms-upgrade-plugin: to-3.3.md#下位互換性のない変更
+P-RESTAPI-CLASS	plugin	^[[:space:]]*(final[[:space:]]+|abstract[[:space:]]+)?class[[:space:]]+RestApi([^A-Za-z0-9_]|$)	要確認: RestApi という名前のクラス。名前空間が無ければ 3.3 の本体のファサードと衝突して致命的なエラーになる	acms-upgrade-plugin: to-3.3.md#下位互換性のない変更
+P-UNIT-GETFIELD	plugin	(get|set)Field[1-8]\(	ユニットの getField1〜8 / setField1〜8 は 3.3 で外から呼べなくなった（当面は転送され非推奨のログが出る）。ユニットごとの取得口か toArray() へ移す	acms-upgrade-plugin: to-3.3.md#非推奨になった機能と代替
+P-BULK-CHANGE	plugin	['"]action_entry	要確認: 一覧の一括変更の項目を扱っている。3.3 では標準の項目に絞られ、独自の項目は Hook extendsBulkChangeEntryActions で足す	acms-upgrade-plugin: to-3.3.md#下位互換性のない変更
+P-ENTRY-CODE	plugin	generateEntryCode(FromTitleOrId)?\(|entry_code_title	エントリーのコードの生成が 3.3 で変わった。generateRandomEntryCode() へ移す	acms-upgrade-plugin: to-3.3.md#非推奨になった機能と代替
+P-IGNORE-BLOG-SCOPE	plugin	setIgnoreBlogScope	setIgnoreBlogScope() は 3.3 で非推奨。ignoringBlogScope() へ移す（3.2.40 にもある）	acms-upgrade-plugin: to-3.3.md#非推奨になった機能と代替
+P-LOCK-POST	plugin	(validateLockPost|logLockPost|unlockPost)\(	Common の POST のロックの関数は 3.3 で非推奨。サービス security.post-rate-limiter へ移す	acms-upgrade-plugin: to-3.3.md#非推奨になった機能と代替
+P-PING	plugin	ping_weblog|PingWeblogUpdate|weblog-updates-ping	Ping 送信は 3.3 で削除された。呼び出しを消す	acms-upgrade-plugin: to-3.3.md#下位互換性のない変更
+T-BULK-CHANGE	theme	name="action_entry\[	このテンプレートは action_entry[] で一括変更の項目を送っている。3.3 では標準の項目（ステータス・カテゴリー・タグ・日時など）に限られ、それ以外の項目はプラグインの Hook extendsBulkChangeEntryActions で許可しないと無視される	acms-upgrade-theme: to-3.3.md#下位互換性のない変更

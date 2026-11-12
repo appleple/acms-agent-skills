@@ -54,5 +54,15 @@
       "acms-upgrade の scan.sh を 3.1 で実行し、T-LOGIN-LAYOUT・T-AUTH-POST・T-AUTH-LINK などで洗い出す（なければ grep で探す）"
     ],
     "source": "公式の移行ガイドは「login.html をカスタマイズしているとログインできなくなる可能性」としか書いておらず、何をどの順で直すか（更新前に退避する、画面ごとの対応）が分からないまま更新して、管理者もログインできなくなりやすい"
+  },
+  {
+    "query": "a-blog cms を 3.3 にしたら、テーマの JavaScript でコンソールに「$(...).size is not a function」が出る。htmx の部分更新のあとにスライダーを初期化している処理もある",
+    "expected_behavior": [
+      "3.3 で jQuery が 4.0 になり .size() が無くなったので .length に直すと説明する",
+      "scan.sh の T-JQUERY4 か grep で他の箇所も探す",
+      "htmx 4 になり、既存サイトは互換の拡張 htmx-2-compat で旧イベントが動くが、新しい書き方（htmx:after:settle）へ移すよう案内する",
+      "themes/system は書き換えない"
+    ],
+    "source": "3.3 の jQuery 4・htmx 4 で、テーマの JavaScript が壊れやすい"
   }
 ]

@@ -7,11 +7,11 @@ description: >-
   削除されたモジュール・クラス（3.1 の Login・Api の削除を含む）、標準の GET モジュールの継承、非推奨のクラス、Hook の変化を、移行先ごとの 移行先ごとの references（to-3.2.md など） で扱う。
   「自作プラグインは 3.2 で動く？」「SQL::newSelect() を使っている箇所は直す必要がある？」「createImages が見つからないエラーが出た」
   「PHP 8.1 に上げたらプラグインが動かない」と頼まれたときに使う。
-  a-blog cms upgrade, migration, plugin, extension/acms, PHP 8.1, SQL helper, removed function, facade, Hook, breaking changes.
+  a-blog cms upgrade, migration, plugin, extension/acms, PHP 8.1, PHP 8.3, SQL helper, removed function, facade, Hook, breaking changes.
   バージョンの判定・バックアップ・本体の更新などの共通手順と scripts/scan.sh は acms-upgrade、テーマの修正は acms-upgrade-theme、
   Hook・ServiceProvider・独自モジュールの書き方は acms-plugin-development、管理画面の JavaScript プラグインは acms-admin-frontend-plugin が担う。
 license: MIT
-compatibility: 移行先 Ver. 3.1・3.2。移行元が Ver. 3.2 未満（3.0・3.1）のサイトのプラグイン（拡張アプリ）も扱う。要修正箇所の洗い出しは acms-upgrade の scripts/scan.sh を使い、入っていなければ grep で探す。
+compatibility: 移行先 Ver. 3.1・3.2・3.3（3.3 はプレリリースの内容）。移行元が Ver. 3.2 未満（3.0・3.1）のサイトのプラグイン（拡張アプリ）も扱う。要修正箇所の洗い出しは acms-upgrade の scripts/scan.sh を使い、入っていなければ grep で探す。
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -25,6 +25,7 @@ metadata:
 |---|---|---|---|
 | Ver. 3.1 | Ver. 3.0.x | [references/to-3.1.md](references/to-3.1.md) | acms-upgrade の `scripts/scan.sh <設置ディレクトリ> 3.1` の `P-` で始まるチェック |
 | Ver. 3.2 | Ver. 3.1.x | [references/to-3.2.md](references/to-3.2.md) | acms-upgrade の `scripts/scan.sh <設置ディレクトリ> 3.2` の `P-` で始まるチェック |
+| Ver. 3.3（プレリリース） | Ver. 3.2.x | [references/to-3.3.md](references/to-3.3.md) | acms-upgrade の `scripts/scan.sh <設置ディレクトリ> 3.3` の `P-` で始まるチェック |
 
 移行先を足すときは [references/_template.md](references/_template.md) を写して `to-<バージョン>.md` を作り、この表に 1 行足す（acms-upgrade・acms-upgrade-theme の同じバージョンのファイルもそろえる）。
 

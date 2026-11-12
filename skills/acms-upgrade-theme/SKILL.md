@@ -12,7 +12,7 @@ description: >-
   バージョンの判定・バックアップ・本体の更新などの共通手順と scripts/scan.sh は acms-upgrade、プラグイン（拡張アプリ）の修正は acms-upgrade-plugin、
   テンプレートの記法は acms-template-acms / acms-template-twig、代替モジュールの選び方は acms-module-reference が担う。
 license: MIT
-compatibility: 移行先 Ver. 3.1・3.2。移行元が Ver. 3.2 未満（3.0・3.1）のサイトのテーマも扱う。要修正箇所の洗い出しは acms-upgrade の scripts/scan.sh を使い、入っていなければ grep で探す。
+compatibility: 移行先 Ver. 3.1・3.2・3.3（3.3 はプレリリースの内容）。移行元が Ver. 3.2 未満（3.0・3.1）のサイトのテーマも扱う。要修正箇所の洗い出しは acms-upgrade の scripts/scan.sh を使い、入っていなければ grep で探す。
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -26,6 +26,7 @@ metadata:
 |---|---|---|---|
 | Ver. 3.1 | Ver. 3.0.x | [references/to-3.1.md](references/to-3.1.md) | acms-upgrade の `scripts/scan.sh <設置ディレクトリ> 3.1` の `T-` で始まるチェック |
 | Ver. 3.2 | Ver. 3.1.x | [references/to-3.2.md](references/to-3.2.md) | acms-upgrade の `scripts/scan.sh <設置ディレクトリ> 3.2` の `T-` で始まるチェック |
+| Ver. 3.3（プレリリース） | Ver. 3.2.x | [references/to-3.3.md](references/to-3.3.md) | acms-upgrade の `scripts/scan.sh <設置ディレクトリ> 3.3` の `T-` で始まるチェック |
 
 移行先を足すときは [references/_template.md](references/_template.md) を写して `to-<バージョン>.md` を作り、この表に 1 行足す（acms-upgrade・acms-upgrade-plugin の同じバージョンのファイルもそろえる）。
 

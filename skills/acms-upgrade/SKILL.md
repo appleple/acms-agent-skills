@@ -7,12 +7,12 @@ description: >-
   移行先ごとの要件（PHP・MySQL）と DB の更新の内容は 移行先ごとの references（to-3.2.md など） にある。
   「3.1 のサイトを 3.2 にしたい」「3.0 の会員サイトを 3.1 にしたい」「バージョンアップは何から始めればいい？」「オンラインアップデートに 3.2 が出てこない」「3.0 から最新にしたい」と頼まれたとき、
   3.2 未満のサイトで作業する前にバージョンを上げるかを決めるときに使う。
-  a-blog cms upgrade, migration, version up, update, 3.0 to 3.1, 3.1 to 3.2, requirements, backup, online update.
+  a-blog cms upgrade, migration, version up, update, 3.0 to 3.1, 3.1 to 3.2, 3.2 to 3.3, requirements, backup, online update.
   テーマの修正（非推奨・削除されたモジュール、ユニットの HTML、acms.css、表示崩れ）は acms-upgrade-theme、
   プラグイン（拡張アプリ）と extension/acms の修正は acms-upgrade-plugin、テンプレートの記法は acms-template-acms / acms-template-twig、
   プラグインの実装は acms-plugin-development が担う。パッチバージョンだけの更新（3.2.x 内）は対象外。
 license: MIT
-compatibility: 移行先 Ver. 3.1・3.2。移行元が Ver. 3.2 未満（3.0・3.1）のサイトも扱う。scripts/scan.sh は POSIX シェル（sh）で動き、Node.js や PHP の CLI は不要。外部通信はしない。
+compatibility: 移行先 Ver. 3.1・3.2・3.3（3.3 はプレリリースの内容）。移行元が Ver. 3.2 未満（3.0・3.1）のサイトも扱う。scripts/scan.sh は POSIX シェル（sh）で動き、Node.js や PHP の CLI は不要。外部通信はしない。
 metadata:
   acms-min-version: "3.2"
   status: stable
@@ -28,6 +28,7 @@ metadata:
 |---|---|---|---|---|---|
 | Ver. 3.1 | Ver. 3.0.x | [references/to-3.1.md](references/to-3.1.md) | `references/to-3.1.md`（`T-` のチェック） | `references/to-3.1.md`（`P-` のチェック） | [scripts/checks/to-3.1.tsv](scripts/checks/to-3.1.tsv) |
 | Ver. 3.2 | Ver. 3.1.x | [references/to-3.2.md](references/to-3.2.md) | `references/to-3.2.md`（`T-` のチェック） | `references/to-3.2.md`（`P-` のチェック） | [scripts/checks/to-3.2.tsv](scripts/checks/to-3.2.tsv) |
+| Ver. 3.3（プレリリース。Ver. 3.3.0-alpha.1 で確かめた内容） | Ver. 3.2.x | [references/to-3.3.md](references/to-3.3.md) | `references/to-3.3.md`（`T-` のチェック） | `references/to-3.3.md`（`P-` のチェック） | [scripts/checks/to-3.3.tsv](scripts/checks/to-3.3.tsv) |
 
 移行先を足すときは、3 スキルそれぞれの `references/_template.md` を写して `to-<バージョン>.md` を作り、このスキルに `scripts/checks/to-<バージョン>.tsv` を作って、この表に 1 行足す。
 

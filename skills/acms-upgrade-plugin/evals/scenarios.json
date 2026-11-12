@@ -43,5 +43,14 @@
       "acms-upgrade の scan.sh を 3.1 で実行し、P-REMOVED-AUTH-CLASS などの P- のチェックで洗い出す（なければ grep で探す）"
     ],
     "source": "公式の移行ガイドに PHP の API の変更が書かれておらず、削除されたクラスを継承したプラグインが更新後に Fatal になってから気づきやすい"
+  },
+  {
+    "query": "3.3 に上げたら、ACMS_POST_Entry_Update を継承して saveUnit() を上書きしていたプラグインがエラーになった",
+    "expected_behavior": [
+      "3.3 で ACMS_POST_Entry_Update などの protected メソッド（saveUnit など）が削除され、保存の処理がサービスに移ったと説明する",
+      "継承して上書きするのをやめ、Hook かサービスの上書きで実現するよう案内する",
+      "scan.sh の P-POST-ENTRY-EXTENDS・P-POST-ENTRY-METHODS で他の箇所も探す"
+    ],
+    "source": "3.3 でエントリー保存の POST モジュールが作り直された"
   }
 ]
