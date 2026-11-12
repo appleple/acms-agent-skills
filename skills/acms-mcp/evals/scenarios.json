@@ -28,5 +28,16 @@
       "上限が destructive でなければ、回避せず利用者に設定の変更を頼む"
     ],
     "source": "削除の確認の仕方（他の CMS の公式スキルと同じ 3 段の進め方）"
+  },
+  {
+    "query": "（MCP で a-blog cms 3.3 につないでいる状態で）この原稿（見出し 3 つと段落、YouTube の URL が 1 つ）でブログの下書きを作って",
+    "expected_behavior": [
+      "本文は body_html で送り、1 つのブロックエディターのユニットとして保存する（units でテキストユニットなどを並べない）",
+      "YouTube は入稿用タグ acms-block-editor-embed-block の url で埋め込む",
+      "dry_run=1 で検証し、応答の warnings を確かめる",
+      "下書き（非公開）で作り、公開は人に任せる",
+      "引数の形は acms_describe で確かめる"
+    ],
+    "source": "指示が無いと、エージェントは units でテキストユニットを並べがちで、編集画面のブロックエディターで直せない本文になる"
   }
 ]
