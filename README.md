@@ -2,6 +2,13 @@
 
 [a-blog cms](https://www.a-blogcms.jp) でサイト制作やプラグイン（拡張アプリ）開発を行う AI エージェント向けのスキル集です。Claude Code・Codex・GitHub Copilot・Cursor・Antigravity など、[Agent Skills](https://agentskills.io/specification) の形式に対応したエージェントで使えます。
 
+> [!WARNING]
+> **このブランチ（acms-3.3）は、a-blog cms Ver. 3.3 アルファ版向けのプレビューです。** 3.3 向けの内容（acms-field-definition・acms-rest-api・acms-mcp、各スキルの `references/ver-3.3.md`、3.2 から 3.3 への移行）は Ver. 3.3.0-alpha.1 のソースで確かめたもので、正式版までに変わることがあります。3.2 のスキルもすべて含み、3.3 の内容は作業対象のサイトが 3.3 以上のときだけ使われます。
+>
+> - 本番のサイトでは、main ブランチの安定版（[最新のリリース](https://github.com/appleple/acms-agent-skills/releases/latest)）を使ってください。
+> - このブランチを Claude Code で入れるときは、マーケットプレイスをブランチ付きで追加します: `claude plugin marketplace add appleple/acms-agent-skills#acms-3.3`（安定版と同じ名前のマーケットプレイスなので、どちらか一方だけを入れます）。
+> - 不具合や、アルファ版と食い違う記述は [Issues](https://github.com/appleple/acms-agent-skills/issues) へお知らせください。
+
 ## スキルとは
 
 スキルは、エージェントが作業の途中で読み込む指示書（`SKILL.md`）です。エージェントは依頼の内容に合うスキルを自分で選んで読み込むので、入れたあとは「トップにお知らせの一覧を出して」のように、いつもどおり依頼するだけで使えます。
