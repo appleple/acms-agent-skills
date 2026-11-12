@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-12
+
+最初の安定版です。スキルの名前と構成をこのバージョンで固定し、以後の削除・改名はメジャーバージョンで行います（docs/compatibility.md）。
+
 ### Added
 
 - a-blog cms Ver. 3.3（Ver. 3.3.0-alpha.1 で確かめた内容）向けに、acms-field-definition（カスタムフィールド定義）、acms-rest-api（REST API・API トークン・OAuth）、acms-mcp（MCP サーバー）を足した。REST API と MCP は新しいプラグイン acms-api に入れた。いずれも status は draft で、Ver. 3.2 のサイトでは使わない

@@ -44,7 +44,7 @@ metadata:
 新しいプラグイン（拡張アプリ）は、白紙や SamplePlugin の複製からではなく、公式のひな型 [acms-plugin-skeleton](https://github.com/appleple/acms-plugin-skeleton)（Composer のパッケージ名 `ablogcms/plugin-skeleton`）から作る。PHPUnit・PHPStan・PHP_CodeSniffer・CI・リリース用の zip の作成が設定済みで、処理を `Services/` に分けてテストする構成になっているため。
 
 1. `composer create-project ablogcms/plugin-skeleton <リポジトリ名>` で作る。聞かれたプラグイン名で、名前空間 `Acms\Plugins\Skeleton`・`ServiceProvider` の `$name`・設定のキーなどが置き換わる。名前はハイフンや `_` を含めない英数字にする（references/production-plugin.md の「ディレクトリ構成」）。GitHub のテンプレートではないので、リポジトリを複製して名前を手で置き換えない。
-2. 対応する範囲を確かめる。ひな型の README に書かれた PHP と a-blog cms のバージョン（現時点では PHP 8.1〜8.5、a-blog cms Ver. 3.2.27 以降）と、`require-dev` の `ablogcms/testing-framework` のバージョン（本体のマイナーバージョンに合わせる）が、作業対象のサイトに合っているかを見る。
+2. 対応する範囲を確かめる。ひな型の README に書かれた PHP と a-blog cms のバージョン（現時点では PHP 8.1〜8.5、a-blog cms Ver. 3.2.27 以降）と、`require-dev` の `ablogcms/testing-framework` のバージョン（本体のマイナーバージョンに合わせる）が、作業対象のサイトに合っているかを見る。合わないとき（3.2.27 より前など）は、本体の更新を先に勧めるか、利用者が更新しないと決めたら、ひな型と同じ構成（references/production-plugin.md の「ディレクトリ構成」）を手で作り、`extension/plugins/SamplePlugin/` を手本にする。
 3. リポジトリの `src/` がプラグインの本体で、`extension/plugins/<名前>/` に置く（開発中はシンボリックリンクかマウント。ひな型の `docker-compose.yml` がそうしている）。リポジトリのルートを `extension/plugins/` に置かない。
 4. 使わないサンプル（`GET/Sample.php`・`POST/Sample.php`・`Modules/Get/V2/Sample.php`・`Corrector.php`・`Validator.php`・設定画面のテンプレート）は、`ServiceProvider::init()` の登録と一緒に消す。残すと、使わないモジュールや校正オプションが登録されたままになる。
 5. 書いたら `composer check`（コーディング規約・PHPStan・PHPUnit）を通す。リリースは、`ServiceProvider` の `$version` と Git のタグをそろえて、ひな型の Composer スクリプトで zip を作る（手で zip にしない）。
