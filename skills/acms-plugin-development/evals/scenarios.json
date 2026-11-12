@@ -78,5 +78,16 @@
       "zip は展開すると <名前>/ServiceProvider.php になる形にし、ディレクトリ名を名前空間と同じにして、tests や開発用の設定を入れない"
     ],
     "source": "スキルなしでは本体と同じライブラリを別のバージョンで同梱して衝突させる、checkRequirements だけで対応バージョンを守れると考える、Git のホスティングの自動アーカイブをそのまま配って一覧に出ない、といった誤りが起きやすい"
+  },
+  {
+    "query": "a-blog cms 3.2 のプラグインを新しく作りたい。テストも書きたいので、ディレクトリ構成から作って",
+    "expected_behavior": [
+      "公式のひな型 acms-plugin-skeleton を composer create-project ablogcms/plugin-skeleton で使うよう案内する",
+      "聞かれたプラグイン名で名前空間などが置き換わること、名前にハイフンや _ を使わないことを伝える",
+      "リポジトリの src/ を extension/plugins/<名前>/ に置く（リポジトリのルートを置かない）",
+      "ひな型の対応バージョン（PHP・a-blog cms・testing-framework）が対象のサイトに合うかを確かめる",
+      "composer check でコーディング規約・PHPStan・PHPUnit を通す"
+    ],
+    "source": "白紙から構成を作るか SamplePlugin を複製しがちで、テスト・PHPStan・リリースの設定が抜ける"
   }
 ]
