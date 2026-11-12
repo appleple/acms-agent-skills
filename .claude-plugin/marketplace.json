@@ -56,6 +56,7 @@
         "./skills/acms-module-reference",
         "./skills/acms-form",
         "./skills/acms-custom-field",
+        "./skills/acms-field-definition",
         "./skills/acms-upgrade-theme",
         "./skills/acms-member-site"
       ],
@@ -82,6 +83,29 @@
         "./skills/acms-plugin-development",
         "./skills/acms-admin-frontend-plugin",
         "./skills/acms-upgrade-plugin"
+      ],
+      "dependencies": [
+        "acms-common"
+      ]
+    },
+    {
+      "name": "acms-api",
+      "displayName": "a-blog cms REST API・MCP",
+      "description": "a-blog cms Ver. 3.3 以降の REST API・API トークン・OAuth と、内蔵の MCP サーバーに AI エージェントをつないで安全に操作するためのスキル",
+      "version": "0.1.1",
+      "source": "./",
+      "strict": false,
+      "license": "MIT",
+      "keywords": [
+        "a-blog cms",
+        "acms",
+        "rest api",
+        "mcp",
+        "oauth"
+      ],
+      "skills": [
+        "./skills/acms-rest-api",
+        "./skills/acms-mcp"
       ],
       "dependencies": [
         "acms-common"

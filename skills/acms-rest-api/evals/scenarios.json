@@ -1,0 +1,32 @@
+[
+  {
+    "query": "a-blog cms 3.3 のサイトに、社内の在庫システムから毎晩エントリーを作成・更新するバッチを作りたい。curl の例を書いて",
+    "expected_behavior": [
+      "acms-project-triage で 3.3 以上かを確かめ、管理画面の REST API 設定で有効にする手順を示す",
+      "必要な権限だけを持つ連携用のユーザーでトークンを発行し、entries:write など最小のスコープにする（entries:publish は公開まで自動にするときだけ）",
+      "トークンは環境変数に入れ、curl では Authorization: Bearer で変数を参照する（値を直書きしない）",
+      "openapi.json を取得してリクエストの形を確かめてから書くよう案内する",
+      "URL は /rest-api/acms/v1/ で末尾に / を付ける",
+      "dry_run=1 で試す、更新は ETag と If-Match、作成の再送は Idempotency-Key を使う"
+    ],
+    "source": "REST API は Ver. 3.3 の新機能で、学習データに無い。WordPress の /wp-json/ の形や、トークンの直書きを書きがち"
+  },
+  {
+    "query": "a-blog cms 3.2.40 で REST API を使ってエントリーを取りたい",
+    "expected_behavior": [
+      "REST API は Ver. 3.3 からで 3.2 には無いと伝える",
+      "3.2 で使える手段（モジュールの JSON 出力、プラグインの独自モジュール）を示す",
+      "3.3 の URL やトークンの手順を 3.2 に当てはめない"
+    ],
+    "source": "3.3 の内容を 3.2 の制作に持ち込まないための確認"
+  },
+  {
+    "query": "3.3 の REST API で公開中のエントリーを PATCH したら 403 になった。トークンには write を付けている",
+    "expected_behavior": [
+      "公開中のエントリーの変更には専用スコープ entries:publish が要り、write や entries:write では足りないと説明する",
+      "応答の problem+json の code と detail を見るよう案内する",
+      "entries:publish を付けるか、リビジョン（新しいバージョン）や下書きで保存して人が公開する方法を示す"
+    ],
+    "source": "公開の権限の分離は a-blog cms 独自の規則で、推測では分からない"
+  }
+]
