@@ -16,6 +16,7 @@
 - 名前は略さない（`dev`・`js` ではなく `development`・`javascript`）。
 - 「拡張アプリ」は「プラグイン（拡張アプリ）」と書く。英語では plugin に統一し、extension は使わない（`extension/plugins/` などの実在するパスは除く）。
 - 対象は a-blog cms Ver. 3.2 以上。それより新しいバージョンで入った機能には本文で「Ver. 3.2.24 以降」のように注記する（docs/compatibility.md）。
+- 3.3 など新しいマイナーバージョンの機能は、本文に注記せず、新しいスキルか既存のスキルの `references/ver-3.3.md` に分ける。3.2 の制作で誤って使われないようにするため。プレリリースの間は main に入れず `acms-3.3` のようなブランチで作る（docs/compatibility.md）。
 - 新しいスキルには評価シナリオを最低1件置く。
 
 詳しくは docs/authoring-guide.md。
