@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-12
+
+最初の安定版です。スキルの名前と構成をこのバージョンで固定し、以後の削除・改名はメジャーバージョンで行います（docs/compatibility.md）。
+
 ### Added
 
 - acms-plugin-development に、新しいプラグイン（拡張アプリ）を公式のひな型 acms-plugin-skeleton（`composer create-project ablogcms/plugin-skeleton`）から作る手順を足した

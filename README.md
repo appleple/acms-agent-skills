@@ -93,7 +93,7 @@ claude plugin install acms-plugin-developer@acms-agent-skills
 セッションの中では `/plugin marketplace add appleple/acms-agent-skills` と `/plugin install acms-site-builder@acms-agent-skills` でも同じことができます。スキルは `/acms-site-builder:acms-form` のようにプラグイン名付きで表示されます。
 
 - 既定では、自分のユーザー単位（すべてのプロジェクト）に入ります。リポジトリの全員で使うなら `--scope project` を付けます。
-- 特定のリリースに固定するなら、マーケットプレイスをタグ付きで追加します（`claude plugin marketplace add appleple/acms-agent-skills#v0.1.1`）。
+- 特定のリリースに固定するなら、マーケットプレイスをタグ付きで追加します（`claude plugin marketplace add appleple/acms-agent-skills#v1.0.0`）。
 
 ### npx skills
 
@@ -134,7 +134,7 @@ gh skill install appleple/acms-agent-skills acms-form --agent github-copilot
 gh skill install appleple/acms-agent-skills acms-form --agent codex --scope user
 
 # リリースタグに固定して入れる
-gh skill install appleple/acms-agent-skills acms-form --agent claude-code --pin v0.1.1
+gh skill install appleple/acms-agent-skills acms-form --agent claude-code --pin v1.0.0
 
 # すべてのスキルを入れる
 gh skill install appleple/acms-agent-skills --all --agent cursor
