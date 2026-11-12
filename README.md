@@ -7,6 +7,7 @@
 >
 > - 本番のサイトでは、main ブランチの安定版（[最新のリリース](https://github.com/appleple/acms-agent-skills/releases/latest)）を使ってください。
 > - このブランチを Claude Code で入れるときは、マーケットプレイスをブランチ付きで追加します: `claude plugin marketplace add appleple/acms-agent-skills#acms-3.3`（安定版と同じ名前のマーケットプレイスなので、どちらか一方だけを入れます）。
+> - zip で入れるとき（claude.ai へのアップロードなど）は、[v1.1.0-alpha.1 のプレリリース](https://github.com/appleple/acms-agent-skills/releases/tag/v1.1.0-alpha.1)の zip を使います（`releases/latest` は安定版を指します）。
 > - 不具合や、アルファ版と食い違う記述は [Issues](https://github.com/appleple/acms-agent-skills/issues) へお知らせください。
 
 ## スキルとは

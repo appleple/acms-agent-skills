@@ -15,6 +15,10 @@ a-blog cms Ver. 3.3 アルファ版向けのプレビューです。acms-3.3 ブ
 - acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin に Ver. 3.2 から 3.3 への移行（`references/to-3.3.md` と `scripts/checks/to-3.3.tsv`）を足した（PHP 8.3 以上、jQuery 4・htmx 4、予約される URL、エントリー保存の POST モジュールの変更など）
 - acms-project-triage の detect.sh が、プレリリース版のバージョン（`3.3.0-alpha.1` など）を読み、Ver. 3.3 の内容を使えるかを出すようにした
 
+### Changed
+
+- リリースのワークフローが、`-` の付いたタグ（`v1.1.0-alpha.1` など）をプレリリースとして作り、「最新」にしないようにした（`releases/latest/download/<スキル名>.zip` が安定版を指したままになる）
+
 ## [1.0.0] - 2026-11-12
 
 最初の安定版です。スキルの名前と構成をこのバージョンで固定し、以後の削除・改名はメジャーバージョンで行います（docs/compatibility.md）。
