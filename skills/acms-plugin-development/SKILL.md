@@ -2,13 +2,14 @@
 name: acms-plugin-development
 description: >-
   a-blog cms（acms）のプラグイン（拡張アプリ）と、extension/acms 配下のユーザー拡張を PHP で開発するときの手順と判断基準。
+  新しく作るときのひな型（acms-plugin-skeleton を composer create-project で使う）、
   プラグイン（拡張アプリ）のディレクトリ構成と ServiceProvider（install / uninstall / activate / init の役割、名前空間）、
   Hook の選び方と登録（HOOK_ENABLE、例外を外へ投げない理由）、独自の GET / V2 GET / POST モジュール（CSRF の扱い）、
   校正オプション（Corrector）・検証オプション（Validator）・グローバル変数の追加、管理画面の設定ページ（Twig 管理画面は Ver. 3.2.24 以降）、
   管理画面への JavaScript の読み込み、動かないときのデバッグ、配布・本番運用するプラグインの設計（独自テーブルの作成とマイグレーション、設定値と API キーの置き場所、権限の確認、ログ、テスト、composer の依存、配布の zip と対応バージョン）を扱う。
   「エントリー保存時に処理を足したい」「独自モジュールを作りたい」「プラグインを作って」「Hook.php に書いたのに動かない」と頼まれたとき、
   ServiceProvider.php・Hook.php・Corrector.php・Validator.php・extension/plugins/ を触るときに使う。
-  a-blog cms plugin, Hook, ServiceProvider, custom module, corrector, validator, DB table, migration, testing, distribution.
+  a-blog cms plugin, plugin skeleton, Hook, ServiceProvider, custom module, corrector, validator, DB table, migration, testing, distribution.
   管理画面の JavaScript プラグインの中身（ACMS.plugins、ACMS.events）は acms-admin-frontend-plugin、テンプレートの記法は acms-template-acms / acms-template-twig が担う。
 license: MIT
 compatibility: a-blog cms Ver. 3.2 以上。Twig の管理画面と Twig の Filter 登録は Ver. 3.2.24 以降、Asset API は Ver. 3.2.29 以降。
@@ -37,6 +38,18 @@ metadata:
 - 本体のファイル（`php/` 配下、`themes/system/`）は書き換えない。アップデートで上書きされるため。`extension/acms/` と `extension/plugins/` は上書きされない。
 - ユーザー拡張は置けば全ブログで動く（Hook はどちらも `HOOK_ENABLE` が `1` のときだけ）。プラグイン（拡張アプリ）は `ServiceProvider::init()` で Hook・校正オプション・検証オプションを `attach` しないと動かない。
 - ユーザー拡張の `Hook.php` でしか受け取れない Hook がある（`init`・`beforeAuthenticate`・`afterAuthenticate`・`restrictionAuthority`・`customRuleValue`）。本体がプラグイン（拡張アプリ）を読み込む前に呼ぶため。
+
+## 新しく作るとき（ひな型）
+
+新しいプラグイン（拡張アプリ）は、白紙や SamplePlugin の複製からではなく、公式のひな型 [acms-plugin-skeleton](https://github.com/appleple/acms-plugin-skeleton)（Composer のパッケージ名 `ablogcms/plugin-skeleton`）から作る。PHPUnit・PHPStan・PHP_CodeSniffer・CI・リリース用の zip の作成が設定済みで、処理を `Services/` に分けてテストする構成になっているため。
+
+1. `composer create-project ablogcms/plugin-skeleton <リポジトリ名>` で作る。聞かれたプラグイン名で、名前空間 `Acms\Plugins\Skeleton`・`ServiceProvider` の `$name`・設定のキーなどが置き換わる。名前はハイフンや `_` を含めない英数字にする（references/production-plugin.md の「ディレクトリ構成」）。GitHub のテンプレートではないので、リポジトリを複製して名前を手で置き換えない。
+2. 対応する範囲を確かめる。ひな型の README に書かれた PHP と a-blog cms のバージョン（現時点では PHP 8.1〜8.5、a-blog cms Ver. 3.2.27 以降）と、`require-dev` の `ablogcms/testing-framework` のバージョン（本体のマイナーバージョンに合わせる）が、作業対象のサイトに合っているかを見る。
+3. リポジトリの `src/` がプラグインの本体で、`extension/plugins/<名前>/` に置く（開発中はシンボリックリンクかマウント。ひな型の `docker-compose.yml` がそうしている）。リポジトリのルートを `extension/plugins/` に置かない。
+4. 使わないサンプル（`GET/Sample.php`・`POST/Sample.php`・`Modules/Get/V2/Sample.php`・`Corrector.php`・`Validator.php`・設定画面のテンプレート）は、`ServiceProvider::init()` の登録と一緒に消す。残すと、使わないモジュールや校正オプションが登録されたままになる。
+5. 書いたら `composer check`（コーディング規約・PHPStan・PHPUnit）を通す。リリースは、`ServiceProvider` の `$version` と Git のタグをそろえて、ひな型の Composer スクリプトで zip を作る（手で zip にしない）。
+
+ひな型の使い方の細部（テストの DB、CI、リリースの手順）はひな型の README を読み、ここに写さない。既にあるプラグインをひな型の構成に移すときも、references/production-plugin.md の「ディレクトリ構成」に従う。
 
 ## 作業の手順
 

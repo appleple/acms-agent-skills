@@ -10,7 +10,7 @@
 
 ## ディレクトリ構成
 
-本体に同梱の `extension/plugins/SamplePlugin/` と、developer サイトが案内するひな型 `ablogcms/plugin-skeleton`（テスト・PHPStan・CI が設定済み）を手本にする。リポジトリでは本体に置く部分（`src/`）とテストを分ける。
+新しく作るなら、ひな型 [acms-plugin-skeleton](https://github.com/appleple/acms-plugin-skeleton)（`composer create-project ablogcms/plugin-skeleton`。テスト・PHPStan・CI・リリースが設定済み）から始める（SKILL.md の「新しく作るとき」）。既存のプラグインを整えるときは、このひな型と本体に同梱の `extension/plugins/SamplePlugin/` を手本にする。リポジトリでは本体に置く部分（`src/`）とテストを分ける。
 
 ```
 my-plugin/                     … リポジトリ（開発用）

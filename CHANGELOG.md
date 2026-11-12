@@ -6,6 +6,7 @@
 
 ### Added
 
+- acms-plugin-development に、新しいプラグイン（拡張アプリ）を公式のひな型 acms-plugin-skeleton（`composer create-project ablogcms/plugin-skeleton`）から作る手順を足した
 - GitHub Release に、スキルごとの zip を添付するようにした（`releases/latest/download/<スキル名>.zip` で取得できる）。README に zip での入れ方を書いた
 - acms-upgrade・acms-upgrade-theme・acms-upgrade-plugin に Ver. 3.0 から 3.1 への移行（`references/to-3.1.md` と `scripts/checks/to-3.1.tsv`）を足した。ログイン・会員の作り直し、設定値の既定値の変更、オンラインアップデートで 3.1 に止められないことなどを、本体ソースの差分から整理した
 
